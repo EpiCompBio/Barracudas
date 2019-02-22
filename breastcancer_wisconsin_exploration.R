@@ -30,9 +30,11 @@ theme_jh = theme_grey() + theme(plot.title=element_text(family="serif",face="bol
 
 
 
-source("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas/utility_functions_R/utility_TDS.R")
 
-
+source("C:/Users/JOE/Documents/R_utility_and_self_implementations/PCA_plots_utility.R")
+source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
+source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
+source("C:/Users/JOE/Documents/R_utility_and_self_implementations/standard_plots_ggplot2_utility.R")
 ################################################################################################################
 # LOADING THE DATA
 ################################################################################################################
@@ -96,7 +98,7 @@ model %>% compile(
 
 # fit the model
 model %>% fit(
-  breast_cancer_clustering, breast_cancer_clustering,
+  as.matrix(breast_cancer_clustering), as.matrix(breast_cancer_clustering),
   epochs = 1000,
   validation_split = 0,
   verbose=0
@@ -104,8 +106,8 @@ model %>% fit(
 
 ###################
 #Model evaluation on the training set
-evaluation_score <- model %>% evaluate(breast_cancer_clustering,
-                                       breast_cancer_clustering)
+evaluation_score <- model %>% evaluate(as.matrix(breast_cancer_clustering),
+                                       as.matrix(breast_cancer_clustering))
 
 print(evaluation_score)
 
@@ -116,7 +118,7 @@ print(evaluation_score)
 layer_name <- "encoder_activation3"
 intermediate_layer_model <- keras_model(inputs = model$input,
                                         outputs = get_layer(model, layer_name)$output)
-intermediate_output <- predict(intermediate_layer_model, breast_cancer_clustering)
+intermediate_output <- predict(intermediate_layer_model, as.matrix(breast_cancer_clustering))
 
 
 
@@ -191,8 +193,7 @@ silhouette_plot_kmeans=silhouette_plot_ggplot2(breast_cancer_clustering,classes=
 x11()
 print(silhouette_plot_kmeans)
 
-
-intCriteria(breast_cancer_clustering,as.integer(as.character(kmeans_breast_cancer_clustering)),"Calinski_Harabasz")
+intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(kmeans_breast_cancer_clustering)),"Calinski_Harabasz")
 
 ################################################################################################################
 ################################################################################################################
@@ -211,7 +212,7 @@ spectral_clustering_breast_cancer_plot = make_PCA_ind_plot_classes(PCA_breast_ca
 x11()
 print(spectral_clustering_breast_cancer_plot )
 
-intCriteria(breast_cancer_clustering,as.integer(as.character(spectral_clustering_breast_cancer)),"Calinski_Harabasz")
+intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(spectral_clustering_breast_cancer)),"Calinski_Harabasz")
 
 
 ################################################################################################################
@@ -233,7 +234,7 @@ x11()
 print(dbscan_clustering_breast_cancer_plot )
 
 
-intCriteria(breast_cancer_clustering,as.integer(as.character(dbscan_clustering_breast_cancer$cluster)),"Calinski_Harabasz")
+intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(dbscan_clustering_breast_cancer$cluster)),"Calinski_Harabasz")
 
 ################################################################################################################
 ################################################################################################################
@@ -255,7 +256,7 @@ print(autoencoder_kmeans_clustering_breast_cancer_plot)
 
 print(table(kmeans_autoencoder$cluster,breast_cancer$V2))
 
-intCriteria(breast_cancer_clustering,as.integer(as.character(kmeans_autoencoder$cluster)),"Calinski_Harabasz")
+intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(kmeans_autoencoder$cluster)),"Calinski_Harabasz")
 
 
 ################################################################################################################
@@ -288,7 +289,7 @@ affinity_prop_clustering_breast_cancer_plot = make_PCA_ind_plot_classes(PCA_brea
 x11()
 print(affinity_prop_clustering_breast_cancer_plot)
 
-intCriteria(breast_cancer_clustering,as.integer(as.character(affinity_prop_clusters)),"Calinski_Harabasz")
+intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(affinity_prop_clusters)),"Calinski_Harabasz")
 
 
 
@@ -311,7 +312,7 @@ pam_clustering_RF_breast_cancer_plot = make_PCA_ind_plot_classes(PCA_breast_canc
 x11()
 print(pam_clustering_RF_breast_cancer_plot)
 
-intCriteria(breast_cancer_clustering,as.integer(as.character(pam_clustering_RF$clustering)),"Calinski_Harabasz")
+intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(pam_clustering_RF$clustering)),"Calinski_Harabasz")
 
 
 ################################################################################################################
@@ -333,5 +334,5 @@ gaussian_mixture_clustering_breast_cancer_plot = make_PCA_ind_plot_classes(PCA_b
 x11()
 print(gaussian_mixture_clustering_breast_cancer_plot)
 
-intCriteria(breast_cancer_clustering,as.integer(as.character(gaussian_mixture_clustering$classification)),"Calinski_Harabasz")
+intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(gaussian_mixture_clustering$classification)),"Calinski_Harabasz")
 # Note that for most criteria, just like for DBSCAN won't make much sense here
