@@ -1,3 +1,0 @@
-# Barracudas
-
-Translational project

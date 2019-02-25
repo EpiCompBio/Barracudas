@@ -1,3 +1,6 @@
+rm(list=ls())
+
+
 ################################################################################################################
 # LOADING PACKAGES
 ################################################################################################################
@@ -12,7 +15,8 @@ using<-function(...) {
   }
 }
 
-using("ggplot2","FactoMineR","reshape2","cluster","dbscan","keras","apcluster","clusterCrit")
+using("ggplot2","FactoMineR","reshape2","cluster","dbscan","keras","apcluster","clusterCrit","kernlab",
+      "randomForest","mclust")
 
 ############################################################
 # DEFINE THEMES & SOURCING FUNCTIONS
@@ -29,8 +33,6 @@ theme_jh = theme_grey() + theme(plot.title=element_text(family="serif",face="bol
   theme(plot.margin=unit(c(.5, .5, .5, .5), "cm"))
 
 
-
-
 source("C:/Users/JOE/Documents/R_utility_and_self_implementations/PCA_plots_utility.R")
 source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
 source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
@@ -38,6 +40,8 @@ source("C:/Users/JOE/Documents/R_utility_and_self_implementations/standard_plots
 ################################################################################################################
 # LOADING THE DATA
 ################################################################################################################
+
+#Some description of the variables 
 
 # 1) ID number
 # 2) Diagnosis (M = malignant, B = benign)
@@ -53,7 +57,7 @@ source("C:/Users/JOE/Documents/R_utility_and_self_implementations/standard_plots
 # i) symmetry 
 # j) fractal dimension ("coastline approximation" - 1)
 
-setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
+setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas/breast_cancer_wisconsin")
 breast_cancer=read.table("breastCancer_wisconsin.txt", sep=",")
 
 breast_cancer_clustering=breast_cancer[,3:ncol(breast_cancer)]
@@ -65,9 +69,8 @@ breast_cancer_clustering=as.data.frame(scale(breast_cancer_clustering))
 
 PCA_breast_cancer_clustering=PCA(breast_cancer_clustering,ncp = 5, graph = FALSE)
 
-
 ################################################################################################################
-# Auto-encoder
+# Auto-encoder => A Neural network for dimensionality reduction
 ################################################################################################################
 
 ##########################
@@ -118,9 +121,8 @@ print(evaluation_score)
 layer_name <- "encoder_activation3"
 intermediate_layer_model <- keras_model(inputs = model$input,
                                         outputs = get_layer(model, layer_name)$output)
-intermediate_output <- predict(intermediate_layer_model, as.matrix(breast_cancer_clustering))
-
-
+intermediate_output <- predict(intermediate_layer_model, as.matrix(breast_cancer_clustering)) #This corresponds to the new scores 
+#of the datapoints in the smaller space
 
 ################################################################################################################
 ################################################################################################################
@@ -243,7 +245,7 @@ intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(dbscan_c
 ################################################################################################################
 
 
-kmeans_autoencoder=kmeans(intermediate_output,center=4)
+kmeans_autoencoder=kmeans(intermediate_output,center=2)
 
 
 autoencoder_kmeans_clustering_breast_cancer_plot = make_PCA_ind_plot_classes(PCA_breast_cancer_clustering,dims=c(1,2),
@@ -321,7 +323,7 @@ intCriteria(as.matrix(breast_cancer_clustering),as.integer(as.character(pam_clus
 ################################################################################################################
 ################################################################################################################
 
-library(mclust)
+
 
 gaussian_mixture_clustering  <- Mclust(breast_cancer_clustering, 2)
 
