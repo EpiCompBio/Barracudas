@@ -32,11 +32,14 @@ theme_jh = theme_grey() + theme(plot.title=element_text(family="serif",face="bol
   theme(legend.key.size = unit(1,"line")) +
   theme(plot.margin=unit(c(.5, .5, .5, .5), "cm"))
 
+path<-dirname(rstudioapi::getActiveDocumentContext()$path)
 
-source("C:/Users/JOE/Documents/R_utility_and_self_implementations/PCA_plots_utility.R")
-source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
-source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
-source("C:/Users/JOE/Documents/R_utility_and_self_implementations/standard_plots_ggplot2_utility.R")
+path.functions = paste0(path,'/utility_functions_R/')
+
+source(paste0(path.functions,"PCA_plots_utility.R"))
+source(paste0(path.functions,"clustering_utility.R"))
+source(paste0(path.functions,"colors_themes_utility.R"))
+source(paste0(path.functions,"standard_plots_ggplot2_utility.R"))
 ################################################################################################################
 # LOADING THE DATA
 ################################################################################################################
