@@ -60,7 +60,6 @@ source(paste0(path.functions,"standard_plots_ggplot2_utility.R"))
 # i) symmetry 
 # j) fractal dimension ("coastline approximation" - 1)
 
-setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas/breast_cancer_wisconsin")
 breast_cancer=read.table("breastCancer_wisconsin.txt", sep=",")
 
 breast_cancer_clustering=breast_cancer[,3:ncol(breast_cancer)]
