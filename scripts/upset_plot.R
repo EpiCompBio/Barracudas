@@ -1,0 +1,41 @@
+require(limma)
+require(VennDiagram)
+require(UpSetR)
+setwd('~/Documents/Translational/Barracudas/')
+mydata = read.csv('../data/processed/UKBcompleteFeb19.csv')
+
+#define outcome col names andn dataset
+outcomes = c('diabetes','mi','stroke','dvt_asthma_copd_atopy','angina','htn')
+
+# outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
+# 
+# outcome_dataset = mydata[,outcome_cols]
+
+#upset plot whole dataset
+png('disease_intersections.png',width=1500,height=800)
+upset(mydata, 
+      sets = outcomes,
+      sets.bar.color = "#56B4E9",
+      order.by = c("freq"), 
+      empty.intersections = "on",
+      mainbar.y.label = 'Disease Intersections',
+      text.scale = c(2, 1.5, 1.5, 1.5, 2, 1.5))
+dev.off()
+
+#col of chronic diseases
+no_chronic = apply(mydata[,outcome_cols],1,sum)
+
+#predictors
+multi_morbid = mydata[which(no_chronic>1),]
+
+#upset plot just multi morbid
+png('multi_morbid_disease_intersections.png',width=1500,height=800)
+upset(multi_morbid, 
+      sets = outcomes,
+      sets.bar.color = "#56B4E9",
+      order.by = c("freq"), 
+      empty.intersections = "on",
+      mainbar.y.label = 'Disease Intersections',
+      text.scale = c(2, 1.5, 1.5, 1.5, 2, 1.5))
+dev.off()
+
