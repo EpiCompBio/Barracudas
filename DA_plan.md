@@ -41,8 +41,8 @@
   
   ### Algorithms
   
-  1. K Means
-  2. Partioning around Medoids (Josh could look into that since it's probably close to what he does)
+  1. K Means (Everyone)
+  2. Partioning around Medoids (Joel)
   3. DBSCAN (Joel)
   4. Gaussian Mixture Models (Abi)
   5. DIANA and hierarchical clustering with various linkage methods (Josh)
@@ -50,10 +50,10 @@
   ### Pre-Processing
   
   Clustering methods require specific inputs to compute clusters
-  Some only work with continuous features (kmeans) while others require a similarity/distance matrix
-  None of the algorithms directly work with the initial mixed data
+  Some only work with continuous features (kmeans) while others require a similarity/distance matrix.
+  Almost none of the algorithms directly work with the initial mixed data
   
-  We have two approaches to our mixed data set
+  We have two approaches to our mixed data set, other than working straight on it
   
   1. Make meaningful continuous features out of our dataset through adapted dimensionality reduction
   2. Make meaningful similarity matrices out of the mixed data
@@ -72,7 +72,7 @@
   
   #### Pipelines Joel
   
-  * Kmeans 
+  * Kmeans (BASELINE = BAD)
   * FAMD = > Kmeans
   * Auto-Encoder => Kmeans
   * RF => DBSCAN
@@ -92,6 +92,9 @@
   * Silhouette coefficient-how well defined are the clusters for each model
   * Calinski-Harabasz criterion
   * Interpretability of the clusters (this will be the big thing)
+  
+  NOTE : Mathematical criteria all favour certain cluster shapes and thus need to be used carefully. They can be of good use to choose the number of clusters
+  for the proper clustering method for example.
   
   ### Cluster Interpretation
   
