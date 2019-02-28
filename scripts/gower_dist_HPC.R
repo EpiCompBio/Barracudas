@@ -31,6 +31,6 @@ gower.dist = daisy(predictor_multi_morbid, metric = 'gower',
 saveRDS(gower.dist,'results/distance_matrix/gower_distance_multi_morbid.rds')
 
 # DIANA on gower dist
-res.diana.gower = diana(gower.dist, diss = TRUE, keep.diss = F, keep.data = F)
+#res.diana.gower = diana(gower.dist, diss = TRUE, keep.diss = F, keep.data = F)
 
-saveRDS(res.diana.gower,'results/clustering/diana_gower_multi_morbid.rds')
+#saveRDS(res.diana.gower,'results/clustering/diana_gower_multi_morbid.rds')

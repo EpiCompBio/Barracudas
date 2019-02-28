@@ -28,9 +28,9 @@ symm_cols = binary_cols[names(binary_cols)!='gender']
 man.dist = daisy(predictor_multi_morbid, metric = 'manhattan',
                    type = list(asymm = 'gender', symm = symm_cols))
 
-saveRDS(gower.dist,'results/distance_matrix/manhattan_distance_multi_morbid.rds')
+saveRDS(man.dist,'results/distance_matrix/manhattan_distance_multi_morbid.rds')
 
 # DIANA on gower dist
-res.diana.man = diana(man.dist, diss = TRUE, keep.diss = F, keep.data = F)
+#res.diana.man = diana(man.dist, diss = TRUE, keep.diss = F, keep.data = F)
 
-saveRDS(res.diana.gower,'results/clustering/diana_manhattan_multi_morbid.rds')
+#saveRDS(res.diana.gower,'results/clustering/diana_manhattan_multi_morbid.rds')
