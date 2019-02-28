@@ -5,10 +5,10 @@ setwd('~/Documents/Translational/Barracudas/')
 mydata = read.csv('../data/processed/UKBcompleteFeb19.csv')
 
 #define outcome col names andn dataset
-outcomes = c('diabetes','mi','stroke','dvt_asthma_copd_atopy','angina','htn')
+outcomes = c('diabetes','mi','stroke','dvt_asthma_copd_atopy','angina')
 
-# outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
-# 
+outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
+
 # outcome_dataset = mydata[,outcome_cols]
 
 #upset plot whole dataset
