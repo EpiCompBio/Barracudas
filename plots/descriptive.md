@@ -1,3 +1,3 @@
 # Descriptive plots
-![BMI](/BMI.png)
+ ![BMI](/BMI.png)
 
