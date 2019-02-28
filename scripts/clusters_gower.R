@@ -5,7 +5,7 @@ suppressPackageStartupMessages(library(cluster, lib.loc = lib.path
 
 setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/')
 
-gower.dist = readRDS('results/distance_matrix/gower_distance_multi_morbid.rds', header=F)
+gower.dist = readRDS('results/distance_matrix/gower_distance_multi_morbid.rds')
 
 #DIANA on gower dist
 res.diana.gower = diana(gower.dist, diss = TRUE, keep.diss = F, keep.data = F)
