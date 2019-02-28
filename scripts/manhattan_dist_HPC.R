@@ -25,8 +25,7 @@ binary_cols = which(unlist(sapply(predictor_multi_morbid, function(x) length(lev
 symm_cols = binary_cols[names(binary_cols)!='gender']
 
 #gower distance
-man.dist = daisy(predictor_multi_morbid, metric = 'manhattan',
-                   type = list(asymm = 'gender', symm = symm_cols))
+man.dist = daisy(predictor_multi_morbid, metric = 'manhattan')
 
 saveRDS(man.dist,'results/distance_matrix/manhattan_distance_multi_morbid.rds')
 
