@@ -7,7 +7,7 @@ setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morb
 
 mydata = read.csv('data/processed/UKBcompleteFeb19.csv',header=T)
 
-outcomes = c('diabetes','mi','htn','stroke','dvt_asthma_copd_atopy','angina')
+outcomes = c('diabetes','mi','stroke','dvt_asthma_copd_atopy','angina')
 
 outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
 
