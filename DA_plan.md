@@ -72,27 +72,18 @@
   
   #### Pipelines Joel
   
-  Kmeans 
-  
-  FAMD = > Kmeans
-  
-  Auto-Encoder => Kmeans
-  
-  RF => DBSCAN
-  
-  RF => PAM
-  
-  Gower distance matrix => PAM
-  
-  Gower distance matrix => DBSCAN
-  
-  Auto-Encoder => Some distance calculation => DBSCAN
-  
-  Auto-Encoder => Some distance calculation => PAM
-  
-  FAMD => Some distance calculation => PAM
-  
-  FAMD => Some distance calculation => DBSCAN
+  * Kmeans 
+  * FAMD = > Kmeans
+  * Auto-Encoder => Kmeans
+  * RF => DBSCAN
+  * RF => PAM
+  * Gower distance matrix => PAM
+  * Gower distance matrix => DBSCAN
+  * Auto-Encoder => Some distance calculation => DBSCAN
+  * Auto-Encoder => Some distance calculation => PAM
+  * FAMD => Some distance calculation => PAM
+  * FAMD => Some distance calculation => DBSCAN
+
   
   ## Cluster Evaluation and Interpretation
   
