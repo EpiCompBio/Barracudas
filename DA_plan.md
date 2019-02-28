@@ -45,7 +45,7 @@
   2. Partioning around Medoids (Josh could look into that since it's probably close to what he does)
   3. DBSCAN (Joel)
   4. Gaussian Mixture Models (Abi)
-  5. Josh to choose?
+  5. DIANA and hierarchical clustering with various linkage methods (Josh)
   
   ### Pre-Processing
   
