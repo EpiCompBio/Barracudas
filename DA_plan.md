@@ -6,7 +6,8 @@
   
   This data analysis plan describes the aims, methodology and outcomes that will be used for the cluster analysis of multi-morbidity in UK Biobank participants. These analyses will be carried out by the Barracudas (MSc Health Data Analytics and Machine Learning students).
   
-  ![Image of Barracuda]
+ ![Barracuda](/Barracuda.png)
+ 
   ### Aims
   
   The overall objective of this study is to identify subsets of individuals suffering from multi-morbidity who share common environmental and/or biological pathways. To do this we are going to analyse UK Biobank participants.
