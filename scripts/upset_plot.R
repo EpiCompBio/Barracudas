@@ -1,14 +1,12 @@
-require(limma)
-require(VennDiagram)
 require(UpSetR)
 setwd('~/Documents/Translational/Barracudas/')
 mydata = read.csv('../data/processed/UKBcompleteFeb19.csv')
 
 #define morbidly obese
-mydata$obese = ifelse(mydata$BMI > 35, 1, 0)
+mydata$obese = ifelse(mydata$BMI >= 35, 1, 0)
 
 #define outcome col names andn dataset
-outcomes = c('diabetes','mi','stroke','htn','angina','obese')
+outcomes = c('diabetes','mi','stroke','angina','obese')
 
 outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
 
@@ -18,7 +16,7 @@ upset(mydata,
       sets = outcomes,
       sets.bar.color = "#56B4E9",
       order.by = c("freq"), 
-      empty.intersections = "on",
+      empty.intersections = NULL,
       mainbar.y.label = 'Disease Intersections',
       text.scale = c(2, 1.5, 1.5, 1.5, 2, 1.5))
 dev.off()
@@ -35,7 +33,7 @@ upset(multi_morbid,
       sets = outcomes,
       sets.bar.color = "#56B4E9",
       order.by = c("freq"), 
-      empty.intersections = "on",
+      empty.intersections = NULL,
       mainbar.y.label = 'Disease Intersections',
       text.scale = c(2, 1.5, 1.5, 1.5, 2, 1.5))
 dev.off()
