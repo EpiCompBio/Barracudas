@@ -4,15 +4,18 @@ require(UpSetR)
 setwd('~/Documents/Translational/Barracudas/')
 mydata = read.csv('../data/processed/UKBcompleteFeb19.csv')
 
+#define morbidly obese
+mydata$obese = ifelse(mydata$BMI > 35, 1, 0)
+
 #define outcome col names andn dataset
-outcomes = c('diabetes','mi','stroke','dvt_asthma_copd_atopy','angina')
+outcomes = c('diabetes','mi','stroke','htn','angina','obese')
 
 outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
 
 # outcome_dataset = mydata[,outcome_cols]
 
 #upset plot whole dataset
-png('disease_intersections.png',width=1500,height=800)
+png('plots/disease_intersections.png',width=1500,height=800)
 upset(mydata, 
       sets = outcomes,
       sets.bar.color = "#56B4E9",
@@ -29,7 +32,7 @@ no_chronic = apply(mydata[,outcome_cols],1,sum)
 multi_morbid = mydata[which(no_chronic>1),]
 
 #upset plot just multi morbid
-png('multi_morbid_disease_intersections.png',width=1500,height=800)
+png('plots/multi_morbid_disease_intersections.png',width=1500,height=800)
 upset(multi_morbid, 
       sets = outcomes,
       sets.bar.color = "#56B4E9",
