@@ -13,7 +13,7 @@ outcomes = c('diabetes','mi','stroke','htn','angina','obese')
 outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
 
 #upset plot whole dataset
-png('plots/disease_intersections.png',width=1500,height=800)
+svg('plots/disease_intersections.svg',width=20,height=10)
 upset(mydata, 
       sets = outcomes,
       sets.bar.color = "#56B4E9",
