@@ -14,10 +14,10 @@
 | Diabetes (%)              	| 4069 (57.1)        	| 6022 (56.6)      	| 580 (100.0)        	| 1108 (100.0)     	| <0.001  	|
 
  ![Birth Year](plots/birth_years.svg)
- ![Alcohol](descriptive_analysis_results/plots/alcohol.svg)
- ![BMI](descriptive_analysis_results/plots/BMI.svg)
- ![smoker](descriptive_analysis_results/plots/smoker.svg)
+ ![Alcohol](plots/alcohol.svg)
+ ![BMI](plots/BMI.svg)
+ ![smoker](plots/smoker.svg)
  ## Multi-morbid disease intersections
- ![Multi-morbid disease intersections](descriptive_analysis_results/plots/multi_morbid_disease_intersections.svg)
+ ![Multi-morbid disease intersections](plots/multi_morbid_disease_intersections.svg)
  ## Whole cohort disease intersections
- ![All disease intersections](descriptive_analysis_results/plots/disease_intersections.svg)
+ ![All disease intersections](plots/disease_intersections.svg)
