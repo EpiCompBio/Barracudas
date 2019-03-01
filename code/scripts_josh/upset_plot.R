@@ -11,7 +11,7 @@ outcomes = c('diabetes','mi','stroke','angina','obese')
 outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
 
 #upset plot whole dataset
-svg('plots/disease_intersections.svg',width=20,height=10)
+svg('descriptive_analysis_results/plots/disease_intersections.svg',width=20,height=10)
 upset(mydata, 
       sets = outcomes,
       sets.bar.color = "#56B4E9",
@@ -28,7 +28,7 @@ no_chronic = apply(mydata[,outcome_cols],1,sum)
 multi_morbid = mydata[which(no_chronic>1),]
 
 #upset plot just multi morbid
-svg('plots/multi_morbid_disease_intersections.svg',width=20,height=10)
+svg('descriptive_analysis_results/plots/multi_morbid_disease_intersections.svg',width=20,height=10)
 upset(multi_morbid, 
       sets = outcomes,
       sets.bar.color = "#56B4E9",

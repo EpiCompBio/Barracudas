@@ -50,5 +50,5 @@ table1 <- CreateTableOne(vars = vars,
                          strata = strata,
                          factorVars = catVars, data = multi_morbid )
 Table1Matrix <- print(table1, quote=FALSE, noSpaces = TRUE, contDigits=1)
-write.csv(Table1Matrix,'Barracudas/descriptive_analysis/tableone.csv')
+write.csv(Table1Matrix,'Barracudas/descriptive_analysis_results/tableone.csv')
 summary(table1)

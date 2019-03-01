@@ -34,6 +34,8 @@ theme_jh = theme_grey() + theme(plot.title=element_text(family="serif",face="bol
 
 path<-dirname(rstudioapi::getActiveDocumentContext()$path)
 
+setwd(path)
+
 path.functions = paste0(path,'/utility_functions_R/')
 
 source(paste0(path.functions,"PCA_plots_utility.R"))
