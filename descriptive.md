@@ -13,11 +13,11 @@
 | DVT/Asthma/COPD/Atopy (%) 	| 6361 (89.3)        	| 8041 (75.6)      	| 580 (100.0)        	| 1108 (100.0)     	| <0.001  	|
 | Diabetes (%)              	| 4069 (57.1)        	| 6022 (56.6)      	| 580 (100.0)        	| 1108 (100.0)     	| <0.001  	|
 
- ![Birth Year](/plots/birth_years.png)
- ![Alcohol](/plots/alcohol.png)
- ![BMI](/plots/BMI.png)
- ![smoker](/plots/smoker.png)
+ ![Birth Year](/plots/birth_years.svg)
+ ![Alcohol](/plots/alcohol.svg)
+ ![BMI](/plots/BMI.svg)
+ ![smoker](/plots/smoker.svg)
  ## Multi-morbid disease intersections
  ![Multi-morbid disease intersections](/plots/multi_morbid_disease_intersections.svg)
  ## Whole cohort disease intersections
- ![All disease intersections](/plots/disease_intersections.png)
+ ![All disease intersections](/plots/disease_intersections.svg)
