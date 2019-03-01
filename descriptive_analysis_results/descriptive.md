@@ -13,7 +13,7 @@
 | DVT/Asthma/COPD/Atopy (%) 	| 6361 (89.3)        	| 8041 (75.6)      	| 580 (100.0)        	| 1108 (100.0)     	| <0.001  	|
 | Diabetes (%)              	| 4069 (57.1)        	| 6022 (56.6)      	| 580 (100.0)        	| 1108 (100.0)     	| <0.001  	|
 
- ![Birth Year](descriptive_analysis_results/plots/birth_years.svg)
+ ![Birth Year](plots/birth_years.svg)
  ![Alcohol](descriptive_analysis_results/plots/alcohol.svg)
  ![BMI](descriptive_analysis_results/plots/BMI.svg)
  ![smoker](descriptive_analysis_results/plots/smoker.svg)
