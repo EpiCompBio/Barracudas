@@ -17,3 +17,5 @@
  ![Alcohol](/plots/alcohol.png)
  ![BMI](/plots/BMI.png)
  ![smoker](/plots/smoker.png)
+ ![Multi-morbid disease intersections](/plots/multi_morbid_disease_intersections.png)
+ ![All disease intersections](/plots/disease_intersections.png)
