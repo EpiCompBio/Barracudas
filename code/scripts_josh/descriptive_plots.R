@@ -1,4 +1,7 @@
 library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(scales) 
 setwd('~/Documents/Translational/')
 mydata = read.csv('data/processed/UKBcompleteFeb19.csv')
 
@@ -86,3 +89,10 @@ ggplot(mydata, aes(x = current_smoker, fill = Sex)) +
 
 dev.off()
 
+ggplot(mydata, aes(x=no_chronic,  group=current_smoker)) + 
+  geom_bar(aes(y = ..prop.., fill = factor(..x..)), stat="count") +
+  geom_text(aes( label = scales::percent(..prop..),
+                 y= ..prop.. ), stat= "count", vjust = -.5) +
+  labs(y = "Current smokers (%)", fill="Number of chronic diseases") +
+  facet_grid(~Sex) +
+  scale_y_continuous(labels = scales::percent)
