@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # Descriptive analysis: tables and plots
 ## Table 1: whole dataset
+=======
+# Descriptive tables and plots
+## Table 1
+>>>>>>> 582cfdc37f9e773ee7d3fa0b79168d6096c88057
 |                        	| Female:0      	| Male:0        	| Female:1     	| Male:1       	| Female:2     	| Male:2       	| Female:3     	| Male:3       	| p      	|
 |------------------------	|---------------	|---------------	|--------------	|--------------	|--------------	|--------------	|--------------	|--------------	|--------	|
 | n                      	| 237349        	| 188086        	| 31114        	| 33915        	| 4560         	| 6394         	| 449          	| 788          	|        	|
