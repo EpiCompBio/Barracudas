@@ -11,7 +11,7 @@ mydata = read.csv('data/processed/UKBcompleteFeb19.csv',header=T)
 mydata$obese = ifelse(mydata$BMI > 35, 1, 0)
 
 #define outcome col names andn dataset
-outcomes = c('diabetes','mi','stroke','htn','angina','obese')
+outcomes = c('diabetes','mi','stroke','angina','obese')
 
 outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
 

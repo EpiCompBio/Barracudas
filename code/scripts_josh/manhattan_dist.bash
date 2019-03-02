@@ -4,7 +4,7 @@
 #PBS -N manhattan
 
 
-cd /rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/code/HDA_multi-morbidity/Barracudas/scripts/
+cd /rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/Barracudas/code/scripts_josh/
 
 module load anaconda3/personal
 
