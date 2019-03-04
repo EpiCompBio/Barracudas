@@ -1,9 +1,16 @@
-setwd('~/Documents/Translational/')
+lib.path = '/rds/general/user/je108/home/anaconda3/lib/R/library/'
 
-gower.dist = readRDS('results/distance_matrix/gower_distance_multi_morbid.rds')
+suppressPackageStartupMessages(library(doParallel, lib.loc = lib.path
+))
+
+setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/results/clustering')
+
+# setwd('~/Documents/Translational/results/clustering')
+
+gower.dist = readRDS('../distance_matrix/gower_distance_multi_morbid.rds')
 
 #compile list of clustering objects
-cluster_files = list.files('clustering/')
+cluster_files = list.files(pattern = 'gower')
 clusters = list()
 for (i in 1:length(cluster_files)){
 clusters[[i]] = readRDS(cluster_files[i])
@@ -48,5 +55,13 @@ for (i in 1:length(cluster_names)){
 cluster_4_summary = cbind(cluster_4_summary,cluster_names)
 names(cluster_4_summary) = c('Cluster 1','Cluster 2','Cluster 3','Cluster 4','Model')
 
-#cophenetic distances for dendrograms
-cophenetic(as.hclust(clusters[[1]]))
+#cophenetic distances for dendrograms -- gower
+registerDoParallel(6)
+cor.cophenetic = foreach(i = 1:length(clusters), .combine = rbind) %dopar% {
+  d.cophenetic = cophenetic(as.hclust(clusters[[i]]))
+  cor.cophen = c(cor(gower.dist,d.cophenetic),cluster_names[i])
+  return(cor.cophen)
+}
+colnames(cor.cophenetic) = c('cor_cophenetic','model')
+saveRDS(cor.cophenetic,'gower_cophenetic.rds')
+
