@@ -8,7 +8,7 @@ setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morb
 mydata = read.csv('data/processed/UKBcompleteFeb19.csv',header=T)
 
 #define obese BMI > 35
-mydata$obese = ifelse(mydata$BMI > 35, 1, 0)
+mydata$obese = ifelse(mydata$BMI >= 35, 1, 0)
 
 #define outcome col names andn dataset
 outcomes = c('diabetes','mi','stroke','angina','obese')
