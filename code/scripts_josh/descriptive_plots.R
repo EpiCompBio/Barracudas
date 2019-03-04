@@ -98,4 +98,13 @@ ggplot(mydata, aes(x=no_chronic,  group=current_smoker)) +
   labs(y = "Current smokers (%)", fill="Number of chronic diseases") +
   facet_grid(~Sex) +
   scale_y_continuous(labels = scales::percent)
+<<<<<<< HEAD
 >>>>>>> 582cfdc37f9e773ee7d3fa0b79168d6096c88057
+=======
+
+ggplot(mydata, aes(no_chronic, group = current_smoker)) + 
+  geom_bar(aes(y = ..prop.., fill = factor(..x..)), stat="count") + 
+  scale_y_continuous(labels=scales::percent) +
+  ylab("relative frequencies") +
+  facet_grid(~Sex)
+>>>>>>> 9e223d007934861e8a27d8d81d39228936836f92
