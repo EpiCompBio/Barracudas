@@ -1,6 +1,6 @@
-setwd('~/Documents/Translational/results/')
+setwd('~/Documents/Translational/')
 
-gower.dist = readRDS('distance_matrix/')
+gower.dist = readRDS('results/distance_matrix/gower_distance_multi_morbid.rds')
 
 #compile list of clustering objects
 cluster_files = list.files('clustering/')

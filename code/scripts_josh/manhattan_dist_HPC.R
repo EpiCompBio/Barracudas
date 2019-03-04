@@ -53,6 +53,6 @@ cat_col_ids = which(colnames(multi_morbid) %in% cat_cols)
 multi_morbid = as.data.frame(scale(multi_morbid))
 
 #manhattan distance
-man.dist = daisy(multi_morbid, metric = 'manhattan', type = list(ordratio = cat_col_ids))
+man.dist = daisy(multi_morbid, metric = 'manhattan')
 
 saveRDS(man.dist,'results/distance_matrix/manhattan_distance_multi_morbid.rds')
