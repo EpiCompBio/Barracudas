@@ -22,15 +22,15 @@ no_chronic = apply(mydata[,outcome_cols],1,sum)
 multi_morbid = mydata[which(no_chronic>1),-c(1,outcome_cols)]
 
 #binary cols
-binary_cols = which(unlist(sapply(multi_morbid, function(x) length(levels(factor(x)))==2)))
+binary_col_ids = which(unlist(sapply(multi_morbid, function(x) length(levels(factor(x)))==2)))
 
 #symmetrical binary cols
-symm_cols = binary_cols[names(binary_cols)!='gender']
+symm_cols = binary_col_ids[names(binary_col_ids)!='gender']
 
 #categorical cols
-cat_cols = c('birth_month',
-             'self_reported_surgery',
-             'freq_climb_stairs_4wk',
+cat_cols = c('birth_month')
+ord_cols = c('self_reported_surgery',
+             'freq_climb_stairs_4wks',
              'freq_walked_for_pleasure_4wks',
              'Duration_pleasure_walks',
              'smokers_in_house',
@@ -47,18 +47,18 @@ cat_cols = c('birth_month',
              'Alc_intake_freq',
              'seated_box_height'
              )
-cat_col_ids = which(colnames(multi_morbid) %in% cat_cols)
 
-#scale numeric/ordinal features
-multi_morbid[,-binary_cols] = as.data.frame(scale(multi_morbid[,-binary_cols]))
+cat_col_ids = which(colnames(multi_morbid) %in% cat_cols)
+ord_col_ids = which(colnames(multi_morbid) %in% ord_cols) 
+
+multi_morbid[,cat_col_ids] = sapply(multi_morbid[,cat_col_ids],factor)
+multi_morbid[,ord_col_ids] = sapply(multi_morbid[,ord_col_ids],ordered)
+
+#scale numeric features
+multi_morbid[,-c(binary_col_ids,cat_col_ids,ord_col_ids)] = as.data.frame(scale(multi_morbid[,-c(binary_col_ids,cat_col_ids,ord_col_ids)]))
 
 #gower distance
 gower.dist = daisy(multi_morbid, metric = 'gower',
-                   type = list(asymm = 'gender', symm = symm_cols, ordratio = cat_col_ids))
+                   type = list(asymm = 'gender', symm = symm_cols))
 
 saveRDS(gower.dist,'results/distance_matrix/gower_distance_multi_morbid.rds')
-
-# DIANA on gower dist
-#res.diana.gower = diana(gower.dist, diss = TRUE, keep.diss = F, keep.data = F)
-
-#saveRDS(res.diana.gower,'results/clustering/diana_gower_multi_morbid.rds')
