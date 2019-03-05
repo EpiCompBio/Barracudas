@@ -1,6 +1,6 @@
 #!/bin/sh
-#PBS -l walltime=72:00:00
-#PBS -l select=1:ncpus=1:mem=96gb
+#PBS -l walltime=24:00:00
+#PBS -l select=1:ncpus=1:mem=24gb
 #PBS -N manhattan_cluster
 #PBS -q med-bio
 
