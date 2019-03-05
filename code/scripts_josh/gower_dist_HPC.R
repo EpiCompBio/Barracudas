@@ -51,8 +51,8 @@ ord_cols = c('self_reported_surgery',
 cat_col_ids = which(colnames(multi_morbid) %in% cat_cols)
 ord_col_ids = which(colnames(multi_morbid) %in% ord_cols) 
 
-multi_morbid[,cat_col_ids] = sapply(multi_morbid[,cat_col_ids],factor)
-multi_morbid[,ord_col_ids] = sapply(multi_morbid[,ord_col_ids],ordered)
+multi_morbid[,cat_col_ids] = factor(multi_morbid[,cat_col_ids])
+multi_morbid[,ord_col_ids] = lapply(multi_morbid[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
 
 #scale numeric features
 multi_morbid[,-c(binary_col_ids,cat_col_ids,ord_col_ids)] = as.data.frame(scale(multi_morbid[,-c(binary_col_ids,cat_col_ids,ord_col_ids)]))
