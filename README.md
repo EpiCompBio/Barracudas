@@ -2,17 +2,30 @@
 
 ## Methods for dimensionality reduction : 
 
-### PCA 
+### Principal Components Analysis (Not useful here since we have mixed data, but it is for the principle)
 
 Dimensionality reduction through Principal Components Analysis 
 
-### Auto-encoders 
+### Factor Analysis of Mixed Data : 
 
-Dimensionality reduction through Neural Networks
+Dimensionality reduction of mixed data through FAMD
+
+http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/115-famd-factor-analysis-of-mixed-data-in-r-essentials/
+
+http://www.numdam.org/article/RSA_2004__52_4_93_0.pdf
+
+
+### Auto-encoders (THIS IS OUT)
+
+Dimensionality reduction through Neural Networks :
 
 https://blog.keras.io/building-autoencoders-in-keras.html 
 
-# Methods for clustering : 
+This doesn't appear to work very well, since even for model data the clusters aren't correctly retrieved with stuff like kmeans. 
+
+
+## Methods for clustering : 
+
 
 ### Kmeans
 
@@ -33,6 +46,8 @@ Density based clustering
 https://www.aaai.org/Papers/KDD/1996/KDD96-037.pdf
 
 ### Affinity Propagation 
+
+http://science.sciencemag.org/content/315/5814/972
 
 ### Gaussian Mixture Models 
 

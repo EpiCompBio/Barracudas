@@ -75,16 +75,17 @@
 #### Pipelines Joel
   
   * Kmeans (BASELINE = BAD)
-  * FAMD = > Kmeans
-  * Auto-Encoder => Kmeans
+  * FAMD = > Kmeans (Looks promising, retrieves real clusters on example data well)
+  * Auto-Encoder => Kmeans (This doesn't look very good, autoencoders have trouble with the binary and categorical data. Either ditch or additional research)
   * RF => DBSCAN
-  * RF => PAM
+  * RF => PAM 
   * Gower distance matrix => PAM
   * Gower distance matrix => DBSCAN
   * Auto-Encoder => Some distance calculation => DBSCAN
   * Auto-Encoder => Some distance calculation => PAM
   * FAMD => Some distance calculation => PAM
   * FAMD => Some distance calculation => DBSCAN
+  * Kamila R-package (looks very promising)
 
   
 ## Cluster Evaluation and Interpretation

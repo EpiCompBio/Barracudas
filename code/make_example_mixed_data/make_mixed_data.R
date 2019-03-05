@@ -14,6 +14,13 @@ req<-unlist(lapply(libs,require,character.only=TRUE))
 
 using("MASS")
 
+################################################################################
+# WORKING DIRECTORY AND SOURCING FUNCTIONS
+################################################################################
+
+# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
+# 
+# setwd(file_path)
 
 set.seed(1)
 
