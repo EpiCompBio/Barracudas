@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 # Descriptive analysis: tables and plots
 ## Table 1: whole dataset
-=======
 # Descriptive tables and plots
 ## Table 1
 |                        	| Female:0      	| Male:0        	| Female:1     	| Male:1       	| Female:2     	| Male:2       	| Female:3     	| Male:3       	| p      	|
