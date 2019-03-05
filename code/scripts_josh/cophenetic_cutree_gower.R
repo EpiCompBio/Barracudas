@@ -56,7 +56,8 @@ cluster_4_summary = cbind(cluster_4_summary,cluster_names)
 names(cluster_4_summary) = c('Cluster 1','Cluster 2','Cluster 3','Cluster 4','Model')
 
 #cophenetic distances for dendrograms -- gower
-registerDoParallel(6)
+cl = makeCluster(6)
+registerDoParallel(cl)
 cor.cophenetic = foreach(i = 1:length(clusters), .combine = rbind) %dopar% {
   d.cophenetic = cophenetic(as.hclust(clusters[[i]]))
   cor.cophen = c(cor(gower.dist,d.cophenetic),cluster_names[i])
@@ -65,3 +66,9 @@ cor.cophenetic = foreach(i = 1:length(clusters), .combine = rbind) %dopar% {
 colnames(cor.cophenetic) = c('cor_cophenetic','model')
 saveRDS(cor.cophenetic,'gower_cophenetic.rds')
 
+gower_cluster_summary = list(NULL)
+gower_cluster_summary$two = cluster_2_summary
+gower_cluster_summary$three = cluster_3_summary
+gower_cluster_summary$four = cluster_4_summary
+
+saveRDS(gower_cluster_summary,'gower_cluster_summary.rds')
