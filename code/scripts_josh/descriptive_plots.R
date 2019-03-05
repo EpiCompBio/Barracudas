@@ -88,23 +88,3 @@ ggplot(mydata, aes(x = current_smoker, fill = Sex)) +
         axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
 
 dev.off()
-
-<<<<<<< HEAD
-=======
-ggplot(mydata, aes(x=no_chronic,  group=current_smoker)) + 
-  geom_bar(aes(y = ..prop.., fill = factor(..x..)), stat="count") +
-  geom_text(aes( label = scales::percent(..prop..),
-                 y= ..prop.. ), stat= "count", vjust = -.5) +
-  labs(y = "Current smokers (%)", fill="Number of chronic diseases") +
-  facet_grid(~Sex) +
-  scale_y_continuous(labels = scales::percent)
-<<<<<<< HEAD
->>>>>>> 582cfdc37f9e773ee7d3fa0b79168d6096c88057
-=======
-
-ggplot(mydata, aes(no_chronic, group = current_smoker)) + 
-  geom_bar(aes(y = ..prop.., fill = factor(..x..)), stat="count") + 
-  scale_y_continuous(labels=scales::percent) +
-  ylab("relative frequencies") +
-  facet_grid(~Sex)
->>>>>>> 9e223d007934861e8a27d8d81d39228936836f92

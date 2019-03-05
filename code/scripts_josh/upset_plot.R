@@ -18,7 +18,7 @@ upset(mydata,
       order.by = c("freq"), 
       empty.intersections = NULL,
       mainbar.y.label = 'Disease Intersections',
-      text.scale = c(2, 1.5, 1.5, 1.5, 2, 1.5))
+      text.scale = c(3, 3, 3, 1.9, 3, 4))
 dev.off()
 
 #col of chronic diseases
@@ -35,6 +35,6 @@ upset(multi_morbid,
       order.by = c("freq"), 
       empty.intersections = NULL,
       mainbar.y.label = 'Disease Intersections',
-      text.scale = c(2, 1.5, 1.5, 1.5, 2, 1.5))
+      text.scale = c(3, 3, 3, 1.9, 3, 4))
 dev.off()
 
