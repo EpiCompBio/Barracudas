@@ -1,0 +1,94 @@
+\documentclass{article}
+
+%Always needed but we don't really know why that much
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}    
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath} %maths
+\usepackage{amssymb} %math symbols
+\usepackage{soul} %Package to underline
+\usepackage{graphicx} %Figures
+\usepackage{chngcntr} % De­fines com­mands \coun­ter­within
+\usepackage{float} %Im­proves the in­ter­face for defin­ing float­ing ob­jects 
+%such as fig­ures and ta­bles
+\linespread{1.2} % Line spacing
+% définition des marges
+\usepackage{geometry}
+\geometry{hmargin=3cm,vmargin=3cm}
+\usepackage{xcolor} %Package to colorier text
+\usepackage{tabularx} %tables
+\usepackage[hang,small]{caption} %for captions
+\usepackage{verbatim} %Package to comment out paragraphs
+\usepackage{fancyhdr} % Headers and footers
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{arrows.meta,shapes}
+
+\usepackage{hyperref} %Package for hyperlinks
+
+\usepackage{tocloft}
+\usepackage{subcaption}
+
+\usepackage{listings}
+
+
+
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{Imperial College London $\bullet$ Clinical Data Management 
+Project} % 
+%Custom header text
+\fancyfoot[RO,LE]{\thepage} % Custom footer text
+
+
+\counterwithin{section}{part}
+\renewcommand{\thepart}{\Alph{part}}
+\renewcommand\thesection{\Roman{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand\thesubsubsection{\thesubsection.\alph{subsubsection}}
+
+\addtolength{\cftsecnumwidth}{10pt}
+\addtolength{\cftsubsecnumwidth}{10pt}
+
+\title{ 
+\fontsize{22pt}{10pt}\selectfont\textbf{Translational Data Science}}
+
+\author{Abigail East, Joshua Elliot, Joël Heller}
+
+\begin{document}
+	
+\thispagestyle{fancy} % All pages have headers and footers
+	
+\maketitle	
+\newpage
+	
+	
+	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%TABLE OF CONTENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%INTRODUCTION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+\section{Introduction}
+
+blehzfrgbg \cite{Milligan1981}
+\cite{Ester:1996:DAD:3001460.3001507}
+
+\section{Bleh}
+	
+\bibliographystyle{unsrt}
+\bibliography{References}	
+
+
+\end{document}

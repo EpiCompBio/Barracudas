@@ -12,7 +12,7 @@ using<-function(...) {
   }
 }
 
-using("FactoMineR")
+using("FactoMineR","mclust")
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -68,18 +68,28 @@ example_mixed_data_clustering_kamila=example_mixed_data_clustering_kamila[,-ncol
 FAMD_res_example_mixed_data_clustering_1=FAMD(example_mixed_data_clustering_1, ncp = ncol(example_mixed_data_clustering_1), graph = FALSE)
 
 ################################################################################
-# Kmeans on the FAMD row coordinates
+# GMM on the FAMD row coordinates
 ################################################################################
+# gaussian_mixture_clustering  <- Mclust(breast_cancer_clustering, 2)
 
-kmeans_FAMD_res_example_mixed_data_clustering_1=kmeans(FAMD_res_example_mixed_data_clustering_1$ind$coord[,1:7],centers=3)
-clusters_kmeans_FAMD=kmeans_FAMD_res_example_mixed_data_clustering_1$cluster
 
-kmeans_FAMD_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,classes=clusters_kmeans_FAMD,
+GMM_FAMD_res_example_mixed_data_clustering_1=Mclust(FAMD_res_example_mixed_data_clustering_1$ind$coord[,1:7],G=3)
+clusters_GMM_FAMD=GMM_FAMD_res_example_mixed_data_clustering_1$classification
+
+GMM_FAMD_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,classes=as.factor(clusters_GMM_FAMD),
                                                     dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale)
-x11()
-print(kmeans_FAMD_classes_plot)
 
-table(true_clusters,clusters_kmeans_FAMD)
+
+
+svg(filename="../results_joel_PC/FAMD_GMM_self_mixed_data_classes_plot.svg",width=10,height=10)
+print(GMM_FAMD_classes_plot)
+dev.off()
+
+x11(width=10,height=10)
+print(GMM_FAMD_classes_plot)
+
+table(true_clusters,clusters_GMM_FAMD)
+
 
 
 ################################################################################################################
@@ -92,19 +102,27 @@ table(true_clusters,clusters_kmeans_FAMD)
 # FAMD
 ################################################################################
 
-FAMD_res_example_mixed_data_clustering_kamila=FAMD(example_mixed_data_clustering_kamila, ncp = ncol(example_mixed_data_clustering_kamila), graph = FALSE)
+FAMD_res_example_mixed_data_clustering_kamila=FAMD(example_mixed_data_clustering_kamila,
+                                                   ncp = ncol(example_mixed_data_clustering_kamila), graph = FALSE)
+
 
 ################################################################################
-# Kmeans on the FAMD row coordinates
+# GMM on the FAMD row coordinates
 ################################################################################
 
-kmeans_FAMD_res_example_mixed_data_clustering_kamila=kmeans(FAMD_res_example_mixed_data_clustering_kamila$ind$coord[,1:7],centers=2)
-clusters_kmeans_FAMD_kamila=kmeans_FAMD_res_example_mixed_data_clustering_kamila$cluster
 
-kmeans_FAMD_kamila_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_kamila,classes=clusters_kmeans_FAMD_kamila,
+GMM_FAMD_res_example_mixed_data_clustering_kamila=Mclust(FAMD_res_example_mixed_data_clustering_kamila$ind$coord[,1:7],G=2)
+clusters_GMM_FAMD_kamila=GMM_FAMD_res_example_mixed_data_clustering_kamila$classification
+
+GMM_FAMD_kamila_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_kamila,classes=clusters_GMM_FAMD_kamila,
                                                            dims=c(1,2),
-                                                    custom_theme=theme_jh,color_scale=distinct_scale)
-x11()
-print(kmeans_FAMD_kamila_classes_plot)
+                                                           custom_theme=theme_jh,color_scale=distinct_scale)
 
-table(true_clusters_kamila,clusters_kmeans_FAMD_kamila)
+svg(filename="../results_joel_PC/FAMD_GMM_kamila_mixed_data_classes_plot.svg",width=10,height=10)
+print(GMM_FAMD_kamila_classes_plot)
+dev.off()
+
+x11(width=10,height=10)
+print(GMM_FAMD_kamila_classes_plot)
+
+table(true_clusters_kamila,clusters_GMM_FAMD_kamila)

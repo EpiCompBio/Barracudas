@@ -12,7 +12,7 @@ using<-function(...) {
   }
 }
 
-using("FactoMineR","dbscan")
+using("randomForest","caret","cluster","FactoMineR")
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -55,11 +55,13 @@ for (k in 5:ncol(example_mixed_data_clustering_kamila)) {
 true_clusters_kamila=example_mixed_data_clustering_kamila[,ncol(example_mixed_data_clustering_kamila)]
 example_mixed_data_clustering_kamila=example_mixed_data_clustering_kamila[,-ncol(example_mixed_data_clustering_kamila)]
 
+
 ################################################################################################################
 ################################################################################################################
 # Selfmade mixed data
 ################################################################################################################
 ################################################################################################################
+
 
 ################################################################################
 # FAMD
@@ -68,28 +70,39 @@ example_mixed_data_clustering_kamila=example_mixed_data_clustering_kamila[,-ncol
 FAMD_res_example_mixed_data_clustering_1=FAMD(example_mixed_data_clustering_1, ncp = ncol(example_mixed_data_clustering_1), graph = FALSE)
 
 ################################################################################
-# DBSCAN 
+# Gower distance for the proximty measures
 ################################################################################
 
+gower_dissimilarity=as.matrix(daisy(example_mixed_data_clustering_1,metric="gower"))
 
-dbscan_FAMD_res_example_mixed_data_clustering_1=dbscan(FAMD_res_example_mixed_data_clustering_1$ind$coord[,1:7],eps=2.2)
-print(unique(dbscan_FAMD_res_example_mixed_data_clustering_1$cluster))
+################################################################################
+# PAM on the dissimilarity matrix made with the Gower distance
+################################################################################
 
-clusters_dbscan_FAMD=dbscan_FAMD_res_example_mixed_data_clustering_1$cluster
+pam_clustering_gower=pam(gower_dissimilarity, diss = TRUE, 3)
 
-dbscan_FAMD_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,classes=clusters_dbscan_FAMD,
-                                                    dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale)
-x11()
-print(dbscan_FAMD_classes_plot)
 
-table(true_clusters,clusters_dbscan_FAMD)
+pam_clustering_gower_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,
+                                                          classes=as.factor(pam_clustering_gower$clustering),dims=c(1,2),
+                                                          custom_theme=theme_jh,color_scale=distinct_scale)
+
+svg(filename="../results_joel_PC/gower_PAM_self_mixed_data_classes_plot.svg",width=10,height=10)
+print(pam_clustering_gower_classes_plot)
+dev.off()
+
+x11(width=10,height=10)
+print(pam_clustering_gower_classes_plot)
+
+
+print(table(as.factor(pam_clustering_gower$clustering),true_clusters))
 
 
 ################################################################################################################
 ################################################################################################################
-# Kamila made mixed data
+# kamila mixed data
 ################################################################################################################
 ################################################################################################################
+
 
 ################################################################################
 # FAMD
@@ -97,18 +110,32 @@ table(true_clusters,clusters_dbscan_FAMD)
 
 FAMD_res_example_mixed_data_clustering_kamila=FAMD(example_mixed_data_clustering_kamila, ncp = ncol(example_mixed_data_clustering_kamila), graph = FALSE)
 
+
 ################################################################################
-# Kmeans on the FAMD row coordinates
+# Gower distance for the proximty measures
 ################################################################################
 
-dbscan_FAMD_res_example_mixed_data_clustering_kamila=dbscan(FAMD_res_example_mixed_data_clustering_kamila$ind$coord[,1:7],eps=2.2)
-print(unique(dbscan_FAMD_res_example_mixed_data_clustering_kamila$cluster))
-clusters_dbscan_FAMD_kamila=dbscan_FAMD_res_example_mixed_data_clustering_kamila$cluster
+gower_dissimilarity_kamila=as.matrix(daisy(example_mixed_data_clustering_kamila,metric="gower"))
 
-dbscan_FAMD_kamila_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_kamila,classes=clusters_dbscan_FAMD_kamila,
-                                                           dims=c(1,2),
-                                                           custom_theme=theme_jh,color_scale=distinct_scale)
-x11()
-print(dbscan_FAMD_kamila_classes_plot)
+################################################################################
+# PAM on the dissimilarity matrix made with the Gower distance
+################################################################################
 
-table(true_clusters_kamila,clusters_dbscan_FAMD_kamila)
+pam_clustering_kamila_gower=pam(gower_dissimilarity_kamila, diss = TRUE, 2)
+
+
+pam_clustering_kamila_gower_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_kamila,
+                                                             classes=as.factor(pam_clustering_kamila_gower$clustering),dims=c(1,2),
+                                                             custom_theme=theme_jh,color_scale=distinct_scale)
+
+svg(filename="../results_joel_PC/gower_PAM_kamila_mixed_data_classes_plot.svg",width=10,height=10)
+print(pam_clustering_kamila_gower_classes_plot)
+dev.off()
+
+x11(width=10,height=10)
+print(pam_clustering_kamila_gower_classes_plot)
+
+
+print(table(as.factor(pam_clustering_kamila_gower$clustering),true_clusters_kamila))
+
+

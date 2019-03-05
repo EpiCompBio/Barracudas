@@ -12,7 +12,7 @@ using<-function(...) {
   }
 }
 
-using("FactoMineR")
+using("kamila","FactoMineR")
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -55,6 +55,7 @@ for (k in 5:ncol(example_mixed_data_clustering_kamila)) {
 true_clusters_kamila=example_mixed_data_clustering_kamila[,ncol(example_mixed_data_clustering_kamila)]
 example_mixed_data_clustering_kamila=example_mixed_data_clustering_kamila[,-ncol(example_mixed_data_clustering_kamila)]
 
+
 ################################################################################################################
 ################################################################################################################
 # Selfmade mixed data
@@ -67,50 +68,66 @@ example_mixed_data_clustering_kamila=example_mixed_data_clustering_kamila[,-ncol
 
 FAMD_res_example_mixed_data_clustering_1=FAMD(example_mixed_data_clustering_1, ncp = ncol(example_mixed_data_clustering_1), graph = FALSE)
 
+
 ################################################################################
-# GMM on the FAMD row coordinates
+# Kamila algorithm
 ################################################################################
-# gaussian_mixture_clustering  <- Mclust(breast_cancer_clustering, 2)
+
+kamila_example_mixed_data_clustering_1 <- kamila(example_mixed_data_clustering_1[,1:3],
+                                                 example_mixed_data_clustering_1[,4:7], numClust = 3, numInit = 10)
 
 
-GMM_FAMD_res_example_mixed_data_clustering_1=Mclust(FAMD_res_example_mixed_data_clustering_1$ind$coord[,1:7],G=3)
-clusters_GMM_FAMD=GMM_FAMD_res_example_mixed_data_clustering_1$classification
 
-GMM_FAMD_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,classes=as.factor(clusters_GMM_FAMD),
-                                                    dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale)
-x11()
-print(GMM_FAMD_classes_plot)
+kamila_clustering_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,
+                                                             classes=as.factor(kamila_example_mixed_data_clustering_1$finalMemb),dims=c(1,2),
+                                                             custom_theme=theme_jh,color_scale=distinct_scale)
 
-table(true_clusters,clusters_GMM_FAMD)
+svg(filename="../results_joel_PC/kamila_self_mixed_data_classes_plot.svg",width=10,height=10)
+print(kamila_clustering_classes_plot)
+dev.off()
 
+x11(width=10,height=10)
+print(kamila_clustering_classes_plot)
+
+
+print(table(as.factor(kamila_example_mixed_data_clustering_1$finalMemb),true_clusters))
 
 
 ################################################################################################################
 ################################################################################################################
-# Kamila made mixed data
+# kamila mixed data
 ################################################################################################################
 ################################################################################################################
+
 
 ################################################################################
 # FAMD
 ################################################################################
 
-FAMD_res_example_mixed_data_clustering_kamila=FAMD(example_mixed_data_clustering_kamila,
-                                                   ncp = ncol(example_mixed_data_clustering_kamila), graph = FALSE)
+FAMD_res_example_mixed_data_clustering_kamila=FAMD(example_mixed_data_clustering_kamila, ncp = ncol(example_mixed_data_clustering_kamila), graph = FALSE)
 
 
 ################################################################################
-# GMM on the FAMD row coordinates
+# Kamila algorithm
 ################################################################################
 
+kamila_example_mixed_data_clustering_kamila <- kamila(example_mixed_data_clustering_kamila[,1:4],
+                                                 example_mixed_data_clustering_kamila[,5:7], numClust = 2, numInit = 10)
 
-GMM_FAMD_res_example_mixed_data_clustering_kamila=Mclust(FAMD_res_example_mixed_data_clustering_kamila$ind$coord[,1:7],G=2)
-clusters_GMM_FAMD_kamila=GMM_FAMD_res_example_mixed_data_clustering_kamila$classification
 
-GMM_FAMD_kamila_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_kamila,classes=clusters_GMM_FAMD_kamila,
-                                                           dims=c(1,2),
-                                                           custom_theme=theme_jh,color_scale=distinct_scale)
-x11()
-print(GMM_FAMD_kamila_classes_plot)
 
-table(true_clusters_kamila,clusters_GMM_FAMD_kamila)
+kamila_clustering_kamila_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_kamila,
+                                                          classes=as.factor(kamila_example_mixed_data_clustering_kamila$finalMemb),dims=c(1,2),
+                                                          custom_theme=theme_jh,color_scale=distinct_scale)
+
+
+svg(filename="../results_joel_PC/kamila_kamila_mixed_data_classes_plot.svg",width=10,height=10)
+print(kamila_clustering_kamila_classes_plot)
+dev.off()
+
+x11(width=10,height=10)
+print(kamila_clustering_kamila_classes_plot)
+
+
+print(table(as.factor(kamila_example_mixed_data_clustering_kamila$finalMemb),true_clusters_kamila))
+
