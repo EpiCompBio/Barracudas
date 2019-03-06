@@ -87,6 +87,7 @@
   * Gower distance matrix 
     * PAM
     * DBSCAN
+    * GMM
   
   * Kamila R-package (looks very promising)
   
