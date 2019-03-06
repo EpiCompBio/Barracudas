@@ -6,7 +6,7 @@
   
   This data analysis plan describes the aims, methodology and outcomes that will be used for the cluster analysis of multi-morbidity in UK Biobank participants. These analyses will be carried out by the Barracudas (MSc Health Data Analytics and Machine Learning students).
   
- ![Barracuda](/Barracuda.png)
+ ![Barracuda](Barracuda.jpg)
  
 ### Aims
   
