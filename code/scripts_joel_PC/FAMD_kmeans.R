@@ -85,7 +85,7 @@ dev.off()
 x11(width=10,height=10)
 print(kmeans_FAMD_classes_plot)
 
-table(true_clusters,clusters_kmeans_FAMD)
+table(true_clusters_example_mixed_data_clustering_1,clusters_kmeans_FAMD)
 
 
 ################################################################################################################

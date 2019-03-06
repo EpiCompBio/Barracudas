@@ -14,9 +14,9 @@
 | Obese (%)              	| 0 (0.0)       	| 0 (0.0)       	| 17584 (56.5) 	| 8930 (26.3)  	| 3666 (80.4)  	| 3478 (54.4)  	| 449 (100.0)  	| 788 (100.0)  	| <0.001 	|
 
  ![Birth Year](plots/birth_years.svg)
- ![Alcohol](plots/alcohol.svg)
+ ![prop_n_disease_by_alcohol_by_sex_plot](descritptive_analysis_joel_plots/prop_n_disease_by_alcohol_by_sex_plot.svg)
  ![BMI](plots/BMI.svg)
- ![smoker](plots/smoker.svg)
+ ![prop_n_disease_by_smoking_by_sex_plot(descritptive_analysis_joel_plots/prop_n_disease_by_smoking_by_sex_plot.svg)
  ## Multi-morbid disease intersections
  ![Multi-morbid disease intersections](plots/multi_morbid_disease_intersections.svg)
  ## Whole cohort disease intersections
