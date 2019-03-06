@@ -65,29 +65,42 @@
   Explore dimensionality reduction techniques for mixed datasets
   
   * FAMD => Mixed PCA with FactoMineR package
-  * Auto-encoder => One hot encode everything and throw a neural network at it
   
 #### Approach 2
   
   * Use approach one then some distance matrix for continuous features
-  * Use Gower distance/random forests on the whole dataset to compute similarities from the mixed data
+  * Use **Gower distance** & **random forests** on the whole dataset to compute similarities from the mixed data
   
-#### Pipelines Joel
+#### Pipelines 
   
   * Kmeans (BASELINE = BAD)
-  * FAMD = > Kmeans (Looks promising, retrieves real clusters on example data well)
-  * Auto-Encoder => Kmeans (This doesn't look very good, autoencoders have trouble with the binary and categorical data. Either ditch or additional research)
-  * RF => DBSCAN
-  * RF => PAM 
-  * Gower distance matrix => PAM
-  * Gower distance matrix => DBSCAN
-  * Auto-Encoder => Some distance calculation => DBSCAN
-  * Auto-Encoder => Some distance calculation => PAM
-  * FAMD => Some distance calculation => PAM
-  * FAMD => Some distance calculation => DBSCAN
-  * Kamila R-package (looks very promising)
-
   
+  * FAMD 
+    * Kmeans (Looks promising, retrieves real clusters on example data well)
+    * PAM 
+    * DBSCAN
+    
+  * RF
+    * DBSCAN
+    * PAM
+ 
+  * Gower distance matrix 
+    * PAM
+    * DBSCAN
+    * GMM
+  
+  * Kamila R-package (looks very promising)
+  
+  * Options to explore if time
+  
+    *  Auto-encoder (one hot encode everything and throw a neural network at it)
+        * Kmeans
+        * Some distance calculation => DBSCAN
+        * Some distance calculation => PAM 
+    * FAMD 
+      * Some distance calculation) => PAM
+      * Some distance calculation) => DBSCAN
+        
 ## Cluster Evaluation and Interpretation
   
 ### Cluster Evaluation
@@ -101,6 +114,7 @@
   
 ### Cluster Interpretation
   
+  * Interpretation of components and clusters from FAMD
   * Dimensionality reduction and interpretation of coefficients
   * Univariate tests for all variables?
   * Interpretation plots?
