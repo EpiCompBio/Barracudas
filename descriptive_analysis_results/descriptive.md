@@ -16,7 +16,7 @@
  ![Birth Year](plots/birth_years.svg)
  ![prop_n_disease_by_alcohol_by_sex_plot](descritptive_analysis_joel_plots/prop_n_disease_by_alcohol_by_sex_plot.svg)
  ![BMI](plots/BMI.svg)
- ![prop_n_disease_by_smoking_by_sex_plot(descritptive_analysis_joel_plots/prop_n_disease_by_smoking_by_sex_plot.svg)
+ ![prop_n_disease_by_smoking_by_sex_plot](descritptive_analysis_joel_plots/prop_n_disease_by_smoking_by_sex_plot.svg)
  ## Multi-morbid disease intersections
  ![Multi-morbid disease intersections](plots/multi_morbid_disease_intersections.svg)
  ## Whole cohort disease intersections
