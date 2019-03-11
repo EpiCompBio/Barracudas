@@ -35,8 +35,8 @@ library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
 
-mydata=read.csv("../data/processed/UKBcompleteFeb19_subset.csv")
-# mydata=read.csv("../data/processed/UKBcompleteFeb19.csv")
+# mydata=read.csv("../data/processed/UKBcompleteFeb19_subset.csv",row.names=1)
+mydata=read.csv("../data/processed/UKBcompleteFeb19.csv")
 
 
 
@@ -74,7 +74,7 @@ binary_cols = which(unlist(sapply(mydata, function(x) length(levels(factor(x)))=
 mydata[,binary_cols]=lapply(mydata[,binary_cols],as.factor)
 
 #re-organize columns
-mydata=mydata %>% select(X,eid,mi,angina,stroke,htn,obese,no_chronic, everything())
+mydata=mydata %>% select(eid,mi,angina,stroke,htn,obese,no_chronic, everything())
 
 #subset multi morbid rows
 multi_morbid = mydata[which(mydata$no_chronic>1),]
@@ -174,7 +174,7 @@ dev.off()
 
 cat_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "factor"]
 cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) != "factor"]
-cont_variables=cont_variables[3:length(cont_variables)]
+cont_variables=cont_variables[2:length(cont_variables)]
 
 
 kmeans_FAMD_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
@@ -310,7 +310,7 @@ dev.off()
 
 cat_variables=colnames(mydata)[sapply(mydata,class) == "factor"]
 cont_variables=colnames(mydata)[sapply(mydata,class) != "factor"]
-cont_variables=cont_variables[3:length(cont_variables)]
+cont_variables=cont_variables[2:length(cont_variables)]
 
 
 kmeans_FAMD_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=mydata[,cont_variables],

@@ -2,7 +2,7 @@
 # LOADING LIBRARIES
 ################################################################################
 
-#using<-function(...) {
+# using<-function(...) {
 #  libs<-unlist(list(...))
 #   req<-unlist(lapply(libs,require,character.only=TRUE))
 #  need<-libs[req==FALSE]
@@ -10,9 +10,9 @@
 #    install.packages(need)
 #    lapply(need,require,character.only=TRUE)
 #  }
-#}
-#
-#using("FactoMineR")
+# }
+# 
+# using("FactoMineR")
 
 
 library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
@@ -34,7 +34,7 @@ library(shadowtext,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
   
 
-# mydata=read.csv("../data/processed/UKBcompleteFeb19_subset.csv")
+# mydata=read.csv("../data/processed/UKBcompleteFeb19_subset.csv",row.names=1)
 mydata=read.csv("../data/processed/UKBcompleteFeb19.csv")
 
 
@@ -69,7 +69,7 @@ binary_cols = which(unlist(sapply(mydata, function(x) length(levels(factor(x)))=
 mydata[,binary_cols]=lapply(mydata[,binary_cols],as.factor)
 
 #re-organize columns
-mydata=mydata %>% select(X,eid,mi,angina,stroke,htn,obese,no_chronic, everything())
+mydata=mydata %>% select(eid,mi,angina,stroke,htn,obese,no_chronic, everything())
 
 #subset multi morbid rows
 multi_morbid = mydata[which(mydata$no_chronic>1),]
@@ -98,7 +98,7 @@ for (k in 1:ncol(multi_morbid)) {
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,9:ncol(multi_morbid)], ncp = ncol(multi_morbid)-9, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,8:ncol(multi_morbid)], ncp = ncol(multi_morbid)-8, graph = FALSE)
 
 
 #IND PLOTS
@@ -151,7 +151,7 @@ saveRDS(FAMD_multi_morbid_res,"../data/processed/FAMD_multi_morbid_res.rds")
 # FAMD on the full dataset
 ################################################################################
 
-FAMD_full_data_res=FAMD(mydata[,9:ncol(multi_morbid)] , ncp = ncol(multi_morbid)-9, graph = FALSE)
+FAMD_full_data_res=FAMD(mydata[,8:ncol(multi_morbid)] , ncp = ncol(multi_morbid)-8, graph = FALSE)
 
 
 #IND PLOTS
