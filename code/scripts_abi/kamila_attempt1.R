@@ -60,6 +60,11 @@ multi_morbid = mydata[which(mydata$no_chronic>1),]
 rownames(multi_morbid) <- multi_morbid[,1]
 multi_morbid[,1] <- NULL
 
+mydata[,'no_chronic']=as.factor(mydata[,'no_chronic'])
+multi_morbid[,'no_chronic']=as.factor(multi_morbid[,'no_chronic'])
+
+saveRDS(multi_morbid, file = "Data/mm_unscaled.rds")
+
 for (k in 1:ncol(mydata)) {
   if (class(mydata[,k])!="factor") {
     mydata[,k]=scale(mydata[,k])
@@ -72,4 +77,34 @@ for (k in 1:ncol(multi_morbid)) {
   }
 }
 
-saveRDS(multi_morbid, file = "Data/multi_morbid_final.rds")
+saveRDS(multi_morbid, file = "Data/mm_scaled.rds")
+
+################################################################################
+################################################################################
+# multi-morbid individuals only
+################################################################################
+################################################################################
+
+################################################################################
+# FAMD on the multi-morbid individuals
+################################################################################
+
+multi_morbid <- readRDS("Data/mm_scaled.rds")
+
+FAMD_kamila_cluster=FAMD(multi_morbid, ncp = ncol(multi_morbid), graph = FALSE)
+
+################################################################################
+# Kamila algorithm
+################################################################################
+
+kamila_cluster <- kamila(multi_morbid[,7:59], multi_morbid[,60:77], numClust = 3, numInit = 10)
+
+kamila_cluster_plot=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
+                                                          classes=as.factor(kamila_cluster$finalMemb),dims=c(1,2),
+                                                          custom_theme=theme_jh,color_scale=distinct_scale)
+
+table(kamila_cluster$finalMemb)
+
+svg("kamila_cluster_plot.svg")
+kamila_cluster_plot
+dev.off()
