@@ -123,3 +123,18 @@ prop_dis_smoking_sex_plot=ggplot(prop_dis_smoking_sex_plot_data) +
 svg("../../descriptive_analysis_results/descritptive_analysis_joel_plots/prop_n_disease_by_smoking_by_sex_plot.svg")
 print(prop_dis_smoking_sex_plot)
 dev.off()
+
+
+vect=rnorm(10^7) 
+
+t0=Sys.time()
+squared=sapply(vect, FUN = function(x){x^2})
+t1=Sys.time()
+print(t1-t0)
+
+cl <- makeCluster(7) 
+set.seed(1)
+# simulated data
+
+squared=parSapply(cl = cl, X = vect, FUN = function(x){x^2})
+stopCluster(cl)
