@@ -14,6 +14,16 @@ using<-function(...) {
 
 using("FactoMineR","parallel","clusterCrit")
 
+library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(reshape2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(shadowtext,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS

@@ -2,17 +2,26 @@
 # LOADING LIBRARIES
 ################################################################################
 
-using<-function(...) {
-  libs<-unlist(list(...))
-  req<-unlist(lapply(libs,require,character.only=TRUE))
-  need<-libs[req==FALSE]
-  if(length(need)>0){
-    install.packages(need)
-    lapply(need,require,character.only=TRUE)
-  }
-}
+#using<-function(...) {
+#  libs<-unlist(list(...))
+#   req<-unlist(lapply(libs,require,character.only=TRUE))
+#  need<-libs[req==FALSE]
+#  if(length(need)>0){
+#    install.packages(need)
+#    lapply(need,require,character.only=TRUE)
+#  }
+#}
+#
+#using("FactoMineR")
 
-using("FactoMineR")
+
+library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(reshape2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(shadowtext,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 ################################################################################
@@ -22,7 +31,7 @@ using("FactoMineR")
 # file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
 # setwd(file_path)
 
-setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
+# setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
   
 
 # mydata=read.csv("../data/processed/UKBcompleteFeb19_subset.csv")
