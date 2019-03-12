@@ -2,17 +2,17 @@
 # LOADING LIBRARIES
 ################################################################################
 
-using<-function(...) {
-  libs<-unlist(list(...))
-  req<-unlist(lapply(libs,require,character.only=TRUE))
-  need<-libs[req==FALSE]
-  if(length(need)>0){
-    install.packages(need)
-    lapply(need,require,character.only=TRUE)
-  }
-}
-
-using("FactoMineR","parallel","clusterCrit")
+# using<-function(...) {
+#   libs<-unlist(list(...))
+#   req<-unlist(lapply(libs,require,character.only=TRUE))
+#   need<-libs[req==FALSE]
+#   if(length(need)>0){
+#     install.packages(need)
+#     lapply(need,require,character.only=TRUE)
+#   }
+# }
+# 
+# using("FactoMineR","parallel","clusterCrit")
 
 library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(reshape2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
@@ -235,137 +235,137 @@ dev.off()
 }
 
 
-################################################################################
-################################################################################
-# full dataset
-################################################################################
-################################################################################
-
-FAMD_full_data_res=readRDS("../data/processed/FAMD_full_data_res.rds")
-
-nb_comp_FAMD_full_data=which(FAMD_full_data_res$eig[,3] > 90)[1]
-
-
-################################################################################
-# Choosing the number of clusters for kmeans
-################################################################################
-
-n_classes=2:8
-
-cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
-cluster_crit_df[,1]=n_classes
-colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
-
-
-# Different numbers of centers
-for (k in 1:length(n_classes)) {
-  
-  kmeans_FAMD_full_data=kmeans(FAMD_full_data_res$ind$coord[,1:nb_comp_FAMD_full_data],centers=n_classes[k])
-  
-  cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_full_data_res$ind$coord[,1:nb_comp_FAMD_full_data]),
-                                            part=kmeans_FAMD_full_data$cluster,c("Calinski_Harabasz","Silhouette")))
-}
-
-
-saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_kmeans/cluster_crit_df_kmeans_FAMD_multi_morbid.rds")
-
-
-################################################################################
-# Kmeans on the FAMD row coordinates
-################################################################################
-
-
-
-kmeans_FAMD_full_data=kmeans(FAMD_full_data_res$ind$coord[,1:nb_comp_FAMD_full_data],centers=2)
-
-saveRDS(kmeans_FAMD_full_data,"../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data.rds")
-
-clusters_kmeans_FAMD_full_data=kmeans_FAMD_full_data$cluster
-
-kmeans_FAMD_full_data_plot_d12=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_kmeans_FAMD_full_data,
-                                                             dims=c(1,2),
-                                                             custom_theme=theme_jh,color_scale=distinct_scale)
-
-
-
-kmeans_FAMD_full_data_plot_d34=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_kmeans_FAMD_full_data,
-                                                             dims=c(3,4),
-                                                             custom_theme=theme_jh,color_scale=distinct_scale)
-
-
-svg(filename="../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data_plot_d12.svg",width=10,height=10)
-print(kmeans_FAMD_full_data_plot_d12)
-dev.off()
-
-svg(filename="../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data_plot_d34.svg",width=10,height=10)
-print(kmeans_FAMD_full_data_plot_d34)
-dev.off()
-
-
-
-
-################################################
-# Means continuous variables by cluster
-################################################
-
-cat_variables=colnames(mydata)[sapply(mydata,class) == "factor"]
-cont_variables=colnames(mydata)[sapply(mydata,class) != "factor"]
-cont_variables=cont_variables[2:length(cont_variables)]
-
-
-kmeans_FAMD_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=mydata[,cont_variables],
-                                                                       classes=as.factor(clusters_kmeans_FAMD_full_data),
-                                                                       color_scale=NULL,custom_theme=theme_jh,title=NULL)
-
-
-svg(filename="../results/results_joel_HPC/FAMD_kmeans//kmeans_FAMD_full_data_mean_by_cluster_continuous_plot.svg",width=10,height=10)
-print(kmeans_FAMD_mean_by_cluster_continuous_plot)
-dev.off()
-
-
-################################################
-# Distributions Cat variables by cluster
-################################################
-
-
-
-cat_variables_split=splitIndices(nx=length(cat_variables), ncl=ceiling(length(cat_variables) / 9))
-
-for (k in 1:length(cat_variables_split)) {
-  
-  
-  kmeans_FAMD_cat_distribution_by_cluster=cat_distribution_by_cluster(data=mydata[,cat_variables[cat_variables_split[[k]]]],
-                                                                      classes=as.factor(clusters_kmeans_FAMD_full_data),layout=c(3,3),
-                                                                      color_scale=NULL,custom_theme=theme_jh,
-                                                                      title=paste0("Distributions of categorical variables by classes (",
-                                                                                   k,"/",length(cat_variables_split),")"))
-  
-  
-  svg(filename=paste0("../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
-      width=10,height=10)
-  grid.draw(kmeans_FAMD_cat_distribution_by_cluster)
-  dev.off()
-  
-}
-
-################################################
-# Distributions Cont variables by cluster
-################################################
-
-cont_variables_split=splitIndices(nx=length(cont_variables), ncl=ceiling(length(cont_variables) / 9))
-
-
-for (k in 1:length(cont_variables_split)) {
-  
-  kmeans_FAMD_cont_distribution_by_cluster=cont_distribution_by_cluster(data=mydata[,cont_variables[cont_variables_split[[k]]]],
-                                                                        classes=as.factor(clusters_kmeans_FAMD_full_data),layout=c(3,3),
-                                                                        color_scale=NULL,custom_theme=theme_jh,
-                                                                        title=paste0("Distributions of continuous variables by classes (",
-                                                                                     k,"/",length(cont_variables_split),")"))
-  
-  svg(filename=paste0("../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
-      width=10,height=10)
-  grid.draw(kmeans_FAMD_cont_distribution_by_cluster)
-  dev.off()
-  
-}
+# ################################################################################
+# ################################################################################
+# # full dataset
+# ################################################################################
+# ################################################################################
+# 
+# FAMD_full_data_res=readRDS("../data/processed/FAMD_full_data_res.rds")
+# 
+# nb_comp_FAMD_full_data=which(FAMD_full_data_res$eig[,3] > 90)[1]
+# 
+# 
+# ################################################################################
+# # Choosing the number of clusters for kmeans
+# ################################################################################
+# 
+# n_classes=2:8
+# 
+# cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
+# cluster_crit_df[,1]=n_classes
+# colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
+# 
+# 
+# # Different numbers of centers
+# for (k in 1:length(n_classes)) {
+#   
+#   kmeans_FAMD_full_data=kmeans(FAMD_full_data_res$ind$coord[,1:nb_comp_FAMD_full_data],centers=n_classes[k])
+#   
+#   cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_full_data_res$ind$coord[,1:nb_comp_FAMD_full_data]),
+#                                             part=kmeans_FAMD_full_data$cluster,c("Calinski_Harabasz","Silhouette")))
+# }
+# 
+# 
+# saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_kmeans/cluster_crit_df_kmeans_FAMD_multi_morbid.rds")
+# 
+# 
+# ################################################################################
+# # Kmeans on the FAMD row coordinates
+# ################################################################################
+# 
+# 
+# 
+# kmeans_FAMD_full_data=kmeans(FAMD_full_data_res$ind$coord[,1:nb_comp_FAMD_full_data],centers=2)
+# 
+# saveRDS(kmeans_FAMD_full_data,"../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data.rds")
+# 
+# clusters_kmeans_FAMD_full_data=kmeans_FAMD_full_data$cluster
+# 
+# kmeans_FAMD_full_data_plot_d12=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_kmeans_FAMD_full_data,
+#                                                              dims=c(1,2),
+#                                                              custom_theme=theme_jh,color_scale=distinct_scale)
+# 
+# 
+# 
+# kmeans_FAMD_full_data_plot_d34=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_kmeans_FAMD_full_data,
+#                                                              dims=c(3,4),
+#                                                              custom_theme=theme_jh,color_scale=distinct_scale)
+# 
+# 
+# svg(filename="../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data_plot_d12.svg",width=10,height=10)
+# print(kmeans_FAMD_full_data_plot_d12)
+# dev.off()
+# 
+# svg(filename="../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data_plot_d34.svg",width=10,height=10)
+# print(kmeans_FAMD_full_data_plot_d34)
+# dev.off()
+# 
+# 
+# 
+# 
+# ################################################
+# # Means continuous variables by cluster
+# ################################################
+# 
+# cat_variables=colnames(mydata)[sapply(mydata,class) == "factor"]
+# cont_variables=colnames(mydata)[sapply(mydata,class) != "factor"]
+# cont_variables=cont_variables[2:length(cont_variables)]
+# 
+# 
+# kmeans_FAMD_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=mydata[,cont_variables],
+#                                                                        classes=as.factor(clusters_kmeans_FAMD_full_data),
+#                                                                        color_scale=NULL,custom_theme=theme_jh,title=NULL)
+# 
+# 
+# svg(filename="../results/results_joel_HPC/FAMD_kmeans//kmeans_FAMD_full_data_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+# print(kmeans_FAMD_mean_by_cluster_continuous_plot)
+# dev.off()
+# 
+# 
+# ################################################
+# # Distributions Cat variables by cluster
+# ################################################
+# 
+# 
+# 
+# cat_variables_split=splitIndices(nx=length(cat_variables), ncl=ceiling(length(cat_variables) / 9))
+# 
+# for (k in 1:length(cat_variables_split)) {
+#   
+#   
+#   kmeans_FAMD_cat_distribution_by_cluster=cat_distribution_by_cluster(data=mydata[,cat_variables[cat_variables_split[[k]]]],
+#                                                                       classes=as.factor(clusters_kmeans_FAMD_full_data),layout=c(3,3),
+#                                                                       color_scale=NULL,custom_theme=theme_jh,
+#                                                                       title=paste0("Distributions of categorical variables by classes (",
+#                                                                                    k,"/",length(cat_variables_split),")"))
+#   
+#   
+#   svg(filename=paste0("../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_full_data_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+#       width=10,height=10)
+#   grid.draw(kmeans_FAMD_cat_distribution_by_cluster)
+#   dev.off()
+#   
+# }
+# 
+# ################################################
+# # Distributions Cont variables by cluster
+# ################################################
+# 
+# cont_variables_split=splitIndices(nx=length(cont_variables), ncl=ceiling(length(cont_variables) / 9))
+# 
+# 
+# for (k in 1:length(cont_variables_split)) {
+#   
+#   kmeans_FAMD_cont_distribution_by_cluster=cont_distribution_by_cluster(data=mydata[,cont_variables[cont_variables_split[[k]]]],
+#                                                                         classes=as.factor(clusters_kmeans_FAMD_full_data),layout=c(3,3),
+#                                                                         color_scale=NULL,custom_theme=theme_jh,
+#                                                                         title=paste0("Distributions of continuous variables by classes (",
+#                                                                                      k,"/",length(cont_variables_split),")"))
+#   
+#   svg(filename=paste0("../results/results_joel_HPC/FAMD_kmeans/kmeans_FAMD_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+#       width=10,height=10)
+#   grid.draw(kmeans_FAMD_cont_distribution_by_cluster)
+#   dev.off()
+#   
+# }

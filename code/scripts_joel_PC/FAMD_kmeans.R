@@ -112,7 +112,11 @@ kmeans_FAMD_res_example_mixed_data_clustering_1=kmeans(FAMD_res_example_mixed_da
 clusters_kmeans_FAMD=kmeans_FAMD_res_example_mixed_data_clustering_1$cluster
 
 kmeans_FAMD_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,classes=clusters_kmeans_FAMD,
-                                                    dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale)
+                                                    dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale,show_labels=FALSE)
+
+
+make_FAMD_ind_plot(FAMD_res_example_mixed_data_clustering_1,
+                           dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale,show_labels=TRUE)
 
 
 svg(filename="../results_joel_PC/FAMD_kmeans_self_mixed_data_classes_plot.svg",width=10,height=10)

@@ -1,3 +1,17 @@
+using<-function(...) {
+  libs<-unlist(list(...))
+  req<-unlist(lapply(libs,require,character.only=TRUE))
+  need<-libs[req==FALSE]
+  if(length(need)>0){
+    install.packages(need)
+    lapply(need,require,character.only=TRUE)
+  }
+}
+
+using("reshape2","magrittr","gridExtra","grid","dplyr","shadowtext","gridExtra")
+
+
+
 
 ########################################################################################################
 # Retrieve the parangon indivudal from a cluster (works only with continuous variables and euclidian distance)
@@ -67,14 +81,6 @@ silhouette_plot_ggplot2=function(data,classes,daisy_metric="euclidean",custom_th
 #### OUTPUT
 # ggplot object of the means by cluster plot
 ########################################################################################################
-
-
-data=multi_morbid[,cont_variables]
-classes=as.factor(clusters_kmeans_FAMD_multi_morbid)
-color_scale=NULL
-custom_theme=theme_jh
-title=NULL
-
 
 mean_by_cluster_continuous=function(data,classes,color_scale=NULL,custom_theme=NULL,title=NULL) {
   

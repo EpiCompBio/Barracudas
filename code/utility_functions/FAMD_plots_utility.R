@@ -39,19 +39,21 @@ circleFun <- function(center = c(0,0),diameter = 1, npoints = 100){
 #FAMD Individuals plot in the space of the two first components : ggplot object
 ########################################################################################################
 
-make_FAMD_ind_plot<- function(FAMD,dims=c(1,2),custom_theme=NULL,color_scale=NULL) {
+make_FAMD_ind_plot<- function(FAMD,dims=c(1,2),custom_theme=NULL,color_scale=NULL, show_labels=TRUE) {
   
   
   FAMD_ind_plot_data=data.frame(FAMD$ind$coord[,dims],names=rownames(FAMD$ind$coord))
   
   if (is.null(color_scale)) {
-    FAMD_ind_plot=ggplot(data=FAMD_ind_plot_data) +
-      geom_point(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2])),color="#0a9cd4") +
-      geom_text(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),label="names"),color="#0a9cd4")
+    FAMD_ind_plot=ggplot(data=FAMD_ind_plot_data) + geom_point(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2])),color="#0a9cd4")
+    if (show_labels==TRUE) {
+      FAMD_ind_plot=FAMD_ind_plot + geom_text(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),label="names"),color="#0a9cd4")
+    }
   } else {
-    FAMD_ind_plot=ggplot(data=FAMD_ind_plot_data) +
-      geom_point(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2])),color=color_scale[1]) +
-      geom_text(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),label="names"),color=color_scale[1])
+    FAMD_ind_plot=ggplot(data=FAMD_ind_plot_data) + geom_point(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2])),color=color_scale[1])
+    if (show_labels==TRUE) {
+      FAMD_ind_plot= FAMD_ind_plot + geom_text(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),label="names"),color=color_scale[1])
+    }
   }
   
   FAMD_ind_plot=FAMD_ind_plot + geom_hline(yintercept=0) +
@@ -164,14 +166,16 @@ make_FAMD_cat_variable_graph<- function(FAMD,dims=c(1,2),custom_theme=NULL,color
 # color_scale=distinct_scale
 
 
-make_FAMD_ind_plot_classes<- function(FAMD,classes,dims=c(1,2),custom_theme=NULL,color_scale=NULL) {
+make_FAMD_ind_plot_classes<- function(FAMD,classes,dims=c(1,2),custom_theme=NULL,color_scale=NULL,show_labels=TRUE) {
   
   FAMD_ind_plot_data=data.frame(FAMD$ind$coord[,dims],names=rownames(FAMD$ind$coord),clusters=as.factor(classes))
   
- FAMD_ind_plot=ggplot(data=FAMD_ind_plot_data) +
-    geom_point(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),color="clusters")) +
-    geom_text(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),color="clusters",label="names"),show.legend = FALSE) +
-    guides(color = guide_legend(override.aes = list(size = 3)))
+  FAMD_ind_plot=ggplot(data=FAMD_ind_plot_data) +
+    geom_point(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),color="clusters"))
+  if (show_labels==TRUE) {
+    FAMD_ind_plot= FAMD_ind_plot +  geom_text(aes_string(x=paste0("Dim.",dims[1]),y=paste0("Dim.",dims[2]),color="clusters",label="names"),show.legend = FALSE)
+  }
+  FAMD_ind_plot= FAMD_ind_plot +  guides(color = guide_legend(override.aes = list(size = 3)))
   
   if (!is.null(color_scale)) {
     FAMD_ind_plot= FAMD_ind_plot + scale_color_manual(values=color_scale)

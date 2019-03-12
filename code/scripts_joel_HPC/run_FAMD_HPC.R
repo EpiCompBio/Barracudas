@@ -12,7 +12,7 @@
 #  }
 # }
 # 
-# using("FactoMineR")
+# using("FactoMineR","magrittr","reshape2","gridExtra","grid","dplyr","shadowtext")
 
 
 library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
@@ -32,17 +32,17 @@ library(shadowtext,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd(file_path)
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
-  
+
 
 # mydata=read.csv("../data/processed/UKBcompleteFeb19_subset.csv",row.names=1)
 mydata=read.csv("../data/processed/UKBcompleteFeb19.csv")
 
 
-# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
-# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
+source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
+source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
 
-source("code/utility_functions/FAMD_plots_utility.R")
-source("code/utility_functions/colors_themes_utility.R")
+# source("code/utility_functions/FAMD_plots_utility.R")
+# source("code/utility_functions/colors_themes_utility.R")
 
 
 ################################################################################
@@ -98,46 +98,46 @@ for (k in 1:ncol(multi_morbid)) {
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,8:ncol(multi_morbid)], ncp = ncol(multi_morbid)-8, graph = FALSE)
-
-
-#IND PLOTS
-FAMD_multi_morbid_ind_plot_d12=make_FAMD_ind_plot(FAMD_multi_morbid_res,
-                   dims=c(1,2),
-                   custom_theme=theme_jh,color_scale=distinct_scale[2])
-
-svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_ind_plot_d12.svg",width=10,height=10)
-print(FAMD_multi_morbid_ind_plot_d12)
-dev.off()
-
-
-FAMD_multi_morbid_ind_plot_d34=make_FAMD_ind_plot(FAMD_multi_morbid_res,
-                                                  dims=c(3,4),
-                                                  custom_theme=theme_jh,color_scale=distinct_scale[2])
-
-svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_ind_plot_d34.svg",width=10,height=10)
-print(FAMD_multi_morbid_ind_plot_d34)
-dev.off()
-
-
-
-#VAR PLOTS 
-FAMD_multi_morbid_var_plot_d12 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
-
-
-svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_var_plot_d12.svg",width=10,height=10)
-print(FAMD_multi_morbid_var_plot_d12)
-dev.off()
-
-
-FAMD_multi_morbid_var_plot_d34 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
-
-svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_var_plot_d34.svg",width=10,height=10)
-print(FAMD_multi_morbid_var_plot_d34)
-dev.off()
-
-
-saveRDS(FAMD_multi_morbid_res,"../data/processed/FAMD_multi_morbid_res.rds")
+# FAMD_multi_morbid_res=FAMD(multi_morbid[,8:ncol(multi_morbid)], ncp = ncol(multi_morbid)-8, graph = FALSE)
+# 
+# 
+# #IND PLOTS
+# FAMD_multi_morbid_ind_plot_d12=make_FAMD_ind_plot(FAMD_multi_morbid_res,
+#                    dims=c(1,2),
+#                    custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+# 
+# svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_ind_plot_d12.svg",width=10,height=10)
+# print(FAMD_multi_morbid_ind_plot_d12)
+# dev.off()
+# 
+# 
+# FAMD_multi_morbid_ind_plot_d34=make_FAMD_ind_plot(FAMD_multi_morbid_res,
+#                                                   dims=c(3,4),
+#                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+# 
+# svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_ind_plot_d34.svg",width=10,height=10)
+# print(FAMD_multi_morbid_ind_plot_d34)
+# dev.off()
+# 
+# 
+# 
+# #VAR PLOTS 
+# FAMD_multi_morbid_var_plot_d12 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
+# 
+# 
+# svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_var_plot_d12.svg",width=10,height=10)
+# print(FAMD_multi_morbid_var_plot_d12)
+# dev.off()
+# 
+# 
+# FAMD_multi_morbid_var_plot_d34 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
+# 
+# svg(filename="../results/results_joel_HPC/FAMD_multi_morbid_var_plot_d34.svg",width=10,height=10)
+# print(FAMD_multi_morbid_var_plot_d34)
+# dev.off()
+# 
+# 
+# saveRDS(FAMD_multi_morbid_res,"../data/processed/FAMD_multi_morbid_res.rds")
 
 
 ################################################################################
