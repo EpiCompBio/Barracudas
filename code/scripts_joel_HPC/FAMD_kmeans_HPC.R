@@ -74,7 +74,7 @@ binary_cols = which(unlist(sapply(mydata, function(x) length(levels(factor(x)))=
 mydata[,binary_cols]=lapply(mydata[,binary_cols],as.factor)
 
 #re-organize columns
-mydata=mydata %>% select(eid,mi,angina,stroke,htn,obese,no_chronic, everything())
+mydata=mydata %>% dplyr::select(eid,diabetes,mi,angina,stroke,obese,htn,no_chronic, everything())
 
 #subset multi morbid rows
 multi_morbid = mydata[which(mydata$no_chronic>1),]
@@ -84,14 +84,14 @@ multi_morbid[,'no_chronic']=as.factor(multi_morbid[,'no_chronic'])
 
 
 for (k in 1:ncol(mydata)) {
-  if (class(mydata[,k])!="factor" & k!=1 & k!=2 & k!=8) {
+  if (class(mydata[,k])!="factor" & k!=1) {
     mydata[,k]=scale(mydata[,k])
   }
 }
 
 
 for (k in 1:ncol(multi_morbid)) {
-  if (class(multi_morbid[,k])!="factor" & k!=1 & k!=2 & k!=8) {
+  if (class(multi_morbid[,k])!="factor" & k!=1) {
     multi_morbid[,k]=scale(multi_morbid[,k])
   }
 }
