@@ -94,17 +94,110 @@ multi_morbid <- readRDS("Data/mm_scaled.rds")
 FAMD_kamila_cluster=FAMD(multi_morbid, ncp = ncol(multi_morbid), graph = FALSE)
 
 ################################################################################
+# Choosing number of clusters for Kamila algorithm
+################################################################################
+
+kamRes <- kamila(multi_morbid[,7:59], multi_morbid[,60:77], numClust = 2:8, numInit = 10,
+                 calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.5)
+
+kamila_cluster_choice <- plot(2:8, kamRes$nClust$psValues,
+     pch = 19, frame = FALSE, 
+     xlab="Number of clusters",
+     ylab="Prediction Strength", xlim = c(2, 8), ylim = c(0, 1))
+
+svg("Git_Repo/code/results_abi/kamila_cluster_choice.svg")
+plot(2:8, kamRes$nClust$psValues,
+     pch = 19, frame = FALSE, 
+     xlab="Number of clusters",
+     ylab="Prediction Strength", xlim = c(2, 8), ylim = c(0, 1))
+dev.off()
+
+# 2 clusters seems best although could use 3 (highest number of clusters giving prediction strength over 0.8/0.9)
+
+################################################################################
 # Kamila algorithm
 ################################################################################
 
-kamila_cluster <- kamila(multi_morbid[,7:59], multi_morbid[,60:77], numClust = 3, numInit = 10)
+# k=3
+kamila_cluster_3 <- kamila(multi_morbid[,7:59], multi_morbid[,60:77], numClust = 3, numInit = 10)
 
-kamila_cluster_plot=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
+kamila_cluster_plot_3=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
                                                           classes=as.factor(kamila_cluster$finalMemb),dims=c(1,2),
                                                           custom_theme=theme_jh,color_scale=distinct_scale)
+
+table(kamila_cluster$finalMemb)
+
+svg("kamila_cluster_plot_3.svg")
+kamila_cluster_plot_3
+dev.off()
+
+# k=2
+kamila_cluster_2 <- kamila(multi_morbid[,7:59], multi_morbid[,60:77], numClust = 2, numInit = 10)
+
+kamila_cluster_plot_2=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
+                                               classes=as.factor(kamila_cluster$finalMemb),dims=c(1,2),
+                                               custom_theme=theme_jh,color_scale=distinct_scale)
 
 table(kamila_cluster$finalMemb)
 
 svg("kamila_cluster_plot.svg")
 kamila_cluster_plot
 dev.off()
+
+################################################
+# Means continuous variables by cluster
+################################################
+
+##### Function for means plot #####
+data=multi_morbid[,cont_variables]
+classes=as.factor(kamila_cluster_2$finalMemb)
+color_scale=NULL
+custom_theme=theme_jh
+title=NULL
+
+
+mean_by_cluster_continuous_kamila=function(data,classes,color_scale=NULL,custom_theme=NULL,title=NULL) {
+  
+  data_and_classes = data.frame(data, classes)
+  means_clusters=aggregate(data_and_classes[,-c(ncol(data_and_classes))],
+                           by=list(data_and_classes[,ncol(data_and_classes)]),mean)
+  
+  means_clusters=apply(means_clusters,2,as.numeric)
+  
+  plot_data=melt(setNames(data.frame(t(means_clusters)[-1,],id=colnames(data)),c(levels(classes),"id")),
+                 id.var="id")
+  
+  colnames(plot_data)[2]="cluster"
+  
+  mean_clusters_plot=ggplot(plot_data, aes(x=id,y=value,group=cluster,colour=cluster)) +
+    geom_point() + geom_line(aes(lty=cluster)) + 
+    xlab("Variables") + ylab("Mean") 
+  if (!is.null(color_scale)) {
+    mean_clusters_plot=mean_clusters_plot + scale_colour_manual(name="Cluster", values = color_scale, labels = levels(classes)) +
+      scale_linetype_discrete(name="Cluster",labels = color_scale)
+  }
+  if (!is.null(title)) {
+    mean_clusters_plot = mean_clusters_plot + ggtitle(title)
+  }
+  mean_clusters_plot=mean_clusters_plot + custom_theme + 
+    theme(axis.text.x = element_text(angle = 90))
+  return(mean_clusters_plot)
+}
+
+cat_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "factor"]
+cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) != "factor"]
+cont_variables=cont_variables[2:length(cont_variables)]
+
+
+kmeans_KAMILA_mean_by_cluster_continuous_plot=mean_by_cluster_continuous_kamila(data=multi_morbid[,cont_variables],
+                                                                       classes=as.factor(kamila_cluster_2$finalMemb),
+                                                                       color_scale=NULL,custom_theme=theme_jh,title=NULL)
+
+
+svg(filename="Git_Repo/code/results_abi/kamila_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+print(kmeans_KAMILA_mean_by_cluster_continuous_plot)
+dev.off()
+
+#########################################################
+# Distribution of continuous/categorical vars by cluster
+#########################################################
