@@ -12,9 +12,10 @@
 #  }
 # }
 # 
-# using("randomForest")
+# using("randomForest","magrittr)
 
 library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 ################################################################################
