@@ -3,20 +3,26 @@
 ################################################################################
 
 # using<-function(...) {
-#  libs<-unlist(list(...))
+#   libs<-unlist(list(...))
 #   req<-unlist(lapply(libs,require,character.only=TRUE))
-#  need<-libs[req==FALSE]
-#  if(length(need)>0){
-#    install.packages(need)
-#    lapply(need,require,character.only=TRUE)
-#  }
+#   need<-libs[req==FALSE]
+#   if(length(need)>0){
+#     install.packages(need)
+#     lapply(need,require,character.only=TRUE)
+#   }
 # }
 # 
-# using("randomForest","magrittr)
+# using("FactoMineR","parallel","clusterCrit")
 
-library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(reshape2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(shadowtext,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 ################################################################################
@@ -26,13 +32,23 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
 # setwd(file_path)
 
-# setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
+# l
 
 
 # full_data=read.csv("../data/processed/UKBcompleteFeb19_subset.csv",row.names=1)
 full_data=read.csv("../data/processed/UKBcompleteFeb19.csv")
 
 
+
+# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
+# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
+# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
+
+
+
+source("code/utility_functions/FAMD_plots_utility.R")
+source("code/utility_functions/colors_themes_utility.R")
+source("code/utility_functions/clustering_utility.R")
 
 ################################################################################
 # PRE-PROCESSING
@@ -58,7 +74,7 @@ binary_cols = which(unlist(sapply(full_data, function(x) length(levels(factor(x)
 full_data[,binary_cols]=lapply(full_data[,binary_cols],as.factor)
 
 #re-organize columns
-full_data=full_data %>% dplyr::select(eid,mi,angina,stroke,htn,obese,no_chronic, everything())
+full_data=full_data %>% dplyr::select(eid,diabetes,mi,angina,stroke,obese,htn,no_chronic, everything())
 
 #subset multi morbid rows
 multi_morbid = full_data[which(full_data$no_chronic>1),]
@@ -73,41 +89,20 @@ for (k in 1:ncol(full_data)) {
   }
 }
 
+
 for (k in 1:ncol(multi_morbid)) {
   if (class(multi_morbid[,k])!="factor" & k!=1) {
     multi_morbid[,k]=scale(multi_morbid[,k])
   }
 }
 
-
 ################################################################################
-################################################################################
-# multi-morbid individuals only
-################################################################################
+# FAMD  multi-morbid individuals
 ################################################################################
 
-################################################################################
-# Random forests for the proximty measures
-################################################################################
+FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_multi_morbid_res.rds")
+
+nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
 
-RF_proximity_measure_multi_morbid_res=randomForest(x=multi_morbid)$proximity
-
-saveRDS(RF_proximity_measure_multi_morbid_res,"../data/processed/RF_proximity_measure_multi_morbid_res.rds")
-
-
-################################################################################
-################################################################################
-# full dataset
-################################################################################
-################################################################################
-
-################################################################################
-# Random forests for the proximty measures
-################################################################################
-
-
-# RF_proximity_measure_full_data_res=randomForest(x=full_data)$proximity
-# 
-# saveRDS(RF_proximity_measure_full_data_res,"../data/processed/RF_proximity_measure_full_data_res.rds")
-
+##############################

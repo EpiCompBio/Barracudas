@@ -2,18 +2,18 @@
 # LOADING LIBRARIES
 ################################################################################
 
-# using<-function(...) {
-#   libs<-unlist(list(...))
-#   req<-unlist(lapply(libs,require,character.only=TRUE))
-#   need<-libs[req==FALSE]
-#   if(length(need)>0){
-#     install.packages(need)
-#     lapply(need,require,character.only=TRUE)
-#   }
-# }
-# 
-# using("randomForest","caret","cluster","FactoMineR","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","shadowtext","parallel","clusterCrit")
+using<-function(...) {
+  libs<-unlist(list(...))
+  req<-unlist(lapply(libs,require,character.only=TRUE))
+  need<-libs[req==FALSE]
+  if(length(need)>0){
+    install.packages(need)
+    lapply(need,require,character.only=TRUE)
+  }
+}
+
+using("randomForest","caret","cluster","FactoMineR","reshape2","magrittr",
+      "gridExtra","grid","dplyr","shadowtext","parallel","clusterCrit","apcluster")
 
 
 
@@ -41,7 +41,7 @@ library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
 
-#full_data=read.csv("../data/processed/UKBcompleteFeb19_subset.csv",row.names=1)
+# full_data=read.csv("../data/processed/UKBcompleteFeb19_subset.csv",row.names=1)
 full_data=read.csv("../data/processed/UKBcompleteFeb19.csv")
 
 
@@ -130,31 +130,36 @@ RF_proximity_measure_multi_morbid_res=readRDS("../data/processed/RF_proximity_me
 # Partitioning around medoids on the randomForest proximity measure
 ################################################################################
 
-RF_pam_multi_morbid=pam(RF_proximity_measure_multi_morbid_res, 2)
+RF_aff_prop_multi_morbid=apclusterK(RF_proximity_measure_multi_morbid_res, K=2)
+
+clusters_RF_aff_prop_multi_morbid=rep(0,nrow(RF_proximity_measure_multi_morbid_res))
+
+for (k in 1:length(RF_aff_prop_multi_morbid@clusters)) {
+  for (l in 1:length(RF_aff_prop_multi_morbid@clusters[[k]])) {
+    clusters_RF_aff_prop_multi_morbid[RF_aff_prop_multi_morbid@clusters[[k]][l]]=k
+  }
+}
+
+saveRDS(RF_aff_prop_multi_morbid,"../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_multi_morbid.rds")
 
 
-saveRDS(RF_pam_multi_morbid,"../results/results_joel_HPC/RF_pam/RF_pam_multi_morbid.rds")
-
-
-clusters_RF_pam_multi_morbid=RF_pam_multi_morbid$clustering
-
-RF_pam_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_pam_multi_morbid,
-                                                             dims=c(1,2),
-                                                             custom_theme=theme_jh,color_scale=distinct_scale)
+RF_aff_prop_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_aff_prop_multi_morbid,
+                                                        dims=c(1,2),
+                                                        custom_theme=theme_jh,color_scale=distinct_scale)
 
 
 
-RF_pam_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_pam_multi_morbid,
-                                                             dims=c(3,4),
-                                                             custom_theme=theme_jh,color_scale=distinct_scale)
+RF_aff_prop_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_aff_prop_multi_morbid,
+                                                        dims=c(3,4),
+                                                        custom_theme=theme_jh,color_scale=distinct_scale)
 
 
-svg(filename="../results/results_joel_HPC/RF_pam/RF_pam_multi_morbid_plot_d12.svg",width=10,height=10)
-print(RF_pam_multi_morbid_plot_d12)
+svg(filename="../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_multi_morbid_plot_d12.svg",width=10,height=10)
+print(RF_aff_prop_multi_morbid_plot_d12)
 dev.off()
 
-svg(filename="../results/results_joel_HPC/RF_pam/RF_pam_multi_morbid_plot_d34.svg",width=10,height=10)
-print(RF_pam_multi_morbid_plot_d34)
+svg(filename="../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_multi_morbid_plot_d34.svg",width=10,height=10)
+print(RF_aff_prop_multi_morbid_plot_d34)
 dev.off()
 
 ################################################
@@ -166,13 +171,13 @@ cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) != "factor"]
 cont_variables=cont_variables[2:length(cont_variables)]
 
 
-RF_pam_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
-                                                                       classes=as.factor(clusters_RF_pam_multi_morbid),
-                                                                       color_scale=NULL,custom_theme=theme_jh,title=NULL)
+RF_aff_prop_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
+                                                                  classes=as.factor(clusters_RF_aff_prop_multi_morbid),
+                                                                  color_scale=NULL,custom_theme=theme_jh,title=NULL)
 
 
-svg(filename="../results/results_joel_HPC/RF_pam/RF_pam_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
-print(RF_pam_mean_by_cluster_continuous_plot)
+svg(filename="../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+print(RF_aff_prop_mean_by_cluster_continuous_plot)
 dev.off()
 
 
@@ -187,16 +192,16 @@ cat_variables_split=splitIndices(nx=length(cat_variables), ncl=ceiling(length(ca
 for (k in 1:length(cat_variables_split)) {
   
   
-  RF_pam_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
-                                                                      classes=as.factor(clusters_RF_pam_multi_morbid),layout=c(3,3),
-                                                                      color_scale=NULL,custom_theme=theme_jh,
-                                                                      title=paste0("Distributions of categorical variables by classes (",
-                                                                                   k,"/",length(cat_variables_split),")"))
+  RF_aff_prop_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
+                                                                 classes=as.factor(clusters_RF_aff_prop_multi_morbid),layout=c(3,3),
+                                                                 color_scale=NULL,custom_theme=theme_jh,
+                                                                 title=paste0("Distributions of categorical variables by classes (",
+                                                                              k,"/",length(cat_variables_split),")"))
   
   
-  svg(filename=paste0("../results/results_joel_HPC/RF_pam/RF_pam_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(RF_pam_cat_distribution_by_cluster)
+  grid.draw(RF_aff_prop_cat_distribution_by_cluster)
   dev.off()
   
 }
@@ -210,15 +215,15 @@ cont_variables_split=splitIndices(nx=length(cont_variables), ncl=ceiling(length(
 
 for (k in 1:length(cont_variables_split)) {
   
-  RF_pam_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
-                                                                        classes=as.factor(clusters_RF_pam_multi_morbid),layout=c(3,3),
-                                                                        color_scale=NULL,custom_theme=theme_jh,
-                                                                        title=paste0("Distributions of continuous variables by classes (",
-                                                                                     k,"/",length(cont_variables_split),")"))
+  RF_aff_prop_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
+                                                                   classes=as.factor(clusters_RF_aff_prop_multi_morbid),layout=c(3,3),
+                                                                   color_scale=NULL,custom_theme=theme_jh,
+                                                                   title=paste0("Distributions of continuous variables by classes (",
+                                                                                k,"/",length(cont_variables_split),")"))
   
-  svg(filename=paste0("../results/results_joel_HPC/RF_pam/RF_pam_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(RF_pam_cont_distribution_by_cluster)
+  grid.draw(RF_aff_prop_cont_distribution_by_cluster)
   dev.off()
   
 }
@@ -236,7 +241,7 @@ for (k in 1:length(cont_variables_split)) {
 # # FAMD  full data individuals
 # ################################################################################
 # 
-# FAMD_full_data_res=readRDS("../data/processed/FAMD_full_data_res_subset.rds")
+# FAMD_full_data_res=readRDS("../data/processed/FAMD_full_data_res.rds")
 # 
 # nb_comp_FAMD_full_data=which(FAMD_full_data_res$eig[,3] > 90)[1]
 # 
@@ -251,31 +256,31 @@ for (k in 1:length(cont_variables_split)) {
 # # Partitioning around medoids on the randomForest proximity measure
 # ################################################################################
 # 
-# RF_pam_full_data=pam(RF_proximity_measure_full_data_res, 2)
+# RF_aff_prop_full_data=pam(RF_proximity_measure_full_data_res, 2)
 # 
 # 
-# saveRDS(RF_pam_full_data,"../results/results_joel_HPC/RF_pam/RF_pam_full_data.rds")
+# saveRDS(RF_aff_prop_full_data,"../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_full_data.rds")
 # 
 # 
-# clusters_RF_pam_full_data=RF_pam_full_data$clustering
+# clusters_RF_aff_prop_full_data=RF_aff_prop_full_data$clustering
 # 
-# RF_pam_full_data_plot_d12=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_RF_pam_full_data,
+# RF_aff_prop_full_data_plot_d12=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_RF_aff_prop_full_data,
 #                                                         dims=c(1,2),
 #                                                         custom_theme=theme_jh,color_scale=distinct_scale)
 # 
 # 
 # 
-# RF_pam_full_data_plot_d34=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_RF_pam_full_data,
+# RF_aff_prop_full_data_plot_d34=make_FAMD_ind_plot_classes(FAMD_full_data_res,classes=clusters_RF_aff_prop_full_data,
 #                                                         dims=c(3,4),
 #                                                         custom_theme=theme_jh,color_scale=distinct_scale)
 # 
 # 
-# svg(filename="../results/results_joel_HPC/RF_pam/RF_pam_full_data_plot_d12.svg",width=10,height=10)
-# print(RF_pam_full_data_plot_d12)
+# svg(filename="../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_full_data_plot_d12.svg",width=10,height=10)
+# print(RF_aff_prop_full_data_plot_d12)
 # dev.off()
 # 
-# svg(filename="../results/results_joel_HPC/RF_pam/RF_pam_full_data_plot_d34.svg",width=10,height=10)
-# print(RF_pam_full_data_plot_d34)
+# svg(filename="../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_full_data_plot_d34.svg",width=10,height=10)
+# print(RF_aff_prop_full_data_plot_d34)
 # dev.off()
 # 
 # ################################################
@@ -287,13 +292,13 @@ for (k in 1:length(cont_variables_split)) {
 # cont_variables=cont_variables[2:length(cont_variables)]
 # 
 # 
-# RF_pam_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=full_data[,cont_variables],
-#                                                                   classes=as.factor(clusters_RF_pam_full_data),
+# RF_aff_prop_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=full_data[,cont_variables],
+#                                                                   classes=as.factor(clusters_RF_aff_prop_full_data),
 #                                                                   color_scale=NULL,custom_theme=theme_jh,title=NULL)
 # 
 # 
-# svg(filename="../results/results_joel_HPC/RF_pam/RF_pam_full_data_mean_by_cluster_continuous_plot.svg",width=10,height=10)
-# print(RF_pam_mean_by_cluster_continuous_plot)
+# svg(filename="../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_full_data_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+# print(RF_aff_prop_mean_by_cluster_continuous_plot)
 # dev.off()
 # 
 # 
@@ -308,16 +313,16 @@ for (k in 1:length(cont_variables_split)) {
 # for (k in 1:length(cat_variables_split)) {
 #   
 #   
-#   RF_pam_cat_distribution_by_cluster=cat_distribution_by_cluster(data=full_data[,cat_variables[cat_variables_split[[k]]]],
-#                                                                  classes=as.factor(clusters_RF_pam_full_data),layout=c(3,3),
+#   RF_aff_prop_cat_distribution_by_cluster=cat_distribution_by_cluster(data=full_data[,cat_variables[cat_variables_split[[k]]]],
+#                                                                  classes=as.factor(clusters_RF_aff_prop_full_data),layout=c(3,3),
 #                                                                  color_scale=NULL,custom_theme=theme_jh,
 #                                                                  title=paste0("Distributions of categorical variables by classes (",
 #                                                                               k,"/",length(cat_variables_split),")"))
 #   
 #   
-#   svg(filename=paste0("../results/results_joel_HPC/RF_pam/RF_pam_full_data_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+#   svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_full_data_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
 #       width=10,height=10)
-#   grid.draw(RF_pam_cat_distribution_by_cluster)
+#   grid.draw(RF_aff_prop_cat_distribution_by_cluster)
 #   dev.off()
 #   
 # }
@@ -331,15 +336,15 @@ for (k in 1:length(cont_variables_split)) {
 # 
 # for (k in 1:length(cont_variables_split)) {
 #   
-#   RF_pam_cont_distribution_by_cluster=cont_distribution_by_cluster(data=full_data[,cont_variables[cont_variables_split[[k]]]],
-#                                                                    classes=as.factor(clusters_RF_pam_full_data),layout=c(3,3),
+#   RF_aff_prop_cont_distribution_by_cluster=cont_distribution_by_cluster(data=full_data[,cont_variables[cont_variables_split[[k]]]],
+#                                                                    classes=as.factor(clusters_RF_aff_prop_full_data),layout=c(3,3),
 #                                                                    color_scale=NULL,custom_theme=theme_jh,
 #                                                                    title=paste0("Distributions of continuous variables by classes (",
 #                                                                                 k,"/",length(cont_variables_split),")"))
 #   
-#   svg(filename=paste0("../results/results_joel_HPC/RF_pam/RF_pam_full_data_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+#   svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop/RF_aff_prop_full_data_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
 #       width=10,height=10)
-#   grid.draw(RF_pam_cont_distribution_by_cluster)
+#   grid.draw(RF_aff_prop_cont_distribution_by_cluster)
 #   dev.off()
 #   
 # }

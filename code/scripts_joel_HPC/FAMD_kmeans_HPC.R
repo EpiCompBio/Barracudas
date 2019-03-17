@@ -142,6 +142,8 @@ saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_kmeans/cluster_crit_df
 ################################################################################
 
 FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
+# FAMD_kmeans_multi_morbid=readRDS("../results/results_joel_HPC/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
+
 
 saveRDS(FAMD_kmeans_multi_morbid,"../results/results_joel_HPC/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
 
@@ -150,13 +152,13 @@ clusters_FAMD_kmeans_multi_morbid=FAMD_kmeans_multi_morbid$cluster
 
 FAMD_kmeans_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_FAMD_kmeans_multi_morbid,
                            dims=c(1,2),
-                           custom_theme=theme_jh,color_scale=distinct_scale)
+                           custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
 
 FAMD_kmeans_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_FAMD_kmeans_multi_morbid,
                                                          dims=c(3,4),
-                                                         custom_theme=theme_jh,color_scale=distinct_scale)
+                                                         custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
 svg(filename="../results/results_joel_HPC/FAMD_kmeans/FAMD_kmeans_multi_morbid_plot_d12.svg",width=10,height=10)

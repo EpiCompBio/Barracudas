@@ -147,8 +147,8 @@ cat_distribution_by_cluster=function(data,classes,layout=NULL,color_scale=NULL,c
     
     tmp_plot=ggplot(data=tmp_plot_data) +
       geom_bar(aes_string(x="classes",y="Freq",fill=paste0(colnames(data)[k])),stat="identity",position="stack") +
-      xlab("") + ylab("") + custom_theme + geom_shadowtext(aes(x=classes,y=position,label=n_ind),check_overlap = TRUE,
-                      size = 4)
+      xlab("") + ylab("") + custom_theme + geom_text(aes(x=classes,y=position,label=n_ind),check_overlap = TRUE,
+                      size = 4,color="black")
     
     
     
