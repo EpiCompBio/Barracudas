@@ -5,7 +5,7 @@ suppressPackageStartupMessages(library(doParallel, lib.loc = lib.path
 
 setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/results/clustering')
 
-# setwd('~/Documents/Translational/results/clustering')
+#setwd('~/Documents/Translational/results/clustering')
 
 manhattan.dist = readRDS('../distance_matrix/manhattan_distance_multi_morbid.rds')
 
@@ -64,11 +64,11 @@ cor.cophenetic = foreach(i = 1:length(clusters), .combine = rbind) %dopar% {
   return(cor.cophen)
 }
 colnames(cor.cophenetic) = c('cor_cophenetic','model')
-saveRDS(cor.cophenetic,'manhattan_cophenetic.rds')
+saveRDS(cor.cophenetic,'summaries/manhattan_cophenetic.rds')
 
 manhattan_cluster_summary = list(NULL)
 manhattan_cluster_summary$two = cluster_2_summary
 manhattan_cluster_summary$three = cluster_3_summary
 manhattan_cluster_summary$four = cluster_4_summary
 
-saveRDS(manhattan_cluster_summary,'manhattan_cluster_summary.rds')
+saveRDS(manhattan_cluster_summary,'summaries/manhattan_cluster_summary.rds')
