@@ -1,11 +1,17 @@
-lib.path = '/rds/general/user/je108/home/anaconda3/lib/R/library/'
+#lib.path = '/rds/general/user/je108/home/anaconda3/lib/R/library/'
 
-suppressPackageStartupMessages(library(doParallel, lib.loc = lib.path
+suppressPackageStartupMessages(library(doParallel #, lib.loc = lib.path
 ))
 
-setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/results/clustering')
+#setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/results/clustering')
 
-# setwd('~/Documents/Translational/results/clustering')
+setwd('~/Documents/Translational/results/clustering')
+
+gower_cluster_summary = readRDS('summaries/gower_cluster_summary.rds')
+
+gower_cophenetic = readRDS('summaries/gower_cophenetic.rds')
+
+gower_diana = readRDS('diana_gower_multi_morbid.rds')
 
 gower.dist = readRDS('../distance_matrix/gower_distance_multi_morbid.rds')
 

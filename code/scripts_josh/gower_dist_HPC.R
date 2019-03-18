@@ -4,6 +4,7 @@ suppressPackageStartupMessages(library(cluster, lib.loc = lib.path
 ))
 
 setwd('/rds/general/project/medbio-berlanga-group/live/projects/group_multi_morbidity/')
+#setwd('~/Documents/Translational/')
 
 mydata = read.csv('data/processed/UKBcompleteFeb19.csv',header=T)
 
@@ -13,13 +14,15 @@ mydata$obese = ifelse(mydata$BMI >= 35, 1, 0)
 #define outcome col names andn dataset
 outcomes = c('diabetes','mi','stroke','angina','obese')
 
-outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
+#outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(mydata))
 
 #col of chronic diseases
-no_chronic = apply(mydata[,outcome_cols],1,sum)
+no_chronic = apply(mydata[,outcomes],1,sum)
 
 #predictors
-multi_morbid = mydata[which(no_chronic>1),-c(1,outcome_cols)]
+remove_cols = grep(paste0(paste0('^',outcomes,'$',collapse = '|'),'|eid|dvt_asthma_copd_atopy'), colnames(mydata))
+
+multi_morbid = mydata[which(no_chronic>1),-remove_cols]
 
 #binary cols
 binary_col_ids = which(unlist(sapply(multi_morbid, function(x) length(levels(factor(x)))==2)))
