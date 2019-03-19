@@ -124,6 +124,7 @@ dev.off()
 ################################################################################
 
 # k=3
+set.seed(1)
 kamila_cluster_3 <- kamila(multi_morbid[,1:53], multi_morbid[,54:71], numClust = 3, numInit = 10)
 
 kamila_cluster_plot_3=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
@@ -132,11 +133,12 @@ kamila_cluster_plot_3=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
 
 table(kamila_cluster_3$finalMemb)
 
-svg("kamila_cluster_plot_3.svg")
+svg("Git_Repo/code/results_abi/KAMILA/kamila_cluster_plot_3.svg")
 kamila_cluster_plot_3
 dev.off()
 
 # k=2
+set.seed(1)
 kamila_cluster_2 <- kamila(multi_morbid[,1:53], multi_morbid[,54:71], numClust = 2, numInit = 10)
 
 kamila_cluster_plot_2=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
@@ -145,7 +147,7 @@ kamila_cluster_plot_2=make_FAMD_ind_plot_classes(FAMD_kamila_cluster,
 
 table(kamila_cluster_2$finalMemb)
 
-svg("Git_Repo/code/results_abi/kamila_cluster_plot_2.svg")
+svg("Git_Repo/code/results_abi/KAMILA/kamila_cluster_plot_2.svg")
 kamila_cluster_plot_2
 dev.off()
 
@@ -155,7 +157,7 @@ dev.off()
 
 ##### Function for means plot #####
 data=multi_morbid[,cont_variables]
-classes=as.factor(kamila_cluster_2$finalMemb)
+classes=as.factor(kamila_cluster_3$finalMemb)
 color_scale=NULL
 custom_theme=theme_jh
 title=NULL
@@ -193,13 +195,20 @@ mean_by_cluster_continuous=function(data,classes,color_scale=NULL,custom_theme=N
   return(mean_clusters_plot)
 }
 
+KAMILA_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
+                                                                  classes=as.factor(kamila_cluster_2$finalMemb),
+                                                                  color_scale=NULL,custom_theme=theme_jh,title=NULL)
+
+svg(filename="Git_Repo/code/results_abi/kamila_multi_morbid_mean_by_cluster_continuous_plot_2.svg",width=10,height=10)
+print(KAMILA_mean_by_cluster_continuous_plot)
+dev.off()
 
 KAMILA_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
-                                                                       classes=as.factor(kamila_cluster_2$finalMemb),
+                                                                       classes=as.factor(kamila_cluster_3$finalMemb),
                                                                        color_scale=NULL,custom_theme=theme_jh,title=NULL)
 
 
-svg(filename="Git_Repo/code/results_abi/kamila_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+svg(filename="Git_Repo/code/results_abi/kamila_multi_morbid_mean_by_cluster_continuous_plot_3.svg",width=10,height=10)
 print(KAMILA_mean_by_cluster_continuous_plot)
 dev.off()
 
@@ -271,6 +280,22 @@ for (k in 1:length(cat_variables_split)) {
       width=10,height=10)
   grid.draw(kamila_cat_distribution_by_cluster)
   dev.off()
+}
+  
+for (k in 1:length(cat_variables_split)) {
+    
+    
+    kamila_cat_distribution_by_cluster_3=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
+                                                                   classes=as.factor(kamila_cluster_3$finalMemb),layout=c(3,3),
+                                                                   color_scale=NULL,custom_theme=theme_jh,
+                                                                   title=paste0("Distributions of categorical variables by classes (",
+                                                                                k,"/",length(cat_variables_split),")"))
+    
+    
+    svg(filename=paste0("Git_Repo/code/results_abi/kamila_3_cat_distributions_",k,"_",length(cat_variables_split),".svg"),
+        width=10,height=10)
+    grid.draw(kamila_cat_distribution_by_cluster)
+    dev.off()
   
 }
 
@@ -335,7 +360,21 @@ cont_variables_split=splitIndices(nx=length(cont_variables), ncl=ceiling(length(
         width=10,height=10)
     grid.draw(kamila_cont_distribution_by_cluster)
     dev.off()
-    }
+  }
+
+for (k in 1:length(cont_variables_split)) {
+  
+  kamila_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
+                                                                   classes=as.factor(kamila_cluster_3$finalMemb),layout=c(3,3),
+                                                                   color_scale=NULL,custom_theme=theme_jh,
+                                                                   title=paste0("Distributions of continuous variables by classes (",
+                                                                                k,"/",length(cont_variables_split),")"))
+  
+  svg(filename=paste0("Git_Repo/code/results_abi/kamila_3_cont_distributions_",k,"_",length(cont_variables_split),".svg"),
+      width=10,height=10)
+  grid.draw(kamila_cont_distribution_by_cluster)
+  dev.off()
+}
 
 #########################################################
 # Heatmaps of variables
@@ -396,4 +435,9 @@ svg("Git_Repo/code/results_abi/KAMILA/silhoutte_kamila.svg")
 sil_plot
 dev.off()
 
+
+sil_plot = silhouette_plot_ggplot2(data = mm_unscaled, classes = kamila_cluster_3$finalMemb)
+svg("Git_Repo/code/results_abi/KAMILA/silhoutte_kamila_3.svg")
+sil_plot
+dev.off()
 
