@@ -33,6 +33,10 @@ multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
+
+sapply(multi_morbid,class)
+
+
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
@@ -53,7 +57,7 @@ source("code/utility_functions/clustering_utility.R")
 
 FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_factors_multi_morbid_res.rds")
 
-nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 85)[1]
+nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 80)[1]
 
 
 ################################################################################

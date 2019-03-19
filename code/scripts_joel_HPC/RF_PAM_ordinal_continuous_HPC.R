@@ -69,7 +69,7 @@ source("code/utility_functions/clustering_utility.R")
 
 FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
-nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
+nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 80)[1]
 
 
 ################################################################################
