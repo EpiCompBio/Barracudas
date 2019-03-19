@@ -12,7 +12,7 @@
 #  }
 # }
 # 
-# using("FactoMineR","ggplot2)
+# using("FactoMineR","ggplot2")
 
 
 library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
@@ -55,7 +55,7 @@ multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)-10)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)-10, graph = FALSE)
 
 
 #IND PLOTS
@@ -106,7 +106,7 @@ saveRDS(FAMD_multi_morbid_res,"../data/processed/FAMD_ordinal_factors_multi_morb
 ################################################################################
 
 
-full_data=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
+full_data=readRDS("../data/processed/full_data_ordinal_keep.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
