@@ -35,7 +35,7 @@ library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
-multi_morbid=multi_morbid[1:200,]
+# multi_morbid=multi_morbid[1:200,]
 
 
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
