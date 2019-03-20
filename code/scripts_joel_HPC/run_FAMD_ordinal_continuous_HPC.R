@@ -114,7 +114,7 @@ FAMD_full_data_res=FAMD(full_data[,10:ncol(multi_morbid)] , ncp = ncol(multi_mor
 #IND PLOTS
 FAMD_full_data_ind_plot_d12=make_FAMD_ind_plot(FAMD_full_data_res,
                                                dims=c(1,2),
-                                               custom_theme=theme_jh,color_scale=distinct_scale[2])
+                                               custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
 svg(filename="../results/results_joel_HPC/FAMD_ordinal_continuous_full_data_ind_plot_d12.svg",width=10,height=10)
 print(FAMD_full_data_ind_plot_d12)
@@ -123,7 +123,7 @@ dev.off()
 
 FAMD_full_data_ind_plot_d34=make_FAMD_ind_plot(FAMD_full_data_res,
                                                dims=c(3,4),
-                                               custom_theme=theme_jh,color_scale=distinct_scale[2])
+                                               custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
 svg(filename="../results/results_joel_HPC/FAMD_ordinal_continuous_full_data_ind_plot_d34.svg",width=10,height=10)
 print(FAMD_full_data_ind_plot_d34)
