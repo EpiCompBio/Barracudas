@@ -88,7 +88,7 @@ saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_kmeans_ordinal_continu
 # Kmeans on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
-FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
+FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=3)
 # FAMD_kmeans_multi_morbid=readRDS("../results/results_joel_HPC/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
 
 
