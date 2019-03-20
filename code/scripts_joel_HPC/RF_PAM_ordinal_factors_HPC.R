@@ -2,33 +2,38 @@
 # LOADING LIBRARIES
 ################################################################################
 
-# using<-function(...) {
-#   libs<-unlist(list(...))
-#   req<-unlist(lapply(libs,require,character.only=TRUE))
-#   need<-libs[req==FALSE]
-#   if(length(need)>0){
-#     install.packages(need)
-#     lapply(need,require,character.only=TRUE)
-#   }
-# }
-# 
-# using("randomForest","caret","cluster","FactoMineR","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","shadowtext","parallel","clusterCrit")
+using<-function(...) {
+  libs<-unlist(list(...))
+  req<-unlist(lapply(libs,require,character.only=TRUE))
+  need<-libs[req==FALSE]
+  if(length(need)>0){
+    install.packages(need)
+    lapply(need,require,character.only=TRUE)
+  }
+}
+
+using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
+      "gridExtra","grid","dplyr","parallel","cluster")
 
 
 
-library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(caret,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
 library(reshape2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(shadowtext,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
+
+#Package needed for the clustering method
+library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
+
+# Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 ################################################################################
@@ -69,7 +74,7 @@ source("code/utility_functions/clustering_utility.R")
 
 FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_factors_multi_morbid_res.rds")
 
-nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 60)[1]
+nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
 
 ################################################################################

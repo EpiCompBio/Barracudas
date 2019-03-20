@@ -13,7 +13,7 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","cluster")
+#       "gridExtra","grid","dplyr","parallel","apcluster")
 
 
 
@@ -36,13 +36,12 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 #Package needed for the clustering method
-library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(apcluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 
 # Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -56,10 +55,6 @@ library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
 # multi_morbid=multi_morbid[1:200,]
-
-
-
-sapply(multi_morbid,class)
 
 
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
@@ -79,74 +74,71 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 ################################################################################
 
-
-FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_factors_multi_morbid_res.rds")
+FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
 
 ################################################################################
-# Gower distance for the proximty measures
+# randomForest proximity matrix multi-morbid individuals
 ################################################################################
 
-gower_dissimilarity_multi_morbid_res=readRDS("../data/processed/gower_dissimilarity_multi_morbid_res.rds")
-
+RF_proximity_measure_multi_morbid_res=readRDS("../data/processed/RF_proximity_measure_ordinal_continuous_multi_morbid_res.rds")
 
 
 ################################################################################
 # Partitioning around medoids on the randomForest proximity measure
 ################################################################################
 
-gower_pam_multi_morbid=pam(gower_dissimilarity_multi_morbid_res, 2)
+RF_aff_prop_multi_morbid=apclusterK(RF_proximity_measure_multi_morbid_res, K=2)
+
+clusters_RF_aff_prop_multi_morbid=rep(0,nrow(RF_proximity_measure_multi_morbid_res))
+
+for (k in 1:length(RF_aff_prop_multi_morbid@clusters)) {
+  for (l in 1:length(RF_aff_prop_multi_morbid@clusters[[k]])) {
+    clusters_RF_aff_prop_multi_morbid[RF_aff_prop_multi_morbid@clusters[[k]][l]]=k
+  }
+}
+
+saveRDS(RF_aff_prop_multi_morbid,"../results/results_joel_HPC/RF_aff_prop_ordinal_continuous/RF_aff_prop_multi_morbid.rds")
 
 
-saveRDS(gower_pam_multi_morbid,"../results/results_joel_HPC/gower_pam/gower_pam_multi_morbid.rds")
 
-
-clusters_gower_pam_multi_morbid=gower_pam_multi_morbid$clustering
-
-gower_pam_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_gower_pam_multi_morbid,
+RF_aff_prop_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_aff_prop_multi_morbid,
                                                         dims=c(1,2),
                                                         custom_theme=theme_jh,color_scale=distinct_scale)
 
 
 
-gower_pam_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_gower_pam_multi_morbid,
+RF_aff_prop_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_aff_prop_multi_morbid,
                                                         dims=c(3,4),
                                                         custom_theme=theme_jh,color_scale=distinct_scale)
 
 
-svg(filename="../results/results_joel_HPC/gower_pam/gower_pam_multi_morbid_plot_d12.svg",width=10,height=10)
-print(gower_pam_multi_morbid_plot_d12)
+svg(filename="../results/results_joel_HPC/RF_aff_prop_ordinal_continuous/RF_aff_prop_ordinal_continuous_multi_morbid_plot_d12.svg",width=10,height=10)
+print(RF_aff_prop_multi_morbid_plot_d12)
 dev.off()
 
-svg(filename="../results/results_joel_HPC/gower_pam/gower_pam_multi_morbid_plot_d34.svg",width=10,height=10)
-print(gower_pam_multi_morbid_plot_d34)
+svg(filename="../results/results_joel_HPC/RF_aff_prop_ordinal_continuous/RF_aff_prop_ordinal_continuous_multi_morbid_plot_d34.svg",width=10,height=10)
+print(RF_aff_prop_multi_morbid_plot_d34)
 dev.off()
 
 ################################################
 # Means continuous variables by cluster
 ################################################
 
-cat_variables=colnames(multi_morbid)[sapply(sapply(multi_morbid,class),function(x) {x[[1]]}) == "factor" |
-                                       sapply(sapply(multi_morbid,class),function(x) {x[[1]]}) == "ordered"]
-cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "numeric"]
+cat_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "factor"]
+cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) != "factor"]
+cont_variables=cont_variables[2:length(cont_variables)]
 
 
-
-
-# cat_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "factor" | sapply(multi_morbid,class) != "ordered factor"]
-# cont_variables=colnames(multi_morbid)[sapply(sapply(multi_morbid,class),function(x) {x[[1]]}) != "factor" &
-#                                          sapply(sapply(multi_morbid,class),function(x) {x[[1]]}) != "ordered"]
-# cont_variables=cont_variables[2:length(cont_variables)]
-
-gower_pam_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
-                                                                  classes=as.factor(clusters_gower_pam_multi_morbid),
+RF_aff_prop_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
+                                                                  classes=as.factor(clusters_RF_aff_prop_multi_morbid),
                                                                   color_scale=NULL,custom_theme=theme_jh,title=NULL)
 
 
-svg(filename="../results/results_joel_HPC/gower_pam/gower_pam_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
-print(gower_pam_mean_by_cluster_continuous_plot)
+svg(filename="../results/results_joel_HPC/RF_aff_prop_ordinal_continuous/RF_aff_prop_multi_ordinal_continuous_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+print(RF_aff_prop_mean_by_cluster_continuous_plot)
 dev.off()
 
 
@@ -161,16 +153,16 @@ cat_variables_split=splitIndices(nx=length(cat_variables), ncl=ceiling(length(ca
 for (k in 1:length(cat_variables_split)) {
   
   
-  gower_pam_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
-                                                                 classes=as.factor(clusters_gower_pam_multi_morbid),layout=c(3,3),
+  RF_aff_prop_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
+                                                                 classes=as.factor(clusters_RF_aff_prop_multi_morbid),layout=c(3,3),
                                                                  color_scale=NULL,custom_theme=theme_jh,
                                                                  title=paste0("Distributions of categorical variables by classes (",
                                                                               k,"/",length(cat_variables_split),")"))
   
   
-  svg(filename=paste0("../results/results_joel_HPC/gower_pam/gower_pam_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop_ordinal_continuous/RF_aff_prop_ordinal_continuous_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(gower_pam_cat_distribution_by_cluster)
+  grid.draw(RF_aff_prop_cat_distribution_by_cluster)
   dev.off()
   
 }
@@ -184,15 +176,15 @@ cont_variables_split=splitIndices(nx=length(cont_variables), ncl=ceiling(length(
 
 for (k in 1:length(cont_variables_split)) {
   
-  gower_pam_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
-                                                                   classes=as.factor(clusters_gower_pam_multi_morbid),layout=c(3,3),
+  RF_aff_prop_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
+                                                                   classes=as.factor(clusters_RF_aff_prop_multi_morbid),layout=c(3,3),
                                                                    color_scale=NULL,custom_theme=theme_jh,
                                                                    title=paste0("Distributions of continuous variables by classes (",
                                                                                 k,"/",length(cont_variables_split),")"))
   
-  svg(filename=paste0("../results/results_joel_HPC/gower_pam/gower_pam_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop_ordinal_continuous/RF_aff_prop_ordinal_continuous_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(gower_pam_cont_distribution_by_cluster)
+  grid.draw(RF_aff_prop_cont_distribution_by_cluster)
   dev.off()
   
 }

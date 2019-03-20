@@ -1,3 +1,16 @@
+cat("-------------------------------------------------------------------------------------------")
+cat("\n")
+cat("Sourcing clustering_utility.R")
+cat("\n")
+cat("These functions depend on the libraries : \n")
+cat("\n")
+cat("reshape2, magrittr, gridExtra, grid, dplyr, shadowtext, gridExtra")
+cat("\n")
+cat("\n")
+cat("-------------------------------------------------------------------------------------------")
+cat("\n")
+
+
 using<-function(...) {
   libs<-unlist(list(...))
   req<-unlist(lapply(libs,require,character.only=TRUE))
@@ -9,7 +22,6 @@ using<-function(...) {
 }
 
 using("reshape2","magrittr","gridExtra","grid","dplyr","shadowtext","gridExtra")
-
 
 
 

@@ -12,12 +12,16 @@
 #  }
 # }
 # 
-# using("FactoMineR","ggplot2")
+# using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer")
 
-
+#Package from sourcing functions
 library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(ggplot2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(ggrepel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
+
+library(viridis,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 ################################################################################
@@ -55,7 +59,9 @@ multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)-10, graph = FALSE)
+
+#Adding a +50 to get higher explained variance
+FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)],ncp = ncol(multi_morbid)+50, graph = FALSE)
 
 
 #IND PLOTS

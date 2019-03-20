@@ -13,7 +13,8 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","clusterCrit","mclust")
+#       "gridExtra","grid","dplyr","parallel","apcluster")
+
 
 
 #Package from sourcing functions
@@ -35,13 +36,13 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 #Package needed for the clustering method
-library(mclust,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(apcsluter,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 
 # Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
 
 
 ################################################################################
@@ -79,64 +80,49 @@ FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_factors_multi_morb
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
+
+
 ################################################################################
-# Choosing the number of clusters 
+# randomForest proximity matrix multi-morbid individuals
 ################################################################################
 
-
-n_classes=2:8
-
-cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
-cluster_crit_df[,1]=n_classes
-colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
+RF_proximity_measure_multi_morbid_res=readRDS("../data/processed/RF_proximity_measure_ordinal_factors_multi_morbid_res.rds")
 
 
-# Different numbers of centers
-for (k in 1:length(n_classes)) {
-  
-  FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=n_classes[k])
-  
-  
-  cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
-                                            part=as.integer(FAMD_GMM_multi_morbid$classification),c("Calinski_Harabasz","Silhouette")))
+################################################################################
+# Partitioning around medoids on the randomForest proximity measure
+################################################################################
+
+RF_aff_prop_multi_morbid=apclusterK(RF_proximity_measure_multi_morbid_res, K=2)
+
+clusters_RF_aff_prop_multi_morbid=rep(0,nrow(RF_proximity_measure_multi_morbid_res))
+
+for (k in 1:length(RF_aff_prop_multi_morbid@clusters)) {
+  for (l in 1:length(RF_aff_prop_multi_morbid@clusters[[k]])) {
+    clusters_RF_aff_prop_multi_morbid[RF_aff_prop_multi_morbid@clusters[[k]][l]]=k
+  }
 }
 
-
-saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_GMM_ordinal_factors/cluster_crit_df_FAMD_GMM_ordinal_factors_multi_morbid.rds")
-
+saveRDS(RF_aff_prop_multi_morbid,"../results/results_joel_HPC/RF_aff_prop_ordinal_factors/RF_aff_prop_multi_morbid.rds")
 
 
-################################################################################
-# GMM on the FAMD row coordinates with the best number of clusters
-################################################################################
-
-FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=2)
-
-
-saveRDS(FAMD_GMM_multi_morbid,"../results/results_joel_HPC/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid.rds")
-
-
-
-
-clusters_FAMD_GMM_multi_morbid=FAMD_GMM_multi_morbid$classification
-
-FAMD_GMM_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_FAMD_GMM_multi_morbid,
+RF_aff_prop_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_aff_prop_multi_morbid,
                                                              dims=c(1,2),
                                                              custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
 
-FAMD_GMM_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_FAMD_GMM_multi_morbid,
+RF_aff_prop_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_RF_aff_prop_multi_morbid,
                                                              dims=c(3,4),
                                                              custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
-svg(filename="../results/results_joel_HPC/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_plot_d12.svg",width=10,height=10)
-print(FAMD_GMM_multi_morbid_plot_d12)
+svg(filename="../results/results_joel_HPC/RF_aff_prop_ordinal_factors/RF_aff_prop_ordinal_factors_multi_morbid_plot_d12.svg",width=10,height=10)
+print(RF_aff_prop_multi_morbid_plot_d12)
 dev.off()
 
-svg(filename="../results/results_joel_HPC/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_plot_d34.svg",width=10,height=10)
-print(FAMD_GMM_multi_morbid_plot_d34)
+svg(filename="../results/results_joel_HPC/RF_aff_prop_ordinal_factors/RF_aff_prop_ordinal_factors_multi_morbid_plot_d34.svg",width=10,height=10)
+print(RF_aff_prop_multi_morbid_plot_d34)
 dev.off()
 
 
@@ -149,13 +135,13 @@ cat_variables=colnames(multi_morbid)[sapply(sapply(multi_morbid,class),function(
 cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "numeric"]
 
 
-FAMD_GMM_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
-                                                                       classes=as.factor(clusters_FAMD_GMM_multi_morbid),
+RF_aff_prop_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
+                                                                       classes=as.factor(clusters_RF_aff_prop_multi_morbid),
                                                                        color_scale=NULL,custom_theme=theme_jh,title=NULL)
 
 
-svg(filename="../results/results_joel_HPC/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
-print(FAMD_GMM_mean_by_cluster_continuous_plot)
+svg(filename="../results/results_joel_HPC/RF_aff_prop_ordinal_factors/RF_aff_prop_ordinal_factors_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+print(RF_aff_prop_mean_by_cluster_continuous_plot)
 dev.off()
 
 
@@ -170,16 +156,16 @@ cat_variables_split=splitIndices(nx=length(cat_variables), ncl=ceiling(length(ca
 for (k in 1:length(cat_variables_split)) {
   
   
-  FAMD_GMM_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
-                                                                      classes=as.factor(clusters_FAMD_GMM_multi_morbid),layout=c(3,3),
+  RF_aff_prop_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
+                                                                      classes=as.factor(clusters_RF_aff_prop_multi_morbid),layout=c(3,3),
                                                                       color_scale=NULL,custom_theme=theme_jh,
                                                                       title=paste0("Distributions of categorical variables by classes (",
                                                                                    k,"/",length(cat_variables_split),")"))
   
   
-  svg(filename=paste0("../results/results_joel_HPC/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop_ordinal_factors/RF_aff_prop_ordinal_factors_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(FAMD_GMM_cat_distribution_by_cluster)
+  grid.draw(RF_aff_prop_cat_distribution_by_cluster)
   dev.off()
   
 }
@@ -193,16 +179,17 @@ cont_variables_split=splitIndices(nx=length(cont_variables), ncl=ceiling(length(
 
 for (k in 1:length(cont_variables_split)) {
   
-  FAMD_GMM_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
-                                                                        classes=as.factor(clusters_FAMD_GMM_multi_morbid),layout=c(3,3),
+  RF_aff_prop_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
+                                                                        classes=as.factor(clusters_RF_aff_prop_multi_morbid),layout=c(3,3),
                                                                         color_scale=NULL,custom_theme=theme_jh,
                                                                         title=paste0("Distributions of continuous variables by classes (",
                                                                                      k,"/",length(cont_variables_split),")"))
   
-  svg(filename=paste0("../results/results_joel_HPC/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC/RF_aff_prop_ordinal_factors/RF_aff_prop_ordinal_factors_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(FAMD_GMM_cont_distribution_by_cluster)
+  grid.draw(RF_aff_prop_cont_distribution_by_cluster)
   dev.off()
   
 }
+
 

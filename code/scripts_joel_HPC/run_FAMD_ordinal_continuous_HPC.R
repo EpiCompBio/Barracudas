@@ -13,10 +13,16 @@
 #  }
 # }
 # 
-# using("FactoMineR","ggplot2)
+# using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer")
 
+#Package from sourcing functions
 library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(ggplot2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(ggrepel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
+library(viridis,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS

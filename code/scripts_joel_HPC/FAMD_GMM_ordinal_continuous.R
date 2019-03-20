@@ -12,19 +12,35 @@
 #   }
 # }
 # 
-# using("FactoMineR","parallel","clusterCrit","reshape2","magrittr","gridExtra","grid","dplyr","parallel","clusterCrit","mclust")
+# using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr","gridExtra","grid","dplyr","parallel","clusterCrit","mclust")
 
+
+#Package from sourcing functions
 library(FactoMineR,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(ggplot2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(ggrepel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
+library(viridis,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
 library(reshape2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
+
+#Package needed for the clustering method
 library(mclust,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
+
+# Other packages used in the script
+library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
@@ -58,7 +74,33 @@ source("code/utility_functions/clustering_utility.R")
 
 FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
-nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 60)[1]
+nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
+
+
+################################################################################
+# Choosing the number of clusters 
+################################################################################
+
+
+n_classes=2:8
+
+cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
+cluster_crit_df[,1]=n_classes
+colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
+
+
+# Different numbers of centers
+for (k in 1:length(n_classes)) {
+  
+  FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=n_classes[k])
+  
+  
+  cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
+                                            part=as.integer(FAMD_GMM_multi_morbid$classification),c("Calinski_Harabasz","Silhouette")))
+}
+
+
+saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_GMM_ordinal_continuous/cluster_crit_df_FAMD_GMM_ordinal_continuous_multi_morbid.rds")
 
 
 ################################################################################

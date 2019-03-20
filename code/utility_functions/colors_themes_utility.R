@@ -1,3 +1,16 @@
+cat("-------------------------------------------------------------------------------------------")
+cat("\n")
+cat("Sourcing colors_themes_utility.R")
+cat("\n")
+cat("These functions depend on the libraries : \n")
+cat("\n")
+cat("viridis, RColorBrewer, ggplot2")
+cat("\n")
+cat("\n")
+cat("-------------------------------------------------------------------------------------------")
+cat("\n")
+
+
 using<-function(...) {
   libs<-unlist(list(...))
   req<-unlist(lapply(libs,require,character.only=TRUE))
