@@ -4,7 +4,7 @@ cat("Sourcing clustering_utility.R")
 cat("\n")
 cat("These functions depend on the libraries : \n")
 cat("\n")
-cat("reshape2, magrittr, gridExtra, grid, dplyr, shadowtext, gridExtra")
+cat("reshape2, magrittr, gridExtra, grid, dplyr, gridExtra")
 cat("\n")
 cat("\n")
 cat("-------------------------------------------------------------------------------------------")
@@ -21,7 +21,7 @@ using<-function(...) {
   }
 }
 
-using("reshape2","magrittr","gridExtra","grid","dplyr","shadowtext","gridExtra")
+using("reshape2","magrittr","gridExtra","grid","dplyr","gridExtra")
 
 
 

@@ -2,18 +2,18 @@
 # LOADING LIBRARIES
 ################################################################################
 
-using<-function(...) {
-  libs<-unlist(list(...))
-  req<-unlist(lapply(libs,require,character.only=TRUE))
-  need<-libs[req==FALSE]
-  if(length(need)>0){
-    install.packages(need)
-    lapply(need,require,character.only=TRUE)
-  }
-}
-
-using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-      "gridExtra","grid","dplyr","parallel","cluster")
+# using<-function(...) {
+#   libs<-unlist(list(...))
+#   req<-unlist(lapply(libs,require,character.only=TRUE))
+#   need<-libs[req==FALSE]
+#   if(length(need)>0){
+#     install.packages(need)
+#     lapply(need,require,character.only=TRUE)
+#   }
+# }
+# 
+# using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
+#       "gridExtra","grid","dplyr","parallel","cluster")
 
 
 
@@ -46,7 +46,7 @@ library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
 
-multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
+# multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
