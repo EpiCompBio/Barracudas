@@ -48,14 +48,15 @@ library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-
+# multi_morbid_ordinal_continuous
+# multi_morbid_ordinal_continuous_HW_PCA
 multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
-source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
-source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
-source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
+# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
+# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
+# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
 
 
 
@@ -70,9 +71,10 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 ################################################################################
 
-FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
+FAMD_multi_morbid_res=readRDS("../data/real_processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
+
 
 
 ################################################################################
@@ -80,7 +82,7 @@ nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 ################################################################################
 
 
-n_classes=2:8
+n_classes=2:5
 
 cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
 cluster_crit_df[,1]=n_classes
@@ -103,7 +105,7 @@ saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_kmeans_ordinal_continu
 # Kmeans on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
-FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=3)
+FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
 # FAMD_kmeans_multi_morbid=readRDS("../results/results_joel_HPC/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
 
 
@@ -198,3 +200,111 @@ for (k in 1:length(cont_variables_split)) {
   
 }
 
+
+################################################
+# Define groupings
+################################################
+
+
+Disease = c("mi","angina","stroke","htn","obese","dvt_asthma_copd_atopy","diabetes","no_chronic")
+Demographics = c("birth_year","birth_month",'Sex',"Townsend_depr_index",
+                 "white_british_irish","mixed","Asian","Black_african","Chinese", "other_ethnic")
+BMI_related = c("waist_circum","hip_circum","Height","height_sitting","sitting_height","BMI",
+                "seated_box_height","Weight","body_fat_perc","whole_body_fat_mass","whole_body_water_mass")
+Activity = c("days_walked_over10min","Duration_walks","n_days_moderate_ex","Duration_moderate_ex",
+             "n_days_vigorous_ex","Duration_vigorous_ex","freq_climb_stairs_4wks",
+             "freq_walked_for_pleasure_4wks", "Duration_pleasure_walks","time_tv",
+             "time_computer","time_driving")
+Vital_signs = c("heart_rate","diastolic_bp","SBP_automated")
+Tobacco = c("smokers_in_house","tob_expo_home","tob_expo_outside","smoker","light_smoker",
+            "ever_smoker","current_smoker")
+Alcohol = c("Alc_intake_freq","current_etoh","ever_etoh")
+Dietary = c("veg_intake_cooked","veg_intake_raw","fresh_fruit","dried_fruit",
+            "oily_fish_intake","non_oily_fish_intake","processed_meat","poultry","beef_intake",
+            "lamb_intake","pork_intake","cheese_intake","bread_intake","cereal_intake",
+            "salt_added_food","tea_intake","coffee_intake","water_intake","varition_in_diet",
+            "major_diet_change_5yr","spread_use")
+Med_surg_hx = c("self_reported_surgery","previous_surgery","pacemaker")
+
+grouping_names=list(Disease=Disease,Demographics=Demographics,BMI_related=BMI_related,
+                    Activity=Activity,Vital_signs=Vital_signs,Tobacco=Tobacco,
+                    Alcohol=Alcohol,Dietary=Dietary,Med_surg_hx=Med_surg_hx)
+
+
+################################################
+# Distribution tests
+################################################
+
+
+distribution_test_df=data.frame(matrix(0,ncol=3,nrow=length(c(cont_variables,cat_variables))))
+colnames(distribution_test_df)=c("var_name","Type","p_value")
+
+
+distribution_test_df[,1]=c(cont_variables,cat_variables)
+distribution_test_df[,2]=c(rep("Cont",length(cont_variables)),rep("Cat",length(cat_variables)))
+
+
+for (k in 1:nrow(distribution_test_df)) {
+  
+  if (distribution_test_df[k,2]=="Cont") {
+    
+    anova_res=summary(lm(outcome ~ clusters,
+                         data=data.frame(outcome=multi_morbid[,distribution_test_df[k,1]],clusters=as.factor(clusters_FAMD_kmeans_multi_morbid))))
+    distribution_test_df[k,3]=df(anova_res$fstatistic[1], anova_res$fstatistic[2], anova_res$fstatistic[3])
+    
+  } else if (distribution_test_df[k,2]=="Cat") {
+    
+    distribution_test_df[k,3]=chisq.test(multi_morbid[,distribution_test_df[k,1]],as.factor(clusters_FAMD_kmeans_multi_morbid))$p.value
+    
+  }
+
+}
+
+distribution_test_df[,3]=p.adjust(distribution_test_df[,3],method="bonferroni")
+
+
+
+distribution_test_df=distribution_test_df[match(colnames(multi_morbid)[2:ncol(multi_morbid)],distribution_test_df[,1]),]
+
+
+significant_cluster_differences_by_variable_plot=make_significant_cluster_differences_by_variable_plot(distribution_test_df,
+                                                                                                       grouping_names=grouping_names,
+                                                                                                  color_scale=NULL,custom_theme=theme_jh,
+                                                                                                  threshold=10^-50)
+
+
+svg(filename=paste0("../results/results_joel_HPC/FAMD_kmeans_ordinal_continuous/",
+                    "FAMD_kmeans_ordinal_continuous_multi_morbid_cluster_differences_by_variable.svg"),
+    width=10,height=10)
+print(significant_cluster_differences_by_variable_plot)
+dev.off()
+
+
+################################################
+# random Forest variable importance
+################################################
+
+
+randomForest_multi_morbid=randomForest(multi_morbid[,2:ncol(multi_morbid)], y=as.factor(clusters_FAMD_kmeans_multi_morbid),ntree=500)
+             
+var_importance_df=data.frame(matrix(0,ncol=2,nrow=length(c(cont_variables,cat_variables))))
+colnames(var_importance_df)=c("var_name","Type")
+  
+var_importance_df[,1]=c(cont_variables,cat_variables)
+var_importance_df[,2]=c(rep("Cont",length(cont_variables)),rep("Cat",length(cat_variables)))         
+
+
+
+var_importance_df=var_importance_df[match(colnames(multi_morbid)[2:ncol(multi_morbid)],var_importance_df[,1]),]
+var_importance_df$var_importance=randomForest_multi_morbid$importance
+
+
+variable_importance_plot=make_variable_importance_plot(var_importance_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
+                                                       threshold=50)
+
+
+svg(filename=paste0("../results/results_joel_HPC/FAMD_kmeans_ordinal_continuous/",
+                    "FAMD_kmeans_ordinal_continuous_multi_morbid_variable_importance.svg"),
+    width=10,height=10)
+print(variable_importance_plot)
+dev.off()

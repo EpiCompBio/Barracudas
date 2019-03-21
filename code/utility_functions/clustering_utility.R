@@ -248,13 +248,129 @@ cont_distribution_by_cluster=function(data,classes,layout=NULL,color_scale=NULL,
 
 
 ########################################################################################################
+# significant cluster differences by variable plot
+#### INPUTS
+# p_value_data : data with the p_values (it should have the following columns : var_name, Type, p_value) 
+# 
+# color_scale : color scale for the plot
+# custom_theme : custom ggplot theme to be applied
+# thresold : significance threshold for annotation
+#### OUTPUT
+# ggplot object of significant cluster differences by variable
+########################################################################################################
+
+make_significant_cluster_differences_by_variable_plot=function(p_value_data,grouping_names=NULL,color_scale=NULL,custom_theme=NULL,threshold=0.05) {
+  
+  
+ 
+  p_value_data[,'p_value']=-log10(p_value_data[,'p_value'])
+  p_value_data[is.infinite(p_value_data[,'p_value']),'p_value']=999
+  
+  p_value_data[is.infinite(p_value_data[,'p_value']),'p_value']=0
+ 
+  
+  if (is.null(grouping_names)) {
+    
+    p_value_data$var_name=factor(p_value_data$var_name,levels=p_value_data$var_name)
+    p_value_plot=ggplot(p_value_data) + geom_point(aes(x=var_name,y=p_value,color=Type),size=2) + 
+      custom_theme + theme(axis.text.x = element_text(angle=60,vjust = 0.8)) +
+      ggtitle("Significance of differences between clusters across variables") + ylab("-log10(p_value)")
+    
+    if (!is.null(color_scale)) {
+      p_value_plot= p_value_plot + scale_color_manual(values=color_scale)
+    }
+    
+  } else {
+    
+    
+   
+    groupings=lapply(grouping_names,function(x) {which(p_value_data[,1]%in%x)})
+    
+
+    
+    p_value_data[,1]%in%unlist(grouping_names)
+    
+    p_value_data=p_value_data[unlist(groupings),]
+    p_value_data$group=unlist(lapply(names(grouping_names),function(x) {rep(x,length(grouping_names[[x]]))}))
+    p_value_data$var_name=factor(p_value_data$var_name,levels=p_value_data$var_name)
+    p_value_data$significant=ifelse(p_value_data[,"p_value"]>-log10(threshold),1,0)
+    
+    p_value_plot=ggplot(p_value_data) + geom_point(aes(x=var_name,y=p_value,color=group),size=2) + 
+      custom_theme + theme(axis.text.x = element_text(angle=60,vjust = 0.8)) +
+      ggtitle("Significance of differences between clusters across variables") + ylab("-log10(p_value)")
+    
+    if (!is.null(color_scale)) {
+      p_value_plot= p_value_plot + scale_color_manual(values=color_scale)
+    }
+    
+    p_value_plot= p_value_plot + 
+      geom_label_repel(data=subset(p_value_data, p_value_data$significant==1),aes(x=var_name,y=p_value,label=var_name)) +
+      geom_hline(yintercept = -log10(threshold))
+    
+
+    
+  }
+  
+  
+  return(p_value_plot)
+  
+}
+
+
+########################################################################################################
 # Criterion plot : plot the given criterion over the sequence of numbers of clusters
 #### INPUTS
-# data : 
-# classes : clusters
+# data : data witht the var importances  (it should have the following columns : var_name, Type, var_importance) 
 # color_scale : color scale for the plot
-# title : title of the plot
 # custom_theme : custom ggplot theme to be applied
+# threshold : threshold for annotation
 #### OUTPUT
-# ggplot object of the means by cluster plot
+# ggplot object of significant cluster differences by variable
 ########################################################################################################
+
+
+make_variable_importance_plot=function(data,grouping_names=NULL,color_scale=NULL,custom_theme=NULL,threshold=5) {
+  
+ 
+
+  if (is.null(grouping_names)) {
+    data$var_name=factor(data$var_name,levels=data$var_name)
+    var_importance_plot=ggplot(data) + geom_point(aes(x=var_name,y=var_importance,color=Type),size=2) + 
+      custom_theme + theme(axis.text.x = element_text(angle=60,vjust = 0.8)) +
+      ggtitle("Variable importance for cluster classification")
+    
+    if (!is.null(color_scale)) {
+      var_importance_plot= var_importance_plot + scale_color_manual(values=color_scale)
+    }
+    
+  } else {
+    
+ 
+    
+       
+    groupings=lapply(grouping_names,function(x) {which(data[,1]%in%x)})
+    
+    data=data[unlist(groupings),]
+    data$group=unlist(lapply(names(grouping_names),function(x) {rep(x,length(grouping_names[[x]]))}))
+    data$var_name=factor(data$var_name,levels=data$var_name)
+    data$significant=ifelse(data[,"var_importance"]>threshold,1,0)
+ 
+    
+    var_importance_plot=ggplot(data) + geom_point(aes(x=var_name,y=var_importance,color=group),size=2) + 
+      custom_theme + theme(axis.text.x = element_text(angle=60,vjust = 0.8)) +
+      ggtitle("Significance of differences between clusters across variables")
+    
+    if (!is.null(color_scale)) {
+      var_importance_plot= var_importance_plot + scale_color_manual(values=color_scale)
+    }
+    
+    var_importance_plot= var_importance_plot + 
+      geom_label_repel(data=subset(data, data$significant==1),aes(x=var_name,y=var_importance,label=var_name)) +
+      geom_hline(yintercept = threshold)
+    
+  }
+  
+  
+  return(var_importance_plot)
+  
+}
