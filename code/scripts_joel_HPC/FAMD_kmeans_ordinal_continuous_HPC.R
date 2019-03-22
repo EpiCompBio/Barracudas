@@ -13,7 +13,7 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","clusterCrit")
+#       "gridExtra","grid","dplyr","parallel","clusterCrit","randomForest")
 
 
 
@@ -37,7 +37,7 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
+library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -71,7 +71,7 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 ################################################################################
 
-FAMD_multi_morbid_res=readRDS("../data/real_processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
+FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]

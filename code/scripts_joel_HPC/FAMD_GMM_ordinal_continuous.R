@@ -41,6 +41,10 @@ library(mclust,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
+
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
