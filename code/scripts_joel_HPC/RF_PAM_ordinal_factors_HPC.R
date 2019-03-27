@@ -56,7 +56,7 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
 
 
-
+source("../data/processed/var_groupings.R")
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")

@@ -13,7 +13,7 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","apcluster")
+#       "gridExtra","grid","dplyr","parallel","apcluster","randomForest")
 
 
 
@@ -66,7 +66,7 @@ multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
 
 
-
+source("../data/processed/var_groupings.R")
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")

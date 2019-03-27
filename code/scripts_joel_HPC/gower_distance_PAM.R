@@ -13,7 +13,7 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","cluster")
+#       "gridExtra","grid","dplyr","parallel","cluster","randomForest")
 
 
 

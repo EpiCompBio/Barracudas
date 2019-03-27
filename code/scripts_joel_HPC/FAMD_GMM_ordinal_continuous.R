@@ -12,7 +12,8 @@
 #   }
 # }
 # 
-# using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr","gridExtra","grid","dplyr","parallel","clusterCrit","mclust")
+# using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2",
+#       "magrittr","gridExtra","grid","dplyr","parallel","clusterCrit","mclust","randomForest")
 
 
 #Package from sourcing functions
