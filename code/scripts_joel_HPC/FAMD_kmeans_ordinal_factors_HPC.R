@@ -50,21 +50,11 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
 
-# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
-# setwd(file_path)
-
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-
-# multi_morbid_ordinal_keep
-# multi_morbid_ordinal_factors_HW_PCA
 multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
 # multi_morbid=multi_morbid[1:200,]
 
-
-# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
-# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
-# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
 
 
 source("../data/processed/var_groupings.R")

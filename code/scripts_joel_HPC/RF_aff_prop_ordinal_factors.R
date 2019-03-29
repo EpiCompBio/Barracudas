@@ -36,7 +36,7 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 #Package needed for the clustering method
-library(apcsluter,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(apcluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 
@@ -50,9 +50,6 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
-
-# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
-# setwd(file_path)
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
