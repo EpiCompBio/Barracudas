@@ -56,7 +56,7 @@ source("code/utility_functions/colors_themes_utility.R")
 # multi_morbid_ordinal_factors_HW_PCA
 # multi_morbid_ordinal_factors
 multi_morbid=readRDS("../data/processed_V3/multi_morbid_male_ordinal_factors_HW_PCA.rds")
-multi_morbid=multi_morbid[1:200,]
+# multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
 # FAMD on the multi-morbid individuals
@@ -175,7 +175,7 @@ saveRDS(FAMD_multi_morbid_res,"../data/processed_V3/FAMD_ordinal_factors_multi_m
 # multi_morbid_ordinal_factors_HW_PCA
 # multi_morbid_ordinal_factors
 multi_morbid=readRDS("../data/processed_V3/multi_morbid_female_ordinal_factors_HW_PCA.rds")
-multi_morbid=multi_morbid[1:200,]
+# multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
 # FAMD on the multi-morbid individuals

@@ -47,7 +47,7 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
 
-# multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
+multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 

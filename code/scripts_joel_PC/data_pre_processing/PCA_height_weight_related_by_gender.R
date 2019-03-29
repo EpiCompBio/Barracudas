@@ -35,16 +35,28 @@ multi_morbid_ordinal_continuous=readRDS("../data/processed_V2/multi_morbid_male_
 
 multi_morbid_ordinal_factors=readRDS("../data/processed_V2/multi_morbid_male_ordinal_keep.rds")
 
-################################################################################
-# WORKING DIRECTORY AND SOURCING FUNCTIONS
-################################################################################
+# We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
+print(sum(multi_morbid_ordinal_continuous$smoker == multi_morbid_ordinal_continuous$current_smoker))
+print(nrow(multi_morbid_ordinal_continuous))
+
+# We're going to remove one of them
+multi_morbid_ordinal_continuous$smoker=NULL
+multi_morbid_ordinal_factors$smoker=NULL
+
+#Birth_month is a dumb variable
+multi_morbid_ordinal_continuous$birth_month=NULL
+multi_morbid_ordinal_factors$birth_month=NULL
+
 
 
 height_weight_related=c("Height","height_sitting","sitting_height","BMI",
                         "Weight","body_fat_perc","whole_body_fat_mass","whole_body_water_mass","waist_circum","hip_circum")
 
 
+
 multi_morbid_HW=multi_morbid_ordinal_continuous[,height_weight_related]
+
+
 
 
 PCA_multi_morbid_HW=PCA(multi_morbid_HW)
@@ -99,6 +111,20 @@ multi_morbid_ordinal_factors=readRDS("../data/processed_V2/multi_morbid_female_o
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
+
+
+# We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
+print(sum(multi_morbid_ordinal_continuous$smoker == multi_morbid_ordinal_continuous$current_smoker))
+print(nrow(multi_morbid_ordinal_continuous))
+
+# We're going to remove one of them
+multi_morbid_ordinal_continuous$smoker=NULL
+multi_morbid_ordinal_factors$smoker=NULL
+
+
+#Birth_month is a dumb variable
+multi_morbid_ordinal_continuous$birth_month=NULL
+multi_morbid_ordinal_factors$birth_month=NULL
 
 
 height_weight_related=c("Height","height_sitting","sitting_height","BMI",

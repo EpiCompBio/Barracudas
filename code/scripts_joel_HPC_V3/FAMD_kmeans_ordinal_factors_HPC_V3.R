@@ -54,7 +54,7 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # multi_morbid_ordinal_keep
 # multi_morbid_ordinal_factors_HW_PCA
 multi_morbid=readRDS("../data/processed_V3/multi_morbid_male_ordinal_factors_HW_PCA.rds")
-multi_morbid=multi_morbid[1:200,]
+# multi_morbid=multi_morbid[1:200,]
 
 
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
@@ -299,8 +299,8 @@ dev.off()
 ####################################################################################################################################################
 ####################################################################################################################################################
 
-multi_morbid=readRDS("../data/processed_V3/multi_morbid_female_ordinal_keep_HW_PCA.rds")
-multi_morbid=multi_morbid[1:200,]
+multi_morbid=readRDS("../data/processed_V3/multi_morbid_female_ordinal_factors_HW_PCA.rds")
+# multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
 ################################################################################

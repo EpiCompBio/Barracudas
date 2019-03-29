@@ -50,11 +50,8 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-
-# multi_morbid_ordinal_keep
-# multi_morbid_ordinal_factors_HW_PCA
 multi_morbid=readRDS("../data/processed_V2/multi_morbid_male_ordinal_keep.rds")
-multi_morbid=multi_morbid[1:200,]
+# multi_morbid=multi_morbid[1:200,]
 
 
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
@@ -153,6 +150,15 @@ FAMD_kmeans_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=mult
 svg(filename="../results/results_joel_HPC_V2_male/FAMD_kmeans_ordinal_factors/FAMD_kmeans_ordinal_factors_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
 print(FAMD_kmeans_mean_by_cluster_continuous_plot)
 dev.off()
+
+################################################
+# Define groupings
+################################################
+
+grouping_names=list(Disease=Disease,Demographics=Demographics,BMI_related=BMI_related,
+                    Activity=Activity,Vital_signs=Vital_signs,Tobacco=Tobacco,
+                    Alcohol=Alcohol,Dietary=Dietary,Med_surg_hx=Med_surg_hx)
+
 
 
 ################################################
@@ -290,7 +296,7 @@ dev.off()
 ####################################################################################################################################################
 
 multi_morbid=readRDS("../data/processed_V2/multi_morbid_female_ordinal_keep.rds")
-multi_morbid=multi_morbid[1:200,]
+# multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
 ################################################################################
