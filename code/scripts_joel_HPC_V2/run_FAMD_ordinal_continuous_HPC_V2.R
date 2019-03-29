@@ -28,17 +28,8 @@ library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
 
-# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
-# setwd(file_path)
-
-
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-
-
-
-# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
-# source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_utility.R")
 
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
@@ -53,8 +44,6 @@ source("code/utility_functions/colors_themes_utility.R")
 ################################################################################
 
 
-# multi_morbid_ordinal_continuous_HW_PCA
-# multi_morbid_ordinal_continuous
 multi_morbid=readRDS("../data/processed_V2/multi_morbid_male_ordinal_continuous.rds")
 # multi_morbid=multi_morbid[1:200,]
 
@@ -171,9 +160,6 @@ saveRDS(FAMD_multi_morbid_res,"../data/processed_V2/FAMD_ordinal_continuous_mult
 ################################################################################
 ################################################################################
 
-
-# multi_morbid_ordinal_continuous_HW_PCA
-# multi_morbid_ordinal_continuous
 multi_morbid=readRDS("../data/processed_V2/multi_morbid_female_ordinal_continuous.rds")
 # multi_morbid=multi_morbid[1:200,]
 

@@ -47,6 +47,7 @@ outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(full_data)
 #col of chronic diseases
 full_data$no_chronic = apply(full_data[,outcome_cols],1,sum)
 
+
 #change gender levels and remove gender that is not used anymore
 full_data$Sex = factor(ifelse(full_data$gender == 0, 'Female','Male'))
 full_data$gender=NULL
