@@ -64,7 +64,7 @@ multi_morbid=readRDS("../data/processed_V3/multi_morbid_male_ordinal_factors_HW_
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)+10, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
 
 
 #IND PLOTS
@@ -183,7 +183,7 @@ multi_morbid=readRDS("../data/processed_V3/multi_morbid_female_ordinal_continuou
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid), graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
 
 
 #IND PLOTS

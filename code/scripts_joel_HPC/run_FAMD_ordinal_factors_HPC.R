@@ -54,7 +54,7 @@ source("code/utility_functions/colors_themes_utility.R")
 # multi_morbid_ordinal_factors_HW_PCA
 # multi_morbid_ordinal_keep
 multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
-multi_morbid=multi_morbid[1:200,]
+# multi_morbid=multi_morbid[1:200,]
 
 
 ################################################################################
@@ -121,7 +121,7 @@ full_data=readRDS("../data/processed/full_data_ordinal_keep.rds")
 # FAMD on the full dataset
 ################################################################################
 
-FAMD_full_data_res=FAMD(full_data[,10:ncol(multi_morbid)] , ncp = ncol(multi_morbid)-10, graph = FALSE)
+FAMD_full_data_res=FAMD(full_data[,10:ncol(multi_morbid)] , ncp = ncol(multi_morbid)+50, graph = FALSE)
 
 
 #IND PLOTS
