@@ -36,13 +36,14 @@ full_data=read.csv("../data/processed/UKBcompleteFeb19.csv")
 # PRE-PROCESSING ON FULL DATA
 ################################################################################
 
-#define obese BMI > 35
-full_data$obese = ifelse(full_data$BMI >= 35, 1, 0)
+#define obese BMI > 40
+full_data$obese = ifelse(full_data$BMI >= 40, 1, 0)
 
 #define outcome cols
-outcomes = c('diabetes','mi','stroke','angina','obese')
+outcomes = c('diabetes','mi','stroke','angina','obese','htn')
 
 outcome_cols = grep(paste0('^',outcomes,'$',collapse = '|'), colnames(full_data))
+
 
 #col of chronic diseases
 full_data$no_chronic = apply(full_data[,outcome_cols],1,sum)

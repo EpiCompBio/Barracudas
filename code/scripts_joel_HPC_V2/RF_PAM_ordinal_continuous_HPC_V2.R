@@ -2,18 +2,18 @@
 # LOADING LIBRARIES
 ################################################################################
 
-using<-function(...) {
-  libs<-unlist(list(...))
-  req<-unlist(lapply(libs,require,character.only=TRUE))
-  need<-libs[req==FALSE]
-  if(length(need)>0){
-    install.packages(need)
-    lapply(need,require,character.only=TRUE)
-  }
-}
-
-using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-      "gridExtra","grid","dplyr","parallel","cluster")
+# using<-function(...) {
+#   libs<-unlist(list(...))
+#   req<-unlist(lapply(libs,require,character.only=TRUE))
+#   need<-libs[req==FALSE]
+#   if(length(need)>0){
+#     install.packages(need)
+#     lapply(need,require,character.only=TRUE)
+#   }
+# }
+# 
+# using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
+#       "gridExtra","grid","dplyr","parallel","cluster","randomForest")
 
 
 
@@ -279,11 +279,6 @@ print(variable_importance_plot)
 dev.off()
 
 
-
-
-
-
-
 ################################################################################
 ################################################################################
 # multi-morbid individuals only FEMALE
@@ -460,7 +455,7 @@ significant_cluster_differences_by_variable_plot=make_significant_cluster_differ
                                                                                                        threshold=10^-50)
 
 
-svg(filename=paste0("../results/results_joel_HPC_V2_female/RF_PAM_ordinal_continuous/",
+svg(filename=paste0("../results/results_joel_HPC_V2_female/RF_pam_ordinal_continuous/",
                     "RF_PAM_ordinal_continuous_multi_morbid_cluster_differences_by_variable.svg"),
     width=10,height=10)
 print(significant_cluster_differences_by_variable_plot)
@@ -490,7 +485,7 @@ variable_importance_plot=make_variable_importance_plot(var_importance_df,groupin
                                                        threshold=50)
 
 
-svg(filename=paste0("../results/results_joel_HPC_V2_female/RF_PAM_ordinal_continuous/",
+svg(filename=paste0("../results/results_joel_HPC_V2_female/RF_pam_ordinal_continuous/",
                     "RF_PAM_ordinal_continuous_multi_morbid_variable_importance.svg"),
     width=10,height=10)
 print(variable_importance_plot)

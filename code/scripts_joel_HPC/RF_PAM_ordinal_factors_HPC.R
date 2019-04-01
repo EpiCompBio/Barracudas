@@ -227,7 +227,7 @@ significant_cluster_differences_by_variable_plot=make_significant_cluster_differ
                                                                                                        threshold=10^-50)
 
 
-svg(filename=paste0("../results/results_joel_HPC/RF_PAM_ordinal_factors/",
+svg(filename=paste0("../results/results_joel_HPC/RF_pam_ordinal_factors/",
                     "RF_PAM_ordinal_factors_multi_morbid_cluster_differences_by_variable.svg"),
     width=10,height=10)
 print(significant_cluster_differences_by_variable_plot)
@@ -257,7 +257,7 @@ variable_importance_plot=make_variable_importance_plot(var_importance_df,groupin
                                                        threshold=50)
 
 
-svg(filename=paste0("../results/results_joel_HPC/RF_PAM_ordinal_factors/",
+svg(filename=paste0("../results/results_joel_HPC/RF_pam_ordinal_factors/",
                     "RF_PAM_ordinal_factors_multi_morbid_variable_importance.svg"),
     width=10,height=10)
 print(variable_importance_plot)
