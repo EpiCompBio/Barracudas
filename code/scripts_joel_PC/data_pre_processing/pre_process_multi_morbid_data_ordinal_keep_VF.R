@@ -71,7 +71,7 @@ print(unique(substr(ICD10_code_names, start = 1, stop = 3)))
 #I22: MI
 #I61 : Intracerebral haemorrhage
 #I21 : MI
-#I25: Chronic ischaemic heart diseas
+#I25: Chronic ischaemic heart diseases
 #I50: Heart failure
 #I63: Cerebral infarction
 #G46: Vascular syndromes of brain in cerebrovascular diseases
@@ -85,26 +85,21 @@ print(unique(substr(ICD10_code_names, start = 1, stop = 3)))
 #I64:Stroke, not specified as haemorrhage or infarction
 
 #We now try to make meaningful groups
-mi_codes=c("I22","I21")
-angina_codes=c("I20")
-stroke_codes=c("I73","I63","I62","I64","I69")
+CAD_codes=c("I22","I21","I23","I25","I20","I24")
+stroke_codes=c("I63","I64","I69","G46")
 heart_failure_codes=c("I50")
-CVD_other_codes=unique(substr(ICD10_code_names, start = 1, stop = 3))[
-  !unique(substr(ICD10_code_names, start = 1, stop = 3))%in%c(mi_codes,angina_codes,stroke_codes,heart_failure_codes)]
+intracranial_haemorrhage_codes=c("I61","I60","I62")
+peripheral_vascular_codes=c("I73")
 
-rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%mi_codes])
 
-mi_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%mi_codes])>=1,1,0)
-angina_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%angina_codes])>=1,1,0)
+CAD_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%CAD_codes])>=1,1,0)
 stroke_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%stroke_codes])>=1,1,0)
-CVD_other_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%CVD_other_codes])>=1,1,0)
 heart_failure_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%heart_failure_codes])>=1,1,0)
+intracranial_haemorrhage_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%intracranial_haemorrhage_codes])>=1,1,0)
+peripheral_vascular_data=ifelse(rowSums(deborah_data2[,substr(colnames(deborah_data2), start = 1, stop = 3)%in%peripheral_vascular_codes])>=1,1,0)
 
 
-supp_data=data.frame(mi_data,angina_data,stroke_data,CVD_other_data,heart_failure_data,eid=deborah_data2$eid)
-
-table(supp_data[,1])
-
+supp_data=data.frame(CAD_data,stroke_data,heart_failure_data,intracranial_haemorrhage_data,peripheral_vascular_data,eid=deborah_data2$eid)
 
 merged_data=merge(full_data,deborah_data,by="eid")
 merged_data=merge(merged_data,supp_data,by="eid")
@@ -114,22 +109,25 @@ merged_data$angina=NULL
 merged_data$stroke=NULL
 merged_data$htn=NULL
 
-merged_data$mi=ifelse(merged_data$heartattack_diag+merged_data$mi_data>=1,1,0)
-merged_data$angina=ifelse(merged_data$angina_diag+merged_data$angina_data>=1,1,0)
+#SHow how much HES data corresponds to self reported
+
+merged_data$CAD=ifelse(merged_data$angina_diag+merged_data$heartattack_diag+merged_data$CAD_data>=1,1,0)
 merged_data$stroke=ifelse(merged_data$stroke_diag+merged_data$stroke_data>=1,1,0)
 merged_data$heart_failure=merged_data$heart_failure_data
-merged_data$CVD_other=merged_data$CVD_other_data
+merged_data$intracranial_haemorrhage=merged_data$intracranial_haemorrhage_data
+merged_data$peripheral_vascular=merged_data$peripheral_vascular_data
+
 
 merged_data$heartattack_diag=NULL
 merged_data$angina_diag=NULL
 merged_data$stroke_diag=NULL
 
 
-merged_data$mi_data=NULL
-merged_data$angina_data=NULL
+merged_data$CAD_data=NULL
+merged_data$heart_failure_data=NULL
 merged_data$stroke_data=NULL
-merged_data$heart_failure_data=NULL 
-merged_data$CVD_other_data=NULL 
+merged_data$intracranial_haemorrhage_data=NULL 
+merged_data$peripheral_vascular_data=NULL 
 
 
 merged_data$htn=merged_data$hBP_diag
@@ -140,16 +138,10 @@ merged_data$htn=as.numeric(as.character(merged_data$htn))
 
 
 table(merged_data$htn)
-table(merged_data$CVD_other)
-table(merged_data$heart_failure)
+table(merged_data$intracranial_haemorrhage)
+table(merged_data$peripheral_vascular)
 
-table(merged_data$htn,merged_data$mi)
-table(merged_data$htn,merged_data$angina)
-table(merged_data$htn,merged_data$stroke)
 
-table(merged_data$mi,merged_data$CVD_other)
-table(merged_data$mi,merged_data$stroke)
-table(merged_data$mi,merged_data$angina)
 
 
 
@@ -161,7 +153,7 @@ table(merged_data$mi,merged_data$angina)
 merged_data$obese = ifelse(merged_data$BMI >= 40, 1, 0)
 
 #define outcome cols
-outcomes = c('diabetes','mi','stroke','angina','obese','htn',"heart_failure","CVD_other")
+outcomes = c('diabetes','CAD','angina','obese','htn',"heart_failure","intracranial_haemorrhage","peripheral_vascular")
 
 
 
@@ -177,8 +169,8 @@ merged_data$Sex = factor(ifelse(merged_data$gender == 0, 'Female','Male'))
 merged_data$gender=NULL
 
 #re-organize columns
-merged_data=merged_data %>% dplyr::select(eid,mi,angina,stroke,obese,diabetes,htn,dvt_asthma_copd_atopy,
-                                          heart_failure,CVD_other,no_chronic, everything())
+merged_data=merged_data %>% dplyr::select(eid,CAD,stroke,obese,diabetes,htn,dvt_asthma_copd_atopy,
+                                          heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic, everything())
 
 
 merged_data[,'no_chronic']=as.factor(merged_data[,'no_chronic'])
