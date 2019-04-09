@@ -39,7 +39,7 @@ FAMD_kamila_cluster=FAMD(multi_morbid, ncp = ncol(multi_morbid), graph = FALSE)
 ################################################################################
 
 kamRes <- kamila(multi_morbid[,1:47], multi_morbid[,48:65], numClust = 2:5, numInit = 10,
-                 calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.8)
+                 calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.5)
 
 kamila_cluster_choice <- plot(2:5, kamRes$nClust$psValues,
                               pch = 19, frame = FALSE, 
