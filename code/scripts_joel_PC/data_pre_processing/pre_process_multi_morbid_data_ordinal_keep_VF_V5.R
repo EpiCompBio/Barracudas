@@ -170,15 +170,11 @@ merged_data$gender=NULL
 
 #re-organize columns
 merged_data=merged_data %>% dplyr::select(eid,CAD,stroke,obese,diabetes,htn,dvt_asthma_copd_atopy,
-                                          heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic,self_reported_surgery,
-                                          previous_surgery,pacemaker, everything())
+                                          heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic, everything())
 
 
 merged_data[,'no_chronic']=as.factor(merged_data[,'no_chronic'])
 
-#binary cols
-binary_col_ids = which(unlist(sapply(merged_data, function(x) length(levels(factor(x)))==2)))
-merged_data[,binary_col_ids]=lapply(merged_data[,binary_col_ids],as.factor)
 
 #We'll transform all the ordinal columns so that they can reasonably be considered continuous
 ord_cols = c('self_reported_surgery',
@@ -203,12 +199,8 @@ ord_cols = c('self_reported_surgery',
 #categorical cols
 cat_cols = c('birth_month')
 
-cat_col_ids = which(colnames(merged_data) %in% cat_cols)
-ord_col_ids = which(colnames(merged_data) %in% ord_cols)
 
 
-merged_data[,cat_col_ids] = factor(merged_data[,cat_col_ids])
-merged_data[,ord_col_ids] = lapply(merged_data[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
 
 
 ####################################################################################################
@@ -219,9 +211,41 @@ merged_data[,ord_col_ids] = lapply(merged_data[,ord_col_ids], function(x) factor
 multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
 
 
-#scale numeric features
-merged_data[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =
-  as.data.frame(scale(merged_data[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)]))
+# We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
+print(sum(multi_morbid$smoker == multi_morbid$current_smoker))
+print(nrow(multi_morbid))
+
+# We're going to remove one of them
+multi_morbid$smoker=NULL
+
+#Birth_month is a dumb variable
+multi_morbid$birth_month=NULL
+
+multi_morbid$hip_waist_ratio=multi_morbid$hip_circum/multi_morbid$waist_circum
+
+multi_morbid$height_sitting=NULL
+
+multi_morbid$sitting_height=NULL
+
+
+multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
+                "whole_body_fat_mass")] <- list(NULL)
+
+
+multi_morbid[,"seated_box_height"] <- list(NULL)
+
+
+#binary cols
+binary_col_ids = which(unlist(sapply(multi_morbid, function(x) length(levels(factor(x)))==2)))
+multi_morbid[,binary_col_ids]=lapply(multi_morbid[,binary_col_ids],as.factor)
+
+
+
+cat_col_ids = which(colnames(multi_morbid) %in% cat_cols)
+ord_col_ids = which(colnames(multi_morbid) %in% ord_cols)
+
+multi_morbid[,cat_col_ids] = factor(multi_morbid[,cat_col_ids])
+multi_morbid[,ord_col_ids] = lapply(multi_morbid[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
 
 
 #scale numeric features
@@ -229,5 +253,4 @@ multi_morbid[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =
   as.data.frame(scale(multi_morbid[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)]))
 
 
-saveRDS(merged_data,"../data/processed/full_data_ordinal_keep.rds")
-saveRDS(multi_morbid,"../data/processed/multi_morbid_ordinal_keep.rds")
+saveRDS(multi_morbid,"../data/processed_V5/multi_morbid_ordinal_factors_HW_mod.rds")

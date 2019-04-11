@@ -12,10 +12,11 @@
 #  }
 # }
 # 
-# using("randomForest")
+# using("magrittr","cluster","dplyr")
 
-
-library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 ################################################################################
@@ -27,8 +28,6 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-
-
 ################################################################################
 ################################################################################
 # multi-morbid individuals only
@@ -36,17 +35,17 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 ################################################################################
 
 
-multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
+multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_factors_HW_PCA.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
-# Random forests for the proximty measures
+# gower distance for the proximty measures
 ################################################################################
 
+gower_dissimilarity_multi_morbid_res=as.matrix(daisy(multi_morbid[,12:ncol(multi_morbid)],metric="gower"))
 
-RF_proximity_measure_multi_morbid_res=randomForest(x=multi_morbid[,16:ncol(multi_morbid)])$proximity
 
-saveRDS(RF_proximity_measure_multi_morbid_res,"../data/processed/RF_proximity_measure_ordinal_factors_multi_morbid_res.rds")
+saveRDS(gower_dissimilarity_multi_morbid_res,"../data/processed_V4/gower_dissimilarity_multi_morbid_res.rds")
 
 
 ################################################################################
@@ -56,10 +55,13 @@ saveRDS(RF_proximity_measure_multi_morbid_res,"../data/processed/RF_proximity_me
 ################################################################################
 
 ################################################################################
-# Random forests for the proximty measures
+# gower distance for the proximty measures
 ################################################################################
 
-
-# RF_proximity_measure_full_data_res=randomForest(x=full_data)$proximity
+# gower_dissimilarity_full_data_res=as.matrix(daisy(full_data,metric="gower"))
 # 
-# saveRDS(RF_proximity_measure_full_data_res,"../data/processed/RF_proximity_measure_ordinal_factors_full_data_res.rds")
+# 
+# saveRDS(gower_dissimilarity_full_data_res,"../data/processed_V4/gower_dissimilarity_full_data_res.rds")
+
+
+

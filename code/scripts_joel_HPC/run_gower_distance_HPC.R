@@ -42,7 +42,7 @@ multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
 # gower distance for the proximty measures
 ################################################################################
 
-gower_dissimilarity_multi_morbid_res=as.matrix(daisy(multi_morbid[,12:ncol(multi_morbid)],metric="gower"))
+gower_dissimilarity_multi_morbid_res=as.matrix(daisy(multi_morbid[,16:ncol(multi_morbid)],metric="gower"))
 
 
 saveRDS(gower_dissimilarity_multi_morbid_res,"../data/processed/gower_dissimilarity_multi_morbid_res.rds")
