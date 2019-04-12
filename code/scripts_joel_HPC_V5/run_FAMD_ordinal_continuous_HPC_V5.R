@@ -61,7 +61,7 @@ multi_morbid=readRDS("../data/processed_V5/multi_morbid_ordinal_continuous_HW_mo
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,12:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,16:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
 
 
 #IND PLOTS

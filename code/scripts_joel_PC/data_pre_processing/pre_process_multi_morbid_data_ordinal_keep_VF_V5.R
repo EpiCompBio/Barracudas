@@ -170,7 +170,8 @@ merged_data$gender=NULL
 
 #re-organize columns
 merged_data=merged_data %>% dplyr::select(eid,CAD,stroke,obese,diabetes,htn,dvt_asthma_copd_atopy,
-                                          heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic, everything())
+                                          heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic,self_reported_surgery,
+                                          previous_surgery,pacemaker, everything())
 
 
 merged_data[,'no_chronic']=as.factor(merged_data[,'no_chronic'])

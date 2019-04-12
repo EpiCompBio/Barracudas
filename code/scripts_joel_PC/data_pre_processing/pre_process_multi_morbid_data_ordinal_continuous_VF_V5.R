@@ -162,7 +162,8 @@ merged_data$gender=NULL
 
 #re-organize columns
 merged_data=merged_data %>% dplyr::select(eid,CAD,stroke,obese,diabetes,htn,dvt_asthma_copd_atopy,
-                                          heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic, everything())
+                                          heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic,self_reported_surgery,
+                                          previous_surgery,pacemaker, everything())
 
 
 merged_data[,'no_chronic']=as.factor(merged_data[,'no_chronic'])
@@ -311,9 +312,17 @@ multi_morbid$birth_month=NULL
 
 multi_morbid$hip_waist_ratio=multi_morbid$hip_circum/multi_morbid$waist_circum
 
+
+height_weight_related=c("Height","height_sitting","sitting_height","BMI",
+                        "Weight","body_fat_perc","whole_body_fat_mass","whole_body_water_mass","hip_waist_ratio")
+
+
+print(cor(multi_morbid[,height_weight_related]))
+
 multi_morbid$height_sitting=NULL
 
 multi_morbid$sitting_height=NULL
+
 
 
 multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
