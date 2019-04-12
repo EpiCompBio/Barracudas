@@ -81,9 +81,9 @@ nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
 n_classes=2:5
 
-cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
+cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=4))
 cluster_crit_df[,1]=n_classes
-colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
+colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette","Point_Bi")
 
 
 # Different numbers of centers
@@ -91,8 +91,8 @@ for (k in 1:length(n_classes)) {
   
   FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=n_classes[k])
   
-  cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
-                                            part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz","Silhouette")))
+  cluster_crit_df[k,2:4]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
+                                            part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz","Silhouette","Point_Biserial")))
 }
 
 

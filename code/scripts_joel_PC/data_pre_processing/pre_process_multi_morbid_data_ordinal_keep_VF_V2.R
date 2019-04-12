@@ -230,7 +230,7 @@ multi_morbid$sitting_height=NULL
 
 
 multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
-                "whole_body_fat_mass")] <- list(NULL)
+                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
 
 
 multi_morbid[,"seated_box_height"] <- list(NULL)
@@ -254,4 +254,4 @@ multi_morbid[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =
   as.data.frame(scale(multi_morbid[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)]))
 
 
-saveRDS(multi_morbid,"../data/processed_V5/multi_morbid_ordinal_factors_HW_mod.rds")
+saveRDS(multi_morbid,"../data/processed_V2/multi_morbid_ordinal_factors_HW_mod.rds")
