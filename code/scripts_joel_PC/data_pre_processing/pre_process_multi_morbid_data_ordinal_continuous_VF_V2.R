@@ -134,7 +134,11 @@ table(merged_data$intracranial_haemorrhage)
 table(merged_data$peripheral_vascular)
 
 
+UKB_age=readRDS("../data/processed/UKB_age.rds")
+colnames(UKB_age)=c("eid","age")
 
+merged_data=merge(merged_data,UKB_age,by="eid")
+merged_data$birth_year=NULL
 
 
 ################################################################################

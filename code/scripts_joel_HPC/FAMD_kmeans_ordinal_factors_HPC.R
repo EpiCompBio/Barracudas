@@ -102,7 +102,21 @@ saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_kmeans_ordinal_factors
 # Kmeans on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
-FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=3)
+
+cluster_crit_vector=rep(0,10)
+for (k in 1:10) {
+  set.seed(k)
+  
+  FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
+  cluster_crit_vector[k]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
+                                            part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz")))
+  
+}
+
+set.seed(which.max(cluster_crit_vector))
+FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
+
+
 # FAMD_kmeans_multi_morbid=readRDS("../results/results_joel_HPC/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
 
 

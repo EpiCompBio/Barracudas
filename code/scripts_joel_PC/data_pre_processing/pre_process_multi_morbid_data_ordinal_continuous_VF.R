@@ -13,6 +13,16 @@ using("magrittr","dplyr")
 # library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
+################################################################################
+# WORKING DIRECTORY AND SOURCING FUNCTIONS
+################################################################################
+
+# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
+# setwd(file_path)
+
+setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
+
+
 
 ################################################################################
 # LOADING DATA

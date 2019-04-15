@@ -1,3 +1,4 @@
+
 ################################################################################
 # LOADING LIBRARIES
 ################################################################################
@@ -23,7 +24,6 @@ library(ggrepel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(viridis,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
-
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
@@ -33,8 +33,6 @@ library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
-
-
 
 
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/FAMD_plots_utility.R")
@@ -51,27 +49,25 @@ source("code/utility_functions/colors_themes_utility.R")
 ################################################################################
 ################################################################################
 
-# multi_morbid_ordinal_factors_HW_PCA
-# multi_morbid_ordinal_keep
-multi_morbid=readRDS("../data/processed_V5/multi_morbid_ordinal_factors_HW_mod.rds")
-# multi_morbid=multi_morbid[1:200,]
 
+# multi_morbid_ordinal_continuous_HW_PCA
+# multi_morbid_ordinal_continuous
+multi_morbid=readRDS("../data/processed_V2/multi_morbid_ordinal_continuous_HW_mod.rds")
+# multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-
-#Adding a +50 to get higher explained variance
-FAMD_multi_morbid_res=FAMD(multi_morbid[,16:ncol(multi_morbid)],ncp = ncol(multi_morbid)+50, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,16:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
 
 
 #IND PLOTS
 FAMD_multi_morbid_ind_plot_d12=make_FAMD_ind_plot(FAMD_multi_morbid_res,
-                   dims=c(1,2),
-                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+                                                  dims=c(1,2),
+                                                  custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_ind_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_multi_morbid_ind_plot_d12.svg",width=10,height=10)
 print(FAMD_multi_morbid_ind_plot_d12)
 dev.off()
 
@@ -80,31 +76,28 @@ FAMD_multi_morbid_ind_plot_d34=make_FAMD_ind_plot(FAMD_multi_morbid_res,
                                                   dims=c(3,4),
                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_ind_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_multi_morbid_ind_plot_d34.svg",width=10,height=10)
 print(FAMD_multi_morbid_ind_plot_d34)
 dev.off()
-
 
 
 #VAR PLOTS
 FAMD_multi_morbid_var_plot_d12 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_var_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_multi_morbid_var_plot_d12.svg",width=10,height=10)
 print(FAMD_multi_morbid_var_plot_d12)
 dev.off()
 
 
 FAMD_multi_morbid_var_plot_d34 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_var_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_multi_morbid_var_plot_d34.svg",width=10,height=10)
 print(FAMD_multi_morbid_var_plot_d34)
 dev.off()
 
 
-saveRDS(FAMD_multi_morbid_res,"../data/processed_V5/FAMD_ordinal_factors_multi_morbid_res.rds")
-
-
+saveRDS(FAMD_multi_morbid_res,"../data/processed_V2/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 
 # ################################################################################
@@ -114,22 +107,22 @@ saveRDS(FAMD_multi_morbid_res,"../data/processed_V5/FAMD_ordinal_factors_multi_m
 # ################################################################################
 # 
 # 
-# full_data=readRDS("../data/processed/full_data_ordinal_keep.rds")
+# full_data=readRDS("../data/processed/full_data_ordinal_continuous.rds")
 # # multi_morbid=multi_morbid[1:200,]
 # 
 # ################################################################################
 # # FAMD on the full dataset
 # ################################################################################
 # 
-# FAMD_full_data_res=FAMD(full_data[,12:ncol(multi_morbid)] , ncp = ncol(multi_morbid)+50, graph = FALSE)
+# FAMD_full_data_res=FAMD(full_data[,12:ncol(multi_morbid)] , ncp = ncol(multi_morbid)+20, graph = FALSE)
 # 
 # 
 # #IND PLOTS
 # FAMD_full_data_ind_plot_d12=make_FAMD_ind_plot(FAMD_full_data_res,
-#                                                   dims=c(1,2),
-#                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+#                                                dims=c(1,2),
+#                                                custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 # 
-# svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_full_data_ind_plot_d12.svg",width=10,height=10)
+# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_ind_plot_d12.svg",width=10,height=10)
 # print(FAMD_full_data_ind_plot_d12)
 # dev.off()
 # 
@@ -138,7 +131,7 @@ saveRDS(FAMD_multi_morbid_res,"../data/processed_V5/FAMD_ordinal_factors_multi_m
 #                                                dims=c(3,4),
 #                                                custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 # 
-# svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_full_data_ind_plot_d34.svg",width=10,height=10)
+# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_ind_plot_d34.svg",width=10,height=10)
 # print(FAMD_full_data_ind_plot_d34)
 # dev.off()
 # 
@@ -148,17 +141,17 @@ saveRDS(FAMD_multi_morbid_res,"../data/processed_V5/FAMD_ordinal_factors_multi_m
 # FAMD_full_data_var_plot_d12 <- make_FAMD_variable_graph(FAMD_full_data_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
 # 
 # 
-# svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_full_data_var_plot_d12.svg",width=10,height=10)
+# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_var_plot_d12.svg",width=10,height=10)
 # print(FAMD_full_data_var_plot_d12)
 # dev.off()
 # 
 # 
 # FAMD_full_data_var_plot_d34 <- make_FAMD_variable_graph(FAMD_full_data_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
 # 
-# svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_full_data_var_plot_d34.svg",width=10,height=10)
+# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_var_plot_d34.svg",width=10,height=10)
 # print(FAMD_full_data_var_plot_d34)
 # dev.off()
 # 
 # 
-# saveRDS(FAMD_full_data_res,"../data/processed/FAMD_ordinal_factors_full_data_res.rds")
+# saveRDS(FAMD_full_data_res,"../data/processed/FAMD_ordinal_continuous_full_data_res.rds")
 # 

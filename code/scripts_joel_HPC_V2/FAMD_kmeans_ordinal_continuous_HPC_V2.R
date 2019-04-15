@@ -47,11 +47,11 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # multi_morbid_ordinal_continuous
 # multi_morbid_ordinal_continuous_HW_PCA
-multi_morbid=readRDS("../data/processed_V5/multi_morbid_ordinal_continuous_HW_mod.rds")
+multi_morbid=readRDS("../data/processed_V2/multi_morbid_ordinal_continuous_HW_mod.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
-source("../data/processed_V5/var_groupings_V5.R")
+source("../data/processed_V2/var_groupings_V2.R")
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")
@@ -63,7 +63,7 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 ################################################################################
 
-FAMD_multi_morbid_res=readRDS("../data/processed_V5/FAMD_ordinal_continuous_multi_morbid_res.rds")
+FAMD_multi_morbid_res=readRDS("../data/processed_V2/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
@@ -92,17 +92,17 @@ for (k in 1:length(n_classes)) {
 }
 
 
-saveRDS(cluster_crit_df,"../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/cluster_crit_df_FAMD_kmeans_ordinal_continuous_multi_morbid.rds")
+saveRDS(cluster_crit_df,"../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/cluster_crit_df_FAMD_kmeans_ordinal_continuous_multi_morbid.rds")
 
 ################################################################################
 # Kmeans on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
 FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
-# FAMD_kmeans_multi_morbid=readRDS("../results/results_joel_HPC_V5/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
+# FAMD_kmeans_multi_morbid=readRDS("../results/results_joel_HPC_V2/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
 
 
-saveRDS(FAMD_kmeans_multi_morbid,"../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid.rds")
+saveRDS(FAMD_kmeans_multi_morbid,"../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid.rds")
 
 
 clusters_FAMD_kmeans_multi_morbid=FAMD_kmeans_multi_morbid$cluster
@@ -118,11 +118,11 @@ FAMD_kmeans_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_r
                                                              custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_plot_d12.svg",width=10,height=10)
 print(FAMD_kmeans_multi_morbid_plot_d12)
 dev.off()
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_plot_d34.svg",width=10,height=10)
 print(FAMD_kmeans_multi_morbid_plot_d34)
 dev.off()
 
@@ -141,7 +141,7 @@ FAMD_kmeans_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=mult
                                                                        color_scale=NULL,custom_theme=theme_jh,title=NULL)
 
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
 print(FAMD_kmeans_mean_by_cluster_continuous_plot)
 dev.off()
 
@@ -164,7 +164,7 @@ for (k in 1:length(cat_variables_split)) {
                                                                                    k,"/",length(cat_variables_split),")"))
   
   
-  svg(filename=paste0("../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
       width=10,height=10)
   grid.draw(FAMD_kmeans_cat_distribution_by_cluster)
   dev.off()
@@ -186,7 +186,7 @@ for (k in 1:length(cont_variables_split)) {
                                                                         title=paste0("Distributions of continuous variables by classes (",
                                                                                      k,"/",length(cont_variables_split),")"))
   
-  svg(filename=paste0("../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
       width=10,height=10)
   grid.draw(FAMD_kmeans_cont_distribution_by_cluster)
   dev.off()
@@ -245,7 +245,7 @@ significant_cluster_differences_by_variable_plot=make_significant_cluster_differ
                                                                                                   threshold=10^-50)
 
 
-svg(filename=paste0("../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/",
+svg(filename=paste0("../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/",
                     "FAMD_kmeans_ordinal_continuous_multi_morbid_cluster_differences_by_variable.svg"),
     width=10,height=10)
 print(significant_cluster_differences_by_variable_plot)
@@ -275,7 +275,7 @@ variable_importance_plot=make_variable_importance_plot(var_importance_df,groupin
                                                        threshold=50)
 
 
-svg(filename=paste0("../results/results_joel_HPC_V5/FAMD_kmeans_ordinal_continuous/",
+svg(filename=paste0("../results/results_joel_HPC_V2/FAMD_kmeans_ordinal_continuous/",
                     "FAMD_kmeans_ordinal_continuous_multi_morbid_variable_importance.svg"),
     width=10,height=10)
 print(variable_importance_plot)
