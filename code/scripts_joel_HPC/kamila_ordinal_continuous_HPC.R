@@ -27,12 +27,13 @@ library(viridis,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
+
 library(reshape2,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
+library(kamila, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")

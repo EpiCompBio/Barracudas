@@ -36,8 +36,7 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 #Package needed for the clustering method
-library(mclust,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
+library(kamila, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 # Other packages used in the script
