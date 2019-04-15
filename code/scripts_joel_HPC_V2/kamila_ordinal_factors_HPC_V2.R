@@ -13,7 +13,7 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","clusterCrit","randomForest")
+#       "gridExtra","grid","dplyr","parallel","clusterCrit","randomForest","kamila")
 
 
 
@@ -32,7 +32,7 @@ library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
+library(kamila,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 #Package needed for the clustering method
@@ -52,12 +52,12 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
+multi_morbid=readRDS("../data/processed_V2/multi_morbid_ordinal_factors_HW_mod.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
 
-source("../data/processed/var_groupings.R")
+source("../data/processed_V2_V2/var_groupings_V2.R")
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")
@@ -69,7 +69,7 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 ################################################################################
 
-FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_factors_multi_morbid_res.rds")
+FAMD_multi_morbid_res=readRDS("../data/processed_V2/FAMD_ordinal_factors_multi_morbid_res.rds")
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
@@ -79,7 +79,7 @@ nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 ################################################################################
 
 cat_variables_kamila=colnames(multi_morbid[,16:ncol(multi_morbid)])[sapply(sapply(multi_morbid[,16:ncol(multi_morbid)],class),function(x) {x[[1]]}) == "factor" |
-                                                                      sapply(sapply(multi_morbid[,16:ncol(multi_morbid)],class),function(x) {x[[1]]}) == "ordered"]
+                                       sapply(sapply(multi_morbid[,16:ncol(multi_morbid)],class),function(x) {x[[1]]}) == "ordered"]
 cont_variables_kamila=colnames(multi_morbid[,16:ncol(multi_morbid)])[sapply(multi_morbid[,16:ncol(multi_morbid)],class) == "numeric"]
 
 
@@ -91,7 +91,7 @@ kamila_cluster_choice <- plot(2:5, kamRes$nClust$psValues,
                               xlab="Number of clusters",
                               ylab="Prediction Strength", xlim = c(2, 5), ylim = c(0, 1))
 
-svg("../results/results_joel_HPC/kamila_ordinal_factors/kamila_oc_cluster_choice.svg")
+svg("../results/results_joel_HPC_V2/kamila_ordinal_factors/kamila_oc_cluster_choice.svg")
 plot(2:5, kamRes$nClust$psValues,
      pch = 19, frame = FALSE, 
      xlab="Number of clusters",
@@ -110,7 +110,7 @@ kamila_multi_morbid=kamila(catFactor=multi_morbid[,cat_variables_kamila],conVar=
 clusters_kamila_multi_morbid=kamila_multi_morbid$finalMemb
 
 
-saveRDS(kamila_multi_morbid,"../results/results_joel_HPC/kamila_ordinal_factors/kamila_kamila_multi_morbid.rds")
+saveRDS(kamila_multi_morbid,"../results/results_joel_HPC_V2/kamila_ordinal_factors/kamila_kamila_multi_morbid.rds")
 
 
 kamila_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_kamila_multi_morbid,
@@ -124,11 +124,11 @@ kamila_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,cl
                                                              custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
-svg(filename="../results/results_joel_HPC/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_plot_d12.svg",width=10,height=10)
 print(kamila_multi_morbid_plot_d12)
 dev.off()
 
-svg(filename="../results/results_joel_HPC/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_plot_d34.svg",width=10,height=10)
 print(kamila_multi_morbid_plot_d34)
 dev.off()
 
@@ -147,7 +147,7 @@ kamila_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_mor
                                                                        color_scale=NULL,custom_theme=theme_jh,title=NULL)
 
 
-svg(filename="../results/results_joel_HPC/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V2/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
 print(kamila_mean_by_cluster_continuous_plot)
 dev.off()
 
@@ -170,7 +170,7 @@ for (k in 1:length(cat_variables_split)) {
                                                                                    k,"/",length(cat_variables_split),")"))
   
   
-  svg(filename=paste0("../results/results_joel_HPC/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC_V2/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
       width=10,height=10)
   grid.draw(kamila_cat_distribution_by_cluster)
   dev.off()
@@ -192,7 +192,7 @@ for (k in 1:length(cont_variables_split)) {
                                                                         title=paste0("Distributions of continuous variables by classes (",
                                                                                      k,"/",length(cont_variables_split),")"))
   
-  svg(filename=paste0("../results/results_joel_HPC/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC_V2/kamila_ordinal_factors/kamila_ordinal_factors_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
       width=10,height=10)
   grid.draw(kamila_cont_distribution_by_cluster)
   dev.off()
@@ -250,7 +250,7 @@ significant_cluster_differences_by_variable_plot=make_significant_cluster_differ
                                                                                                        threshold=10^-50)
 
 
-svg(filename=paste0("../results/results_joel_HPC/kamila_ordinal_factors/",
+svg(filename=paste0("../results/results_joel_HPC_V2/kamila_ordinal_factors/",
                     "kamila_ordinal_factors_multi_morbid_cluster_differences_by_variable.svg"),
     width=10,height=10)
 print(significant_cluster_differences_by_variable_plot)
@@ -280,7 +280,7 @@ variable_importance_plot=make_variable_importance_plot(var_importance_df,groupin
                                                        threshold=50)
 
 
-svg(filename=paste0("../results/results_joel_HPC/kamila_ordinal_factors/",
+svg(filename=paste0("../results/results_joel_HPC_V2/kamila_ordinal_factors/",
                     "kamila_ordinal_factors_multi_morbid_variable_importance.svg"),
     width=10,height=10)
 print(variable_importance_plot)
