@@ -47,7 +47,7 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # multi_morbid_ordinal_continuous
 # multi_morbid_ordinal_continuous_HW_PCA
-multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_continuous_HW_PCA.rds")
+multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
@@ -77,9 +77,9 @@ nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
 n_classes=2:5
 
-cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
+cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=4))
 cluster_crit_df[,1]=n_classes
-colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
+colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette","Point_Bi")
 
 
 # Different numbers of centers
@@ -87,19 +87,34 @@ for (k in 1:length(n_classes)) {
   
   FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=n_classes[k])
   
-  cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
-                                            part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz","Silhouette")))
+  cluster_crit_df[k,2:4]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
+                                            part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz","Silhouette","Point_Biserial")))
 }
 
 
 saveRDS(cluster_crit_df,"../results/results_joel_HPC_V4/FAMD_kmeans_ordinal_continuous/cluster_crit_df_FAMD_kmeans_ordinal_continuous_multi_morbid.rds")
 
+
+
+
+
 ################################################################################
 # Kmeans on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
+cluster_crit_vector=rep(0,10)
+for (k in 1:10) {
+  set.seed(k)
+  
+  FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
+  cluster_crit_vector[k]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
+                                            part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz")))
+  
+}
+
+set.seed(which.max(cluster_crit_vector))
 FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
-# FAMD_kmeans_multi_morbid=readRDS("../results/results_joel_HPC_V4/FAMD_kmeans/FAMD_kmeans_multi_morbid.rds")
+
 
 
 saveRDS(FAMD_kmeans_multi_morbid,"../results/results_joel_HPC_V4/FAMD_kmeans_ordinal_continuous/FAMD_kmeans_ordinal_continuous_multi_morbid.rds")

@@ -13,7 +13,15 @@ using("magrittr","dplyr")
 # library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
+################################################################################
+# WORKING DIRECTORY AND SOURCING FUNCTIONS
+################################################################################
+
+# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
+# setwd(file_path)
+
 setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
+
 
 
 ################################################################################
@@ -134,6 +142,7 @@ table(merged_data$intracranial_haemorrhage)
 table(merged_data$peripheral_vascular)
 
 
+
 UKB_age=readRDS("../data/processed/UKB_age.rds")
 colnames(UKB_age)=c("eid","age")
 
@@ -149,7 +158,7 @@ merged_data$birth_year=NULL
 merged_data$obese = ifelse(merged_data$BMI >= 40, 1, 0)
 
 #define outcome cols
-outcomes = c('diabetes','CAD','angina','htn',"heart_failure","intracranial_haemorrhage","peripheral_vascular")
+outcomes = c('diabetes','CAD','angina','obese','htn',"heart_failure","intracranial_haemorrhage","peripheral_vascular")
 
 
 
@@ -163,6 +172,8 @@ merged_data$no_chronic = apply(merged_data[,outcome_cols],1,sum)
 #change gender levels and remove gender that is not used anymore
 merged_data$Sex = factor(ifelse(merged_data$gender == 0, 'Female','Male'))
 merged_data$gender=NULL
+
+
 
 #re-organize columns
 merged_data=merged_data %>% dplyr::select(eid,CAD,stroke,obese,diabetes,htn,dvt_asthma_copd_atopy,

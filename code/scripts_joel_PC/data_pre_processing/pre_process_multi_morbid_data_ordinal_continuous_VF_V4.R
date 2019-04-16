@@ -341,7 +341,7 @@ multi_morbid$sitting_height=NULL
 
 
 multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
-                                   "whole_body_fat_mass","Height","Weight")] <- list(NULL)
+                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
 
 
 multi_morbid[,"seated_box_height"] <- list(NULL)
@@ -355,6 +355,6 @@ for (k in 1:ncol(multi_morbid)) {
   }
 }
 
-saveRDS(multi_morbid,"../data/processed_V2/multi_morbid_ordinal_continuous_HW_mod.rds")
+saveRDS(multi_morbid,"../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity.rds")
 
 

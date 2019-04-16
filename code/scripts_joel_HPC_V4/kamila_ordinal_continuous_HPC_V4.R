@@ -13,7 +13,8 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","clusterCrit","mclust","randomForest")
+#       "gridExtra","grid","dplyr","parallel","clusterCrit","randomForest","kamila")
+
 
 
 #Package from sourcing functions
@@ -31,18 +32,14 @@ library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(gridExtra,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(grid,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
-
-
-#Package needed for the clustering method
-library(mclust,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
-
+library(kamila,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
+
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -50,8 +47,9 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-
-multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_factors_HW_PCA.rds")
+# multi_morbid_ordinal_continuous
+# multi_morbid_ordinal_continuous_HW_PCA
+multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
@@ -67,68 +65,70 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 ################################################################################
 
-FAMD_multi_morbid_res=readRDS("../data/processed_V4/FAMD_ordinal_factors_multi_morbid_res.rds")
+FAMD_multi_morbid_res=readRDS("../data/processed_V4/FAMD_ordinal_continuous_multi_morbid_res.rds")
+
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
-################################################################################
-# Choosing the number of clusters 
-################################################################################
-
-
-n_classes=2:8
-
-cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
-cluster_crit_df[,1]=n_classes
-colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
-
-
-# Different numbers of centers
-for (k in 1:length(n_classes)) {
-  
-  FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=n_classes[k])
-  
-  
-  cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
-                                            part=as.integer(FAMD_GMM_multi_morbid$classification),c("Calinski_Harabasz","Silhouette")))
-}
-
-
-saveRDS(cluster_crit_df,"../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/cluster_crit_df_FAMD_GMM_ordinal_factors_multi_morbid.rds")
-
-
 
 ################################################################################
-# GMM on the FAMD row coordinates with the best number of clusters
+# Choosing the number of clusters for kamila
 ################################################################################
 
-FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=2)
+
+cat_variables_kamila=colnames(multi_morbid[,16:ncol(multi_morbid)])[sapply(multi_morbid[,16:ncol(multi_morbid)],class) == "factor"]
+cont_variables_kamila=colnames(multi_morbid[,16:ncol(multi_morbid)])[sapply(multi_morbid[,16:ncol(multi_morbid)],class) != "factor"]
 
 
-saveRDS(FAMD_GMM_multi_morbid,"../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid.rds")
+kamRes <- kamila(catFactor=multi_morbid[,cat_variables_kamila],conVar=multi_morbid[,cont_variables_kamila], numClust = 2:5, numInit = 10,
+                 calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.5)
+
+kamila_cluster_choice <- plot(2:5, kamRes$nClust$psValues,
+                              pch = 19, frame = FALSE, 
+                              xlab="Number of clusters",
+                              ylab="Prediction Strength", xlim = c(2, 5), ylim = c(0, 1))
+
+svg("../results/results_joel_HPC_V4/kamila_ordinal_continuous/kamila_oc_cluster_choice.svg")
+plot(2:5, kamRes$nClust$psValues,
+     pch = 19, frame = FALSE, 
+     xlab="Number of clusters",
+     ylab="Prediction Strength", xlim = c(2, 5), ylim = c(0, 1))
+dev.off()
 
 
 
+################################################################################
+# kamila with the best number of clusters
+################################################################################
 
-clusters_FAMD_GMM_multi_morbid=FAMD_GMM_multi_morbid$classification
 
-FAMD_GMM_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_FAMD_GMM_multi_morbid,
+kamila_multi_morbid=kamila(catFactor=multi_morbid[,cat_variables_kamila],conVar=multi_morbid[,cont_variables_kamila],numClust=2,numInit=10)
+
+
+
+clusters_kamila_multi_morbid=kamila_multi_morbid$finalMemb
+
+
+saveRDS(kamila_multi_morbid,"../results/results_joel_HPC_V4/kamila_ordinal_continuous/kamila_kamila_multi_morbid.rds")
+
+
+kamila_multi_morbid_plot_d12=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_kamila_multi_morbid,
                                                              dims=c(1,2),
                                                              custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
 
-FAMD_GMM_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_FAMD_GMM_multi_morbid,
+kamila_multi_morbid_plot_d34=make_FAMD_ind_plot_classes(FAMD_multi_morbid_res,classes=clusters_kamila_multi_morbid,
                                                              dims=c(3,4),
                                                              custom_theme=theme_jh,color_scale=distinct_scale,show_labels = FALSE)
 
 
-svg(filename="../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_plot_d12.svg",width=10,height=10)
-print(FAMD_GMM_multi_morbid_plot_d12)
+svg(filename="../results/results_joel_HPC_V4/kamila_ordinal_continuous/kamila_ordinal_continuous_multi_morbid_plot_d12.svg",width=10,height=10)
+print(kamila_multi_morbid_plot_d12)
 dev.off()
 
-svg(filename="../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_plot_d34.svg",width=10,height=10)
-print(FAMD_GMM_multi_morbid_plot_d34)
+svg(filename="../results/results_joel_HPC_V4/kamila_ordinal_continuous/kamila_ordinal_continuous_multi_morbid_plot_d34.svg",width=10,height=10)
+print(kamila_multi_morbid_plot_d34)
 dev.off()
 
 
@@ -136,18 +136,18 @@ dev.off()
 # Means continuous variables by cluster
 ################################################
 
-cat_variables=colnames(multi_morbid)[sapply(sapply(multi_morbid,class),function(x) {x[[1]]}) == "factor" |
-                                       sapply(sapply(multi_morbid,class),function(x) {x[[1]]}) == "ordered"]
-cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "numeric"]
+cat_variables=colnames(multi_morbid)[sapply(multi_morbid,class) == "factor"]
+cont_variables=colnames(multi_morbid)[sapply(multi_morbid,class) != "factor"]
+cont_variables=cont_variables[2:length(cont_variables)]
 
 
-FAMD_GMM_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
-                                                                       classes=as.factor(clusters_FAMD_GMM_multi_morbid),
+kamila_mean_by_cluster_continuous_plot=mean_by_cluster_continuous(data=multi_morbid[,cont_variables],
+                                                                       classes=as.factor(clusters_kamila_multi_morbid),
                                                                        color_scale=NULL,custom_theme=theme_jh,title=NULL)
 
 
-svg(filename="../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
-print(FAMD_GMM_mean_by_cluster_continuous_plot)
+svg(filename="../results/results_joel_HPC_V4/kamila_ordinal_continuous/kamila_ordinal_continuous_multi_morbid_mean_by_cluster_continuous_plot.svg",width=10,height=10)
+print(kamila_mean_by_cluster_continuous_plot)
 dev.off()
 
 
@@ -162,16 +162,16 @@ cat_variables_split=splitIndices(nx=length(cat_variables), ncl=ceiling(length(ca
 for (k in 1:length(cat_variables_split)) {
   
   
-  FAMD_GMM_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
-                                                                      classes=as.factor(clusters_FAMD_GMM_multi_morbid),layout=c(3,3),
+  kamila_cat_distribution_by_cluster=cat_distribution_by_cluster(data=multi_morbid[,cat_variables[cat_variables_split[[k]]]],
+                                                                      classes=as.factor(clusters_kamila_multi_morbid),layout=c(3,3),
                                                                       color_scale=NULL,custom_theme=theme_jh,
                                                                       title=paste0("Distributions of categorical variables by classes (",
                                                                                    k,"/",length(cat_variables_split),")"))
   
   
-  svg(filename=paste0("../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC_V4/kamila_ordinal_continuous/kamila_ordinal_continuous_multi_morbid_cat_distribution_by_cluster_",k,"_",length(cat_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(FAMD_GMM_cat_distribution_by_cluster)
+  grid.draw(kamila_cat_distribution_by_cluster)
   dev.off()
   
 }
@@ -185,15 +185,15 @@ cont_variables_split=splitIndices(nx=length(cont_variables), ncl=ceiling(length(
 
 for (k in 1:length(cont_variables_split)) {
   
-  FAMD_GMM_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
-                                                                        classes=as.factor(clusters_FAMD_GMM_multi_morbid),layout=c(3,3),
+  kamila_cont_distribution_by_cluster=cont_distribution_by_cluster(data=multi_morbid[,cont_variables[cont_variables_split[[k]]]],
+                                                                        classes=as.factor(clusters_kamila_multi_morbid),layout=c(3,3),
                                                                         color_scale=NULL,custom_theme=theme_jh,
                                                                         title=paste0("Distributions of continuous variables by classes (",
                                                                                      k,"/",length(cont_variables_split),")"))
   
-  svg(filename=paste0("../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
+  svg(filename=paste0("../results/results_joel_HPC_V4/kamila_ordinal_continuous/kamila_ordinal_continuous_multi_morbid_cont_distribution_by_cluster_",k,"_",length(cont_variables_split),".svg"),
       width=10,height=10)
-  grid.draw(FAMD_GMM_cont_distribution_by_cluster)
+  grid.draw(kamila_cont_distribution_by_cluster)
   dev.off()
   
 }
@@ -226,12 +226,12 @@ for (k in 1:nrow(distribution_test_df)) {
   if (distribution_test_df[k,2]=="Cont") {
     
     anova_res=summary(lm(outcome ~ clusters,
-                         data=data.frame(outcome=multi_morbid[,distribution_test_df[k,1]],clusters=as.factor(clusters_FAMD_GMM_multi_morbid))))
+                         data=data.frame(outcome=multi_morbid[,distribution_test_df[k,1]],clusters=as.factor(clusters_kamila_multi_morbid))))
     distribution_test_df[k,3]=df(anova_res$fstatistic[1], anova_res$fstatistic[2], anova_res$fstatistic[3])
     
   } else if (distribution_test_df[k,2]=="Cat") {
     
-    distribution_test_df[k,3]=chisq.test(multi_morbid[,distribution_test_df[k,1]],as.factor(clusters_FAMD_GMM_multi_morbid))$p.value
+    distribution_test_df[k,3]=chisq.test(multi_morbid[,distribution_test_df[k,1]],as.factor(clusters_kamila_multi_morbid))$p.value
     
   }
   
@@ -250,8 +250,8 @@ significant_cluster_differences_by_variable_plot=make_significant_cluster_differ
                                                                                                        threshold=10^-50)
 
 
-svg(filename=paste0("../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/",
-                    "FAMD_GMM_ordinal_factors_multi_morbid_cluster_differences_by_variable.svg"),
+svg(filename=paste0("../results/results_joel_HPC_V4/kamila_ordinal_continuous/",
+                    "kamila_ordinal_continuous_multi_morbid_cluster_differences_by_variable.svg"),
     width=10,height=10)
 print(significant_cluster_differences_by_variable_plot)
 dev.off()
@@ -262,7 +262,7 @@ dev.off()
 ################################################
 
 
-randomForest_multi_morbid=randomForest(multi_morbid[,2:ncol(multi_morbid)], y=as.factor(clusters_FAMD_GMM_multi_morbid),ntree=500)
+randomForest_multi_morbid=randomForest(multi_morbid[,2:ncol(multi_morbid)], y=as.factor(clusters_kamila_multi_morbid),ntree=500)
 
 var_importance_df=data.frame(matrix(0,ncol=2,nrow=length(c(cont_variables,cat_variables))))
 colnames(var_importance_df)=c("var_name","Type")
@@ -280,9 +280,8 @@ variable_importance_plot=make_variable_importance_plot(var_importance_df,groupin
                                                        threshold=50)
 
 
-svg(filename=paste0("../results/results_joel_HPC_V4/FAMD_GMM_ordinal_factors/",
-                    "FAMD_GMM_ordinal_factors_multi_morbid_variable_importance.svg"),
+svg(filename=paste0("../results/results_joel_HPC_V4/kamila_ordinal_continuous/",
+                    "kamila_ordinal_continuous_multi_morbid_variable_importance.svg"),
     width=10,height=10)
 print(variable_importance_plot)
 dev.off()
-
