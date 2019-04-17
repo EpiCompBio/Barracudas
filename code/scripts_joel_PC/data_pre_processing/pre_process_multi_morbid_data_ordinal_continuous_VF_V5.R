@@ -8,7 +8,7 @@ using<-function(...) {
   }
 }
 
-using("magrittr","dplyr")
+using("magrittr","dplyr","KODAMA")
 
 # library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
@@ -341,18 +341,28 @@ multi_morbid$sitting_height=NULL
 
 
 multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
-                                   "whole_body_fat_mass","Height","Weight")] <- list(NULL)
+                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
 
 
 multi_morbid[,"seated_box_height"] <- list(NULL)
 
 
-for (k in 1:ncol(multi_morbid)) {
-  if (class(multi_morbid[,k])!="factor" & k!=1) {
-    multi_morbid[,k]=scale(multi_morbid[,k])
+
+matched_inds = frequency_matching(merged_data[,c("age","Sex")],
+                                       as.numeric(as.character(merged_data$no_chronic)) >1,times=1,seed=1)
+
+
+matched_inds_data=merged_data[as.numeric(matched_inds$selection),]
+
+multi_morbid_ordinal_continuous_HW_mod_controls=matched_inds_data[as.numeric(as.character(matched_inds_data$no_chronic)) < 2,]
+
+
+for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls)) {
+  if (class(multi_morbid_ordinal_continuous_HW_mod_controls[,k])!="factor" & k!=1) {
+    multi_morbid_ordinal_continuous_HW_mod_controls[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls[,k])
   }
 }
 
-saveRDS(multi_morbid,"../data/processed_V2/multi_morbid_ordinal_continuous_HW_mod.rds")
+saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls,"../data/processed_V5/multi_morbid_ordinal_continuous_HW_mod_controls.rds")
 
 
