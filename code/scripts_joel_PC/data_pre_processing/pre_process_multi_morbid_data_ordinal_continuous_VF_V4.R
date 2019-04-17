@@ -158,7 +158,7 @@ merged_data$birth_year=NULL
 merged_data$obese = ifelse(merged_data$BMI >= 40, 1, 0)
 
 #define outcome cols
-outcomes = c('diabetes','CAD','angina','obese','htn',"heart_failure","intracranial_haemorrhage","peripheral_vascular")
+outcomes = c('diabetes','CAD','angina','htn',"heart_failure","intracranial_haemorrhage","peripheral_vascular")
 
 
 
