@@ -35,7 +35,7 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 ################################################################################
 
 
-multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep.rds")
+multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_keep_subset.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 ################################################################################

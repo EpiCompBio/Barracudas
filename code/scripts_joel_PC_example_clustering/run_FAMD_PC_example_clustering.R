@@ -45,18 +45,18 @@ source("code/utility_functions/colors_themes_utility.R")
 # multi_morbid_ordinal_continuous_HW_PCA
 # multi_morbid_ordinal_continuous
 multi_morbid=readRDS("../data/processed_example_clustering/example_mixed_data_clustering.rds")
-# multi_morbid=multi_morbid[1:200,]
 
 
-if(dir.exists("../results/results_joel_HPC_example_clustering")==FALSE) {
-  dir.create("../results/results_joel_HPC_example_clustering")
+if(dir.exists("../results/results_joel_PC_example_clustering")==FALSE) {
+  dir.create("../results/results_joel_PC_example_clustering")
 }
 
 ################################################################################
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_example_clustering_res=FAMD(multi_morbid[,16:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
+FAMD_example_clustering_res=FAMD(multi_morbid,ncp=ncol(multi_morbid) +5, graph = FALSE)
+
 
 
 #IND PLOTS
@@ -64,7 +64,12 @@ FAMD_example_clustering_ind_plot_d12=make_FAMD_ind_plot(FAMD_example_clustering_
                                                   dims=c(1,2),
                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_example_clustering/FAMD_example_clustering_ind_plot_d12.svg",width=10,height=10)
+
+make_FAMD_ind_plot(FAMD_example_clustering_res,
+                   dims=c(1,2),
+                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+
+svg(filename="../results/results_joel_PC_example_clustering/FAMD_example_clustering_ind_plot_d12.svg",width=10,height=10)
 print(FAMD_example_clustering_ind_plot_d12)
 dev.off()
 
@@ -73,7 +78,7 @@ FAMD_example_clustering_ind_plot_d34=make_FAMD_ind_plot(FAMD_example_clustering_
                                                   dims=c(3,4),
                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_example_clustering/FAMD_example_clustering_ind_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_PC_example_clustering/FAMD_example_clustering_ind_plot_d34.svg",width=10,height=10)
 print(FAMD_example_clustering_ind_plot_d34)
 dev.off()
 
@@ -82,14 +87,14 @@ dev.off()
 FAMD_example_clustering_var_plot_d12 <- make_FAMD_variable_graph(FAMD_example_clustering_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
 
-svg(filename="../results/results_joel_HPC_example_clustering/FAMD_example_clustering_var_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_PC_example_clustering/FAMD_example_clustering_var_plot_d12.svg",width=10,height=10)
 print(FAMD_example_clustering_var_plot_d12)
 dev.off()
 
 
 FAMD_example_clustering_var_plot_d34 <- make_FAMD_variable_graph(FAMD_example_clustering_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
-svg(filename="../results/results_joel_HPC_example_clustering/FAMD_example_clustering_var_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_PC_example_clustering/FAMD_example_clustering_var_plot_d34.svg",width=10,height=10)
 print(FAMD_example_clustering_var_plot_d34)
 dev.off()
 

@@ -36,7 +36,7 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 ################################################################################
 
 
-multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
+multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous_subset.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
