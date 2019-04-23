@@ -213,32 +213,6 @@ cat_cols = c('birth_month')
 # PREPARING MULTI-MORBID DATA AND SCALING
 ####################################################################################################
 
-#subset multi morbid rows
-multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
-
-
-# We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
-print(sum(multi_morbid$smoker == multi_morbid$current_smoker))
-print(nrow(multi_morbid))
-
-# We're going to remove one of them
-multi_morbid$smoker=NULL
-
-#Birth_month is a dumb variable
-multi_morbid$birth_month=NULL
-
-multi_morbid$hip_waist_ratio=multi_morbid$hip_circum/multi_morbid$waist_circum
-
-multi_morbid$height_sitting=NULL
-
-multi_morbid$sitting_height=NULL
-
-
-multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
-                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
-
-
-multi_morbid[,"seated_box_height"] <- list(NULL)
 
 
 
@@ -250,6 +224,34 @@ matched_inds = frequency_matching(merged_data[,c("age","Sex")],
 matched_inds_data=merged_data[as.numeric(matched_inds$selection),]
 
 multi_morbid_ordinal_factors_HW_mod_controls=matched_inds_data[as.numeric(as.character(matched_inds_data$no_chronic)) < 2,]
+
+
+
+# We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
+print(sum(multi_morbid_ordinal_factors_HW_mod_controls$smoker == multi_morbid_ordinal_factors_HW_mod_controls$current_smoker))
+print(nrow(multi_morbid_ordinal_factors_HW_mod_controls))
+
+# We're going to remove one of them
+multi_morbid_ordinal_factors_HW_mod_controls$smoker=NULL
+
+#Birth_month is a dumb variable
+multi_morbid_ordinal_factors_HW_mod_controls$birth_month=NULL
+
+multi_morbid_ordinal_factors_HW_mod_controls$hip_waist_ratio=multi_morbid_ordinal_factors_HW_mod_controls$hip_circum/multi_morbid_ordinal_factors_HW_mod_controls$waist_circum
+
+multi_morbid_ordinal_factors_HW_mod_controls$height_sitting=NULL
+
+multi_morbid_ordinal_factors_HW_mod_controls$sitting_height=NULL
+
+
+multi_morbid_ordinal_factors_HW_mod_controls[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
+                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
+
+
+multi_morbid_ordinal_factors_HW_mod_controls[,"seated_box_height"] <- list(NULL)
+
+
+
 
 
 
