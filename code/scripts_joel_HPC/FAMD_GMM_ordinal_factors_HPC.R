@@ -64,10 +64,10 @@ source("code/utility_functions/clustering_utility.R")
 do_choose_nclusters=TRUE
 do_rep_clustering=TRUE
 
-n_rep_choose_nb_clust=3
+n_rep_choose_nb_clust=10
 seed_start_choose_clust=200
 
-n_rep_clustering=50
+n_rep_clustering=30
 seed_start_clustering=1000
 ################################################################################
 ################################################################################
@@ -141,7 +141,7 @@ if (do_choose_nclusters==TRUE) {
 # GMM on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
-if (do_rep==TRUE) {
+if (do_rep_clustering==TRUE) {
   
  
   

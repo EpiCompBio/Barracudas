@@ -60,7 +60,11 @@ source("code/utility_functions/clustering_utility.R")
 do_choose_nclusters=TRUE
 do_rep_clustering=TRUE
 
+n_rep_choose_nb_clust=10
+seed_start_choose_clust=200
 
+n_rep_clustering=30
+seed_start_clustering=1000
 ################################################################################
 ################################################################################
 # multi-morbid individuals only
@@ -85,16 +89,15 @@ if (do_choose_nclusters==TRUE) {
   colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette","Point_Bi")
   
   
-  n_rep_kmeans_choose_nb_clust=10
-  seed_start_kmeans_choose_clust=200
+
   
   
   # Different numbers of centers
   for (k in 1:length(n_classes)) {
     
-    for (i in 1:n_rep_kmeans_choose_nb_clust) {
+    for (i in 1:n_rep_choose_nb_clust) {
       
-      set.seed(seed_start_kmeans_choose_clust+i)
+      set.seed(seed_start_choose_clust+i)
       FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=n_classes[k])
       
       criteria_vector=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
@@ -125,22 +128,21 @@ if (do_choose_nclusters==TRUE) {
 # Kmeans on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
-if (do_rep==TRUE) {
+if (do_rep_clustering==TRUE) {
   
-  n_rep_kmeans=50
-  seed_start_kmeans=1000
+
   
-  cluster_crit_vector=rep(0,n_rep_kmeans)
+  cluster_crit_vector=rep(0,n_rep_clustering)
   
-  for (k in 1:n_rep_kmeans) {
-    set.seed(seed_start_kmeans+k)
+  for (k in 1:n_rep_clustering) {
+    set.seed(seed_start_clustering+k)
     FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
     cluster_crit_vector[k]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
                                               part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz")))
     
   }
   
-  set.seed(which.max(cluster_crit_vector) + seed_start_kmeans)
+  set.seed(which.max(cluster_crit_vector) + seed_start_clustering)
   FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
   
   

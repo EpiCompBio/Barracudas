@@ -71,6 +71,12 @@ source("code/utility_functions/clustering_utility.R")
 do_choose_nclusters=TRUE
 do_rep_clustering=TRUE
 
+
+n_rep_choose_nb_clust=10
+seed_start_choose_clust=1000
+
+n_rep_clustering=30
+seed_start_clustering=200
 ################################################################################
 ################################################################################
 # multi-morbid individuals only
@@ -80,6 +86,7 @@ do_rep_clustering=TRUE
 FAMD_multi_morbid_res=readRDS("../data/processed/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
+
 
 
 ################################################################################
@@ -96,16 +103,15 @@ if (do_choose_nclusters==TRUE) {
   colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette","Point_Bi")
   
   
-  n_rep_GMM_choose_nb_clust=3
-  seed_start_kmeans_choose_clust=200
+ 
   
   
   # Different numbers of centers
   for (k in 1:length(n_classes)) {
     
-    for (i in 1:n_rep_GMM_choose_nb_clust) {
+    for (i in 1:n_rep_clustering) {
       
-      set.seed(seed_start_kmeans_choose_clust+i)
+      set.seed(seed_start_clustering+i)
       
       FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=n_classes[k])
       
@@ -145,15 +151,14 @@ if (do_choose_nclusters==TRUE) {
 
 
 
-if (do_rep==TRUE) {
+if (do_rep_clustering==TRUE) {
   
-  n_rep_GMM=50
-  seed_start_GMM=1000
+
   
-  cluster_crit_vector=rep(0,n_rep_GMM)
+  cluster_crit_vector=rep(0,n_rep_choose_nb_clust)
   
-  for (k in 1:n_rep_GMM) {
-    set.seed(seed_start_GMM+k)
+  for (k in 1:n_rep_choose_nb_clust) {
+    set.seed(seed_start_choose_clust+k)
     FAMD_kmeans_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=2)
     cluster_crit_vector[k]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
                                               part=as.integer(FAMD_kmeans_multi_morbid$classification),c("Calinski_Harabasz")))
