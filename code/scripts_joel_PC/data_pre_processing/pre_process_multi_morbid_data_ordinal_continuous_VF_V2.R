@@ -10,9 +10,6 @@ using<-function(...) {
 
 using("magrittr","dplyr")
 
-# library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-# library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
@@ -346,6 +343,7 @@ multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","w
 
 multi_morbid[,"seated_box_height"] <- list(NULL)
 
+multi_morbid=multi_morbid[sample(1:nrow(multi_morbid),size=floor(nrow(multi_morbid)*(1/3))),]
 
 for (k in 1:ncol(multi_morbid)) {
   if (class(multi_morbid[,k])!="factor" & k!=1) {
@@ -353,6 +351,6 @@ for (k in 1:ncol(multi_morbid)) {
   }
 }
 
-saveRDS(multi_morbid,"../data/processed_V2/multi_morbid_ordinal_continuous_HW_mod.rds")
+saveRDS(multi_morbid,"../data/processed_V2/multi_morbid_ordinal_continuous_HW_mod_subset.rds")
 
 

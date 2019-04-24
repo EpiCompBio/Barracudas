@@ -30,7 +30,7 @@ source("C:/Users/JOE/Documents/R_utility_and_self_implementations/colors_themes_
 ################################################################################
 
 #Loading self made mixed data
-example_mixed_data_clustering_1=readRDS("../../open_data/example_mixed_data_clustering_1.rds")
+example_mixed_data_clustering_1=readRDS("../../../open_data/example_mixed_data_clustering_1.rds")
 
 for (k in 1:3) {
   example_mixed_data_clustering_1[,k]=as.numeric(as.character(example_mixed_data_clustering_1[,k]))
@@ -45,7 +45,7 @@ true_clusters_example_mixed_data_clustering_1=c(rep(1,1000),rep(2,1000),rep(3,10
 
 
 #Loading the mixed dat from the kamila package
-example_mixed_data_clustering_kamila=readRDS("../../open_data/example_mixed_data_clustering_kamila.rds")
+example_mixed_data_clustering_kamila=readRDS("../../../open_data/example_mixed_data_clustering_kamila.rds")
 
 
 for (k in 5:ncol(example_mixed_data_clustering_kamila)) {
@@ -74,6 +74,9 @@ FAMD_res_example_mixed_data_clustering_1=FAMD(example_mixed_data_clustering_1, n
 
 
 GMM_FAMD_res_example_mixed_data_clustering_1=Mclust(FAMD_res_example_mixed_data_clustering_1$ind$coord[,1:7],G=3)
+print(table(GMM_FAMD_res_example_mixed_data_clustering_1$classification))
+
+
 clusters_GMM_FAMD=GMM_FAMD_res_example_mixed_data_clustering_1$classification
 
 GMM_FAMD_classes_plot=make_FAMD_ind_plot_classes(FAMD_res_example_mixed_data_clustering_1,classes=as.factor(clusters_GMM_FAMD),

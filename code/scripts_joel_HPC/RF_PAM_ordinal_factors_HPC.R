@@ -81,7 +81,7 @@ RF_proximity_measure_multi_morbid_res=readRDS("../data/processed/RF_proximity_me
 ################################################################################
 
 RF_pam_multi_morbid=pam(RF_proximity_measure_multi_morbid_res, 2)
-
+RF_pam_multi_morbid$data=NULL
 
 saveRDS(RF_pam_multi_morbid,"../results/results_joel_HPC/RF_pam_ordinal_factors/RF_pam_ordinal_factors_multi_morbid.rds")
 

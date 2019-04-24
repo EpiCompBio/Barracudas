@@ -215,7 +215,10 @@ merged_data[,ord_col_ids] = lapply(merged_data[,ord_col_ids], function(x) factor
 #subset multi morbid rows
 multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
 
-multi_morbid=multi_morbid[sample(1:nrow(multi_morbid),size=floor(nrow(multi_morbid)*(1/3))),]
+multi_morbid <- multi_morbid %>%
+  group_by(Sex,age) %>%
+  sample_frac(0.3) %>% as.data.frame()
+
 
 #scale numeric features
 multi_morbid[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =

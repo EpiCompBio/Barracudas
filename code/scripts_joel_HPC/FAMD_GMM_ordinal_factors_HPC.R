@@ -61,6 +61,14 @@ source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")
 
 
+do_choose_nclusters=TRUE
+do_rep_clustering=TRUE
+
+n_rep_choose_nb_clust=3
+seed_start_choose_clust=200
+
+n_rep_clustering=50
+seed_start_clustering=1000
 ################################################################################
 ################################################################################
 # multi-morbid individuals only
@@ -76,25 +84,56 @@ nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 ################################################################################
 
 
-n_classes=2:8
-
-cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=3))
-cluster_crit_df[,1]=n_classes
-colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette")
-
-
-# Different numbers of centers
-for (k in 1:length(n_classes)) {
+if (do_choose_nclusters==TRUE) {
   
-  FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=n_classes[k])
+  n_classes=2:5
+  
+  cluster_crit_df=as.data.frame(matrix(0,nrow=length(n_classes),ncol=4))
+  cluster_crit_df[,1]=n_classes
+  colnames(cluster_crit_df)=c("n_classes","Cal_Har","Silhouette","Point_Bi")
   
   
-  cluster_crit_df[k,2:3]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
-                                            part=as.integer(FAMD_GMM_multi_morbid$classification),c("Calinski_Harabasz","Silhouette")))
+
+  
+  
+  # Different numbers of centers
+  for (k in 1:length(n_classes)) {
+    
+    for (i in 1:n_rep_choose_nb_clust) {
+      
+      set.seed(seed_start_choose_clust+i)
+      
+      FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=n_classes[k])
+      
+      
+      criteria_vector=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
+                                         part=as.integer(FAMD_GMM_multi_morbid$classification),c("Calinski_Harabasz",
+                                                                                                 "Silhouette","Point_Biserial")))
+      
+      
+      if (is.finite(criteria_vector[1]) & criteria_vector[1]>cluster_crit_df[k,2]) {
+        cluster_crit_df[k,2]=criteria_vector[1]
+      }
+      
+      
+      if (is.finite(criteria_vector[2]) & criteria_vector[2]>cluster_crit_df[k,3]) {
+        cluster_crit_df[k,3]=criteria_vector[2]
+      }
+      
+      if (is.finite(criteria_vector[3]) & criteria_vector[3]<cluster_crit_df[k,4]) {
+        cluster_crit_df[k,4]=criteria_vector[3]
+      }
+      
+    }
+    
+  }
+  
+  saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_GMM_ordinal_factors/cluster_crit_df_FAMD_GMM_ordinal_factors_multi_morbid.rds")
+  
+  
 }
 
 
-saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_GMM_ordinal_factors/cluster_crit_df_FAMD_GMM_ordinal_factors_multi_morbid.rds")
 
 
 
@@ -102,7 +141,33 @@ saveRDS(cluster_crit_df,"../results/results_joel_HPC/FAMD_GMM_ordinal_factors/cl
 # GMM on the FAMD row coordinates with the best number of clusters
 ################################################################################
 
-FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=2)
+if (do_rep==TRUE) {
+  
+ 
+  
+  cluster_crit_vector=rep(0,n_rep_clustering)
+  
+  for (k in 1:n_rep_clustering) {
+    set.seed(seed_start_clustering+k)
+    FAMD_kmeans_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=2)
+    cluster_crit_vector[k]=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
+                                              part=as.integer(FAMD_kmeans_multi_morbid$classification),c("Calinski_Harabasz")))
+    
+  }
+  
+  set.seed(which.max(cluster_crit_vector) + seed_start_kmeans)
+  FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=2)
+  
+  
+  
+} else {
+  FAMD_GMM_multi_morbid=Mclust(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],G=2)
+}
+
+
+
+
+
 
 
 saveRDS(FAMD_GMM_multi_morbid,"../results/results_joel_HPC/FAMD_GMM_ordinal_factors/FAMD_GMM_ordinal_factors_multi_morbid.rds")

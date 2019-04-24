@@ -15,7 +15,12 @@ set.seed(1)
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
 
+# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
+# setwd(file_path)
+
 setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
+
+
 
 ################################################################################
 # LOADING DATA
@@ -308,6 +313,37 @@ print(summary(merged_data[,'seated_box_height']))
 multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
 
 
+# We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
+print(sum(multi_morbid$smoker == multi_morbid$current_smoker))
+print(nrow(multi_morbid))
+
+# We're going to remove one of them
+multi_morbid$smoker=NULL
+
+#Birth_month is a dumb variable
+multi_morbid$birth_month=NULL
+
+multi_morbid$hip_waist_ratio=multi_morbid$hip_circum/multi_morbid$waist_circum
+
+
+height_weight_related=c("Height","height_sitting","sitting_height","BMI",
+                        "Weight","body_fat_perc","whole_body_fat_mass","whole_body_water_mass","hip_waist_ratio")
+
+
+print(cor(multi_morbid[,height_weight_related]))
+
+multi_morbid$height_sitting=NULL
+
+multi_morbid$sitting_height=NULL
+
+
+
+multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
+                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
+
+
+multi_morbid[,"seated_box_height"] <- list(NULL)
+
 
 multi_morbid <- multi_morbid %>%
   group_by(Sex,age) %>%
@@ -320,5 +356,6 @@ for (k in 1:ncol(multi_morbid)) {
   }
 }
 
+saveRDS(multi_morbid,"../data/processed_V2/multi_morbid_ordinal_continuous_HW_mod_subset.rds")
 
-saveRDS(multi_morbid,"../data/processed/multi_morbid_ordinal_continuous_subset.rds")
+

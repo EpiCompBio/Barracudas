@@ -86,6 +86,7 @@ gower_dissimilarity_multi_morbid_res=readRDS("../data/processed/gower_dissimilar
 ################################################################################
 
 gower_pam_multi_morbid=pam(gower_dissimilarity_multi_morbid_res, 2)
+gower_pam_multi_morbid$data=NULL
 
 
 saveRDS(gower_pam_multi_morbid,"../results/results_joel_HPC/gower_pam/gower_pam_multi_morbid.rds")
