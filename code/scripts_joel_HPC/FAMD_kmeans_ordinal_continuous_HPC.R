@@ -60,39 +60,39 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 # Parameters for inside the script
 ################################################################################
-n_Cores=20
+# n_Cores=20
+# 
+# do_choose_nclusters=FALSE
+# do_rep_clustering=TRUE
+# do_stability=TRUE
+# 
+# n_rep_choose_nb_clust=10
+# seed_start_choose_clust=200
+# 
+# n_rep_clustering=50
+# seed_start_clustering=1000
+# 
+# n_sub_sample=100
+# int_val=90
+# add_to_seed_subsampling=0
+
+
+
+n_Cores=7
 
 do_choose_nclusters=TRUE
 do_rep_clustering=FALSE
 do_stability=FALSE
 
-n_rep_choose_nb_clust=10
+n_rep_choose_nb_clust=5
 seed_start_choose_clust=200
 
-n_rep_clustering=50
+n_rep_clustering=10
 seed_start_clustering=1000
 
-n_sub_sample=100
+n_sub_sample=50
 int_val=90
 add_to_seed_subsampling=0
-
-
-
-# n_Cores=7
-# 
-# do_choose_nclusters=TRUE
-# do_rep_clustering=FALSE
-# do_stability=FALSE
-# 
-# n_rep_choose_nb_clust=5
-# seed_start_choose_clust=200
-# 
-# n_rep_clustering=10
-# seed_start_clustering=1000
-# 
-# n_sub_sample=50
-# int_val=90
-# add_to_seed_subsampling=0
 
 ################################################################################
 ################################################################################
@@ -182,7 +182,7 @@ if (do_rep_clustering==TRUE) {
                                        
                                        
                                        set.seed(seed_start_clustering+k)
-                                       FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=3)
+                                       FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
                                        cluster_crit=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
                                                                        part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz")))
                                        return(cluster_crit)
@@ -419,7 +419,7 @@ var_importance_stab_list=foreach(i=1:n_sub_sample,
                                      set.seed(k+add_to_seed_subsampling)
                                      
                                      FAMD_kmeans_multi_morbid_subsample=
-                                       kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=3)
+                                       kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=2)
                                      cluster_crit_vector[k]=
                                        unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample]),
                                                           part=FAMD_kmeans_multi_morbid_subsample$cluster,c("Calinski_Harabasz")))
@@ -427,7 +427,7 @@ var_importance_stab_list=foreach(i=1:n_sub_sample,
                                    }
                                    set.seed(which.max(cluster_crit_vector+add_to_seed_subsampling))
                                    FAMD_kmeans_multi_morbid_subsample=
-                                     kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=3)
+                                     kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=2)
                                    
                                    clusters_FAMD_kmeans_multi_morbid_subsample=FAMD_kmeans_multi_morbid_subsample$cluster
                                    
@@ -457,7 +457,7 @@ colnames(var_importance_stab_df)=c("var_name","Type")
 
 var_importance_stab_df[,1]=c(cont_variables,cat_variables)
 var_importance_stab_df[,2]=c(rep("Cont",length(cont_variables)),rep("Cat",length(cat_variables)))         
-var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid),var_importance_stab_df[,1]),]
+var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid[,2:ncol(multi_morbid)]),var_importance_stab_df[,1]),]
 
 
 var_importance_stab_df$median=apply(var_importance_stab_matrix,2,median)

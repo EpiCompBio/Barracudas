@@ -68,9 +68,9 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 n_Cores=20
 
-do_choose_nclusters=TRUE
-do_rep_clustering=FALSE
-do_stability=FALSE
+do_choose_nclusters=FALSE
+do_rep_clustering=TRUE
+do_stability=TRUE
 
 n_rep_choose_nb_clust=10
 seed_start_choose_clust=200
@@ -168,7 +168,7 @@ if (do_rep_clustering==TRUE) {
                                        
                                        
                                        set.seed(seed_start_clustering+k)
-                                       FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=3)
+                                       FAMD_kmeans_multi_morbid=kmeans(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid],centers=2)
                                        cluster_crit=unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_res$ind$coord[,1:nb_comp_FAMD_multi_morbid]),
                                                                        part=FAMD_kmeans_multi_morbid$cluster,c("Calinski_Harabasz")))
                                        return(cluster_crit)
@@ -401,7 +401,7 @@ if (do_stability==TRUE) {
                                        set.seed(k+add_to_seed_subsampling)
                                        
                                        FAMD_kmeans_multi_morbid_subsample=
-                                         kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=3)
+                                         kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=2)
                                        cluster_crit_vector[k]=
                                          unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample]),
                                                             part=FAMD_kmeans_multi_morbid_subsample$cluster,c("Calinski_Harabasz")))
@@ -437,7 +437,7 @@ if (do_stability==TRUE) {
   
   var_importance_stab_df[,1]=c(cont_variables,cat_variables)
   var_importance_stab_df[,2]=c(rep("Cont",length(cont_variables)),rep("Cat",length(cat_variables)))         
-  var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid),var_importance_stab_df[,1]),]
+  var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid[,2:ncol(multi_morbid)]),var_importance_stab_df[,1]),]
   
   
   var_importance_stab_df$median=apply(var_importance_stab_matrix,2,median)
