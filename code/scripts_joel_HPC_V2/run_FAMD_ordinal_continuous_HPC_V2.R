@@ -59,7 +59,7 @@ multi_morbid=readRDS("../data/processed_V2/multi_morbid_ordinal_continuous_HW_mo
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,16:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,15:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
 
 
 #IND PLOTS
@@ -100,58 +100,58 @@ dev.off()
 saveRDS(FAMD_multi_morbid_res,"../data/processed_V2/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 
-# ################################################################################
-# ################################################################################
-# # full dataset
-# ################################################################################
-# ################################################################################
-# 
-# 
-# full_data=readRDS("../data/processed/full_data_ordinal_continuous.rds")
-# # multi_morbid=multi_morbid[1:200,]
-# 
-# ################################################################################
-# # FAMD on the full dataset
-# ################################################################################
-# 
-# FAMD_full_data_res=FAMD(full_data[,12:ncol(multi_morbid)] , ncp = ncol(multi_morbid)+20, graph = FALSE)
-# 
-# 
-# #IND PLOTS
-# FAMD_full_data_ind_plot_d12=make_FAMD_ind_plot(FAMD_full_data_res,
-#                                                dims=c(1,2),
-#                                                custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
-# 
-# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_ind_plot_d12.svg",width=10,height=10)
-# print(FAMD_full_data_ind_plot_d12)
-# dev.off()
-# 
-# 
-# FAMD_full_data_ind_plot_d34=make_FAMD_ind_plot(FAMD_full_data_res,
-#                                                dims=c(3,4),
-#                                                custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
-# 
-# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_ind_plot_d34.svg",width=10,height=10)
-# print(FAMD_full_data_ind_plot_d34)
-# dev.off()
-# 
-# 
-# 
-# #VAR PLOTS
-# FAMD_full_data_var_plot_d12 <- make_FAMD_variable_graph(FAMD_full_data_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
-# 
-# 
-# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_var_plot_d12.svg",width=10,height=10)
-# print(FAMD_full_data_var_plot_d12)
-# dev.off()
-# 
-# 
-# FAMD_full_data_var_plot_d34 <- make_FAMD_variable_graph(FAMD_full_data_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
-# 
-# svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_var_plot_d34.svg",width=10,height=10)
-# print(FAMD_full_data_var_plot_d34)
-# dev.off()
-# 
-# 
-# saveRDS(FAMD_full_data_res,"../data/processed/FAMD_ordinal_continuous_full_data_res.rds")
-# 
+################################################################################
+################################################################################
+# full dataset
+################################################################################
+################################################################################
+
+
+full_data=readRDS("../data/processed/full_data_ordinal_continuous.rds")
+# multi_morbid=multi_morbid[1:200,]
+
+################################################################################
+# FAMD on the full dataset
+################################################################################
+
+FAMD_full_data_res=FAMD(full_data[,15:ncol(multi_morbid)] , ncp = ncol(multi_morbid)+20, graph = FALSE)
+
+
+#IND PLOTS
+FAMD_full_data_ind_plot_d12=make_FAMD_ind_plot(FAMD_full_data_res,
+                                               dims=c(1,2),
+                                               custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_ind_plot_d12.svg",width=10,height=10)
+print(FAMD_full_data_ind_plot_d12)
+dev.off()
+
+
+FAMD_full_data_ind_plot_d34=make_FAMD_ind_plot(FAMD_full_data_res,
+                                               dims=c(3,4),
+                                               custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_ind_plot_d34.svg",width=10,height=10)
+print(FAMD_full_data_ind_plot_d34)
+dev.off()
+
+
+
+#VAR PLOTS
+FAMD_full_data_var_plot_d12 <- make_FAMD_variable_graph(FAMD_full_data_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
+
+
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_var_plot_d12.svg",width=10,height=10)
+print(FAMD_full_data_var_plot_d12)
+dev.off()
+
+
+FAMD_full_data_var_plot_d34 <- make_FAMD_variable_graph(FAMD_full_data_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
+
+svg(filename="../results/results_joel_HPC_V2/FAMD_ordinal_continuous_full_data_var_plot_d34.svg",width=10,height=10)
+print(FAMD_full_data_var_plot_d34)
+dev.off()
+
+
+saveRDS(FAMD_full_data_res,"../data/processed/FAMD_ordinal_continuous_full_data_res.rds")
+
