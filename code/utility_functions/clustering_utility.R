@@ -374,3 +374,68 @@ make_variable_importance_plot=function(data,grouping_names=NULL,color_scale=NULL
   return(var_importance_plot)
   
 }
+
+
+
+########################################################################################################
+# Variable importance stability plot
+#### INPUTS
+# data : data witht the var importances  (it should have the following columns : var_name, Type,  mean, LB, UB) 
+# color_scale : color scale for the plot
+# custom_theme : custom ggplot theme to be applied
+# threshold : threshold for annotation
+#### OUTPUT
+# ggplot object of significant cluster differences by variable
+########################################################################################################
+
+
+make_variable_importance_stability_plot=function(data,grouping_names=NULL,color_scale=NULL,custom_theme=NULL,threshold=5) {
+
+
+
+  if (is.null(grouping_names)) {
+    data$var_name=factor(data$var_name,levels=data$var_name)
+    var_importance_stability_plot=ggplot(data) + geom_point(aes(x=var_name,y=median,color=Type),size=2) +
+      custom_theme + theme(axis.text.x = element_text(angle=60,vjust = 0.8)) +
+      geom_errorbar(aes(ymin=LB, ymax=UB,x=var_name,color=Type), width=.2,
+                    position=position_dodge(.9)) +
+      ggtitle("Variable importance for cluster classification")
+
+    if (!is.null(color_scale)) {
+      var_importance_stability_plot= var_importance_stability_plot + scale_color_manual(values=color_scale)
+    }
+
+  } else {
+
+
+
+
+
+    groupings=lapply(grouping_names,function(x) {which(data[,1]%in%x)})
+
+    data=data[unlist(groupings),]
+    data$group=unlist(lapply(names(grouping_names),function(x) {rep(x,length(grouping_names[[x]]))}))
+    data$var_name=factor(data$var_name,levels=data$var_name)
+    data$significant=ifelse(data[,"median"]>threshold,1,0)
+
+
+    var_importance_stability_plot=ggplot(data) + geom_point(aes(x=var_name,y=median,color=group),size=2) +
+      custom_theme + theme(axis.text.x = element_text(angle=60,vjust = 0.8)) +
+      geom_errorbar(aes(ymin=LB, ymax=UB,x=var_name,color=group), width=.2,
+                    position=position_dodge(.9)) +
+      ggtitle("Significance of differences between clusters across variables")
+
+    if (!is.null(color_scale)) {
+      var_importance_stability_plot= var_importance_stability_plot + scale_color_manual(values=color_scale)
+    }
+
+    var_importance_stability_plot= var_importance_stability_plot +
+      geom_label_repel(data=subset(data, data$significant==1),aes(x=var_name,y=median,label=var_name)) +
+      geom_hline(yintercept = threshold)
+
+  }
+
+
+  return(var_importance_stability_plot)
+
+}

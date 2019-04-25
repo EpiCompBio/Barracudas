@@ -13,19 +13,18 @@ using<-function(...) {
 }
 
 using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-      "gridExtra","grid","dplyr","parallel","clusterCrit","randomForest","kamila")
+      "gridExtra","grid","dplyr","parallel","clusterCrit","randomForest","kamila","doParallel")
 
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
 
-# setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
+setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
-# multi_morbid_ordinal_continuous
-# multi_morbid_ordinal_continuous_HW_PCA
+
 multi_morbid=readRDS("../data/processed_example_NO_clustering/example_mixed_data_NO_clustering.rds")
-# multi_morbid=multi_morbid[1:200,]
+
 
 
 source("../data/processed_example_NO_clustering/var_groupings_example_NO_clustering.R")
@@ -37,6 +36,27 @@ source("code/utility_functions/clustering_utility.R")
 if(dir.exists("../results/results_joel_PC_example_NO_clustering/kamila_example_NO_clustering")==FALSE) {
   dir.create("../results/results_joel_PC_example_NO_clustering/kamila_example_NO_clustering")
 }
+
+
+################################################################################
+# Parameters for inside the script
+################################################################################
+n_Cores=7
+
+do_choose_nclusters=TRUE
+do_rep_clustering=TRUE
+do_stability=TRUE
+
+
+n_rep_choose_nb_clust=5
+seed_start_choose_clust=200
+
+n_rep_clustering=10
+seed_start_clustering=1000
+
+n_sub_sample=10
+int_val=90
+add_to_seed_subsampling=0
 
 
 ################################################################################
@@ -55,35 +75,46 @@ nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 # Choosing the number of clusters for kamila
 ################################################################################
 
-
-cat_variables_kamila=colnames(multi_morbid)[sapply(multi_morbid,class) == "factor"]
-cont_variables_kamila=colnames(multi_morbid)[sapply(multi_morbid,class) != "factor"]
-
-
-kamRes <- kamila(catFactor=multi_morbid[,cat_variables_kamila],conVar=multi_morbid[,cont_variables_kamila], numClust = 2:5, numInit = 10,
-                 calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.5)
-
-kamila_cluster_choice <- plot(2:5, kamRes$nClust$psValues,
-                              pch = 19, frame = FALSE, 
-                              xlab="Number of clusters",
-                              ylab="Prediction Strength", xlim = c(2, 5), ylim = c(0, 1))
-
-svg("../results/results_joel_PC_example_NO_clustering/kamila_example_NO_clustering/kamila_oc_cluster_choice.svg")
-plot(2:5, kamRes$nClust$psValues,
-     pch = 19, frame = FALSE, 
-     xlab="Number of clusters",
-     ylab="Prediction Strength", xlim = c(2, 5), ylim = c(0, 1))
-dev.off()
-
-
+if (do_choose_nclusters==TRUE) {
+  
+  cat_variables_kamila=colnames(multi_morbid)[sapply(multi_morbid,class) == "factor"]
+  cont_variables_kamila=colnames(multi_morbid)[sapply(multi_morbid,class) != "factor"]
+  
+  set.seed(seed_start_choose_clust)
+  kamRes <- kamila(catFactor=multi_morbid[,cat_variables_kamila],conVar=multi_morbid[,cont_variables_kamila], numClust = 2:5,
+                   numInit = n_rep_choose_nb_clust,
+                   calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.5)
+  
+  kamila_cluster_choice <- plot(2:5, kamRes$nClust$psValues,
+                                pch = 19, frame = FALSE, 
+                                xlab="Number of clusters",
+                                ylab="Prediction Strength", xlim = c(2, 5), ylim = c(0, 1))
+  
+  svg("../results/results_joel_PC_example_NO_clustering/kamila_example_NO_clustering/kamila_oc_cluster_choice.svg")
+  plot(2:5, kamRes$nClust$psValues,
+       pch = 19, frame = FALSE, 
+       xlab="Number of clusters",
+       ylab="Prediction Strength", xlim = c(2, 5), ylim = c(0, 1))
+  dev.off()
+  
+}
 
 ################################################################################
 # kamila with the best number of clusters
 ################################################################################
 
-
-kamila_multi_morbid=kamila(catFactor=multi_morbid[,cat_variables_kamila],conVar=multi_morbid[,cont_variables_kamila],numClust=2,numInit=10)
-
+if (do_rep_clustering==TRUE) {
+  
+  set.seed(seed_start_clustering)
+  kamila_multi_morbid=kamila(catFactor=multi_morbid[,cat_variables_kamila],
+                             conVar=multi_morbid[,cont_variables_kamila],numClust=2,numInit=n_rep_clustering)
+  
+  
+} else {
+  
+  kamila_multi_morbid=kamila(catFactor=multi_morbid[,cat_variables_kamila],conVar=multi_morbid[,cont_variables_kamila],numClust=2,numInit=1)
+  
+}
 
 
 clusters_kamila_multi_morbid=kamila_multi_morbid$finalMemb
@@ -253,7 +284,7 @@ var_importance_df$var_importance=randomForest_multi_morbid$importance
 
 
 variable_importance_plot=make_variable_importance_plot(var_importance_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
-                                                       threshold=100)
+                                                       threshold=50)
 
 
 svg(filename=paste0("../results/results_joel_PC_example_NO_clustering/kamila_example_NO_clustering/",
@@ -261,3 +292,80 @@ svg(filename=paste0("../results/results_joel_PC_example_NO_clustering/kamila_exa
     width=10,height=10)
 print(variable_importance_plot)
 dev.off()
+
+
+
+
+################################################################################################
+# Cluster stability
+################################################################################################
+
+if (do_stability==TRUE) {
+  
+  registerDoParallel(n_Cores)
+  
+  
+  lower_bound_int=floor(n_sub_sample * (100 - int_val) / 200) + 1
+  upper_bound_int=floor(n_sub_sample * (1 - (100 - int_val) / 200))+  1
+  
+  # matrix(0,ncol=ncol(multi_morbid),nrow=n_sub_sample)
+  
+  
+  
+  var_importance_stab_list=foreach(i=1:n_sub_sample,
+                                   .packages = c('kamila',"randomForest","clusterCrit")) %dopar% {
+                                     
+                                     
+                                     set.seed(i)
+                                     multi_morbid_subsample=multi_morbid[sample(1:nrow(multi_morbid),size=floor(nrow(multi_morbid)*0.8)),]
+                                     # multi_morbid_subsample= multi_morbid_subsample[,c(2,1,3:ncol(multi_morbid_subsample))]
+                                     
+                                     kamila_multi_morbid_subsample=kamila(catFactor=multi_morbid_subsample[,cat_variables_kamila],
+                                                                          conVar=multi_morbid_subsample[,cont_variables_kamila],numClust=2,numInit=10)
+                                     
+                                     clusters_kamila_multi_morbid_subsample=kamila_multi_morbid_subsample$finalMemb
+                                     
+                                     
+                                     randomForest_multi_morbid_subsample=
+                                       randomForest(multi_morbid_subsample, y=as.factor(clusters_kamila_multi_morbid_subsample),ntree=500)
+                                     
+                                     return(randomForest_multi_morbid_subsample$importance)
+                                     
+                                   }
+  
+  
+  stopImplicitCluster()
+  
+  var_importance_stab_matrix=as.data.frame(matrix(unlist(var_importance_stab_list),
+                                                  byrow=TRUE,nrow=length(var_importance_stab_list),
+                                                  dimnames = list(NULL,
+                                                                  rownames(var_importance_stab_list[[1]]))))
+  
+  var_importance_stab_matrix=apply(var_importance_stab_matrix,2,sort)
+  
+  
+  var_importance_stab_df=data.frame(matrix(0,ncol=2,nrow=length(c(cont_variables,cat_variables))))
+  colnames(var_importance_stab_df)=c("var_name","Type")
+  
+  var_importance_stab_df[,1]=c(cont_variables,cat_variables)
+  var_importance_stab_df[,2]=c(rep("Cont",length(cont_variables)),rep("Cat",length(cat_variables)))         
+  var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid),var_importance_stab_df[,1]),]
+  
+  
+  var_importance_stab_df$median=apply(var_importance_stab_matrix,2,median)
+  var_importance_stab_df$LB=apply(var_importance_stab_matrix,2,function(x) {x[lower_bound_int]})
+  var_importance_stab_df$UB=apply(var_importance_stab_matrix,2,function(x) {x[upper_bound_int]})
+  
+  
+  
+  variable_importance_stability_plot=make_variable_importance_stability_plot(var_importance_stab_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
+                                                                             threshold=50)
+  
+  
+  svg(filename=paste0("../results/results_joel_PC_example_NO_clustering/kamila_example_NO_clustering/",
+                      "kamila_example_NO_clustering_multi_morbid_variable_importance_stability.svg"),
+      width=10,height=10)
+  print(variable_importance_stability_plot)
+  dev.off()
+  
+}
