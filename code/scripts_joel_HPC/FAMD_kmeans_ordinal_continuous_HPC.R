@@ -60,39 +60,40 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 # Parameters for inside the script
 ################################################################################
-# n_Cores=20
-# 
-# do_choose_nclusters=FALSE
-# do_rep_clustering=TRUE
-# do_stability=TRUE
-# 
-# n_rep_choose_nb_clust=10
-# seed_start_choose_clust=200
-# 
-# n_rep_clustering=50
-# seed_start_clustering=1000
-# 
-# n_sub_sample=100
-# int_val=90
-# add_to_seed_subsampling=0
+n_Cores=20
 
+do_choose_nclusters=FALSE
+do_rep_clustering=TRUE
+do_stability=TRUE
 
-
-n_Cores=7
-
-do_choose_nclusters=TRUE
-do_rep_clustering=FALSE
-do_stability=FALSE
-
-n_rep_choose_nb_clust=5
+n_rep_choose_nb_clust=10
 seed_start_choose_clust=200
 
-n_rep_clustering=10
+n_rep_clustering=50
 seed_start_clustering=1000
 
-n_sub_sample=50
+n_sub_sample=100
 int_val=90
 add_to_seed_subsampling=0
+
+
+#FOR LOCAL
+
+# n_Cores=7
+# 
+# do_choose_nclusters=TRUE
+# do_rep_clustering=FALSE
+# do_stability=FALSE
+# 
+# n_rep_choose_nb_clust=5
+# seed_start_choose_clust=200
+# 
+# n_rep_clustering=10
+# seed_start_clustering=1000
+# 
+# n_sub_sample=50
+# int_val=90
+# add_to_seed_subsampling=0
 
 ################################################################################
 ################################################################################
