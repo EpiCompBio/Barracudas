@@ -13,7 +13,7 @@
 # }
 # 
 # using("FactoMineR","ggplot2","ggrepel","viridis","RColorBrewer","reshape2","magrittr",
-#       "gridExtra","grid","dplyr","parallel","clusterCrit","mclust","randomForest")
+#       "gridExtra","grid","dplyr","parallel","clusterCrit","mclust","randomForest","doParallel")
 
 
 #Package from sourcing functions
@@ -43,6 +43,8 @@ library(mclust,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(clusterCrit,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(doParallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
