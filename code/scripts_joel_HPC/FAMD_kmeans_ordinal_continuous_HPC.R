@@ -76,6 +76,24 @@ n_sub_sample=100
 int_val=90
 add_to_seed_subsampling=0
 
+
+
+# n_Cores=7
+# 
+# do_choose_nclusters=TRUE
+# do_rep_clustering=FALSE
+# do_stability=FALSE
+# 
+# n_rep_choose_nb_clust=5
+# seed_start_choose_clust=200
+# 
+# n_rep_clustering=10
+# seed_start_clustering=1000
+# 
+# n_sub_sample=50
+# int_val=90
+# add_to_seed_subsampling=0
+
 ################################################################################
 ################################################################################
 # multi-morbid individuals only
@@ -386,7 +404,11 @@ var_importance_stab_list=foreach(i=1:n_sub_sample,
                                    multi_morbid_subsample=multi_morbid[sample(1:nrow(multi_morbid),size=floor(nrow(multi_morbid)*0.8)),]
                                    
                                    
-                                   FAMD_multi_morbid_subsample_res=FAMD(multi_morbid_subsample,ncp=ncol(multi_morbid_subsample) +5, graph = FALSE)
+                                   FAMD_multi_morbid_subsample_res=FAMD(multi_morbid_subsample[,15:ncol(multi_morbid_subsample)],
+                                                                        ncp=ncol(multi_morbid_subsample) +20, graph = FALSE)
+                                   
+                                   
+                                   
                                    
                                    nb_comp_FAMD_multi_morbid_subsample=which(FAMD_multi_morbid_subsample_res$eig[,3] > 90)[1]
                                    
@@ -405,13 +427,15 @@ var_importance_stab_list=foreach(i=1:n_sub_sample,
                                    }
                                    set.seed(which.max(cluster_crit_vector+add_to_seed_subsampling))
                                    FAMD_kmeans_multi_morbid_subsample=
-                                     kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=2)
+                                     kmeans(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample],centers=3)
                                    
                                    clusters_FAMD_kmeans_multi_morbid_subsample=FAMD_kmeans_multi_morbid_subsample$cluster
                                    
                                    
+                                   
                                    randomForest_multi_morbid_subsample=
-                                     randomForest(multi_morbid_subsample, y=as.factor(clusters_FAMD_kmeans_multi_morbid_subsample),ntree=500)
+                                     randomForest(multi_morbid_subsample[,2:ncol(multi_morbid_subsample)],
+                                                  y=as.factor(clusters_FAMD_kmeans_multi_morbid_subsample),ntree=500)
                                    
                                    return(randomForest_multi_morbid_subsample$importance)
                                    

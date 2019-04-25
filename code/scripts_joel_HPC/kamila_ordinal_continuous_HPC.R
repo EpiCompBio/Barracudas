@@ -356,7 +356,7 @@ if (do_stability==TRUE) {
                                      
                                      
                                      randomForest_multi_morbid_subsample=
-                                       randomForest(multi_morbid_subsample, y=as.factor(clusters_kamila_multi_morbid_subsample),ntree=500)
+                                       randomForest(multi_morbid_subsample[,2:ncol(multi_morbid_subsample)], y=as.factor(clusters_kamila_multi_morbid_subsample),ntree=500)
                                      
                                      return(randomForest_multi_morbid_subsample$importance)
                                      

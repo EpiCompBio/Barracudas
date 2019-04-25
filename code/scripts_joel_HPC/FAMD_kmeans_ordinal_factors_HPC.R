@@ -389,7 +389,8 @@ if (do_stability==TRUE) {
                                      multi_morbid_subsample=multi_morbid[sample(1:nrow(multi_morbid),size=floor(nrow(multi_morbid)*0.8)),]
                                      
                                      
-                                     FAMD_multi_morbid_subsample_res=FAMD(multi_morbid_subsample,ncp=ncol(multi_morbid_subsample) +5, graph = FALSE)
+                                     FAMD_multi_morbid_subsample_res=FAMD(multi_morbid_subsample[,15:ncol(multi_morbid_subsample)],
+                                                                          ncp=ncol(multi_morbid_subsample) +20, graph = FALSE)
                                      
                                      nb_comp_FAMD_multi_morbid_subsample=which(FAMD_multi_morbid_subsample_res$eig[,3] > 90)[1]
                                      
@@ -414,7 +415,7 @@ if (do_stability==TRUE) {
                                      
                                      
                                      randomForest_multi_morbid_subsample=
-                                       randomForest(multi_morbid_subsample, y=as.factor(clusters_FAMD_kmeans_multi_morbid_subsample),ntree=500)
+                                       randomForest(multi_morbid_subsample[,2:ncol(multi_morbid_subsample)], y=as.factor(clusters_FAMD_kmeans_multi_morbid_subsample),ntree=500)
                                      
                                      return(randomForest_multi_morbid_subsample$importance)
                                      
