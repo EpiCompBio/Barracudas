@@ -46,7 +46,7 @@ multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous_subset.r
 
 RF_proximity_measure_multi_morbid_res=randomForest(x=multi_morbid[,15:ncol(multi_morbid)])$proximity
 
-saveRDS(RF_proximity_measure_multi_morbid_res,"../data/processed/RF_proximity_measure_ordinal_factors_multi_morbid_res.rds")
+saveRDS(RF_proximity_measure_multi_morbid_res,"../data/processed/RF_proximity_measure_ordinal_continuous_multi_morbid_res.rds")
 
 
 ################################################################################
