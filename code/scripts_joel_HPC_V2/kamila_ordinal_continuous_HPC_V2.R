@@ -53,7 +53,7 @@ multi_morbid=readRDS("../data/processed_V2/multi_morbid_ordinal_continuous_HW_mo
 # multi_morbid=multi_morbid[1:200,]
 
 
-source("../data/processed_V2/var_groupings.R")
+source("../data/processed_V2/var_groupings_V2.R")
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")
