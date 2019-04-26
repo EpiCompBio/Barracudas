@@ -61,7 +61,7 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 # Parameters for inside the script
 ################################################################################
-n_Cores=7
+n_Cores=20
 
 do_choose_nclusters=TRUE
 do_rep_clustering=TRUE

@@ -61,7 +61,7 @@ multi_morbid=readRDS("../data/processed_V2/multi_morbid_ordinal_continuous_HW_mo
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
 
 
-source("../data/processed_V2/var_groupings.R")
+source("../data/processed_V2/var_groupings_V2.R")
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")
