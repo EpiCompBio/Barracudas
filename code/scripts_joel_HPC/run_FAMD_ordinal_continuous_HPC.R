@@ -54,7 +54,7 @@ source("code/utility_functions/colors_themes_utility.R")
 
 # multi_morbid_ordinal_continuous_HW_PCA
 # multi_morbid_ordinal_continuous
-multi_morbid2=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
+multi_morbid=readRDS("../data/processed/multi_morbid_ordinal_continuous.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 ################################################################################

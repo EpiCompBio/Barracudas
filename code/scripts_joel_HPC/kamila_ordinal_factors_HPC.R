@@ -375,7 +375,7 @@ if (do_stability==TRUE) {
   
   var_importance_stab_df[,1]=c(cont_variables,cat_variables)
   var_importance_stab_df[,2]=c(rep("Cont",length(cont_variables)),rep("Cat",length(cat_variables)))         
-  var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid),var_importance_stab_df[,1]),]
+  var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid[,2:ncol(multi_morbid)]),var_importance_stab_df[,1]),]
   
   
   var_importance_stab_df$median=apply(var_importance_stab_matrix,2,median)

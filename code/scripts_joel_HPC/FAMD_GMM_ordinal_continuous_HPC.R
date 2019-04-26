@@ -449,7 +449,7 @@ if (do_stability==TRUE) {
                                 
                                        cluster_crit_vector[k]=
                                          unlist(intCriteria(traj=as.matrix(FAMD_multi_morbid_subsample_res$ind$coord[,1:nb_comp_FAMD_multi_morbid_subsample]),
-                                                            part=FAMD_kmeans_multi_morbid_subsample$cluster,c("Calinski_Harabasz")))
+                                                            part=as.integer(FAMD_GMM_multi_morbid_subsample$classification),c("Calinski_Harabasz")))
                                        
                                      }
                                      set.seed(which.max(cluster_crit_vector+add_to_seed_subsampling))
