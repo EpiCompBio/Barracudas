@@ -343,6 +343,11 @@ multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","w
 
 multi_morbid[,"seated_box_height"] <- list(NULL)
 
+multi_morbid <- multi_morbid %>%
+  group_by(Sex,age) %>%
+  sample_frac(0.3) %>% as.data.frame()
+
+
 
 for (k in 1:ncol(multi_morbid)) {
   if (class(multi_morbid[,k])!="factor" & k!=1) {
@@ -350,6 +355,6 @@ for (k in 1:ncol(multi_morbid)) {
   }
 }
 
-saveRDS(multi_morbid,"../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity.rds")
+saveRDS(multi_morbid,"../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity_subset.rds")
 
 

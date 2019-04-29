@@ -308,7 +308,7 @@ print(summary(merged_data[,'seated_box_height']))
 multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
 
 
-
+set.seed(1)
 multi_morbid <- multi_morbid %>%
   group_by(Sex,age) %>%
   sample_frac(0.3) %>% as.data.frame()

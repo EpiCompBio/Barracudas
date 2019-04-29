@@ -28,9 +28,6 @@ library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
 
-# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
-# setwd(file_path)
-
 
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
@@ -50,8 +47,6 @@ source("code/utility_functions/colors_themes_utility.R")
 ################################################################################
 
 
-# multi_morbid_ordinal_continuous_HW_PCA
-# multi_morbid_ordinal_continuous
 multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity.rds")
 # multi_morbid=multi_morbid[1:200,]
 
@@ -59,7 +54,7 @@ multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_continuous_HW_mo
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,16:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,15:ncol(multi_morbid)], ncp = ncol(multi_morbid)+20, graph = FALSE)
 
 
 #IND PLOTS
