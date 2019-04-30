@@ -1,4 +1,3 @@
-
 ################################################################################
 # LOADING LIBRARIES
 ################################################################################
@@ -24,6 +23,7 @@ library(ggrepel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(viridis,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(RColorBrewer, lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
+
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
@@ -45,30 +45,29 @@ source("code/utility_functions/colors_themes_utility.R")
 
 
 
+################################################################################
+################################################################################
+# multi-morbid individuals only
+################################################################################
+################################################################################
 
-################################################################################
-################################################################################
-# multi-morbid individuals only : MALE
-################################################################################
-################################################################################
-
-
-# multi_morbid_ordinal_factors_HW_PCA
-# multi_morbid_ordinal_factors
 multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_factors_HW_mod_male.rds")
 # multi_morbid=multi_morbid[1:200,]
+
 
 ################################################################################
 # FAMD on the multi-morbid individuals
 ################################################################################
 
-FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)+50, graph = FALSE)
+
+#Adding a +50 to get higher explained variance
+FAMD_multi_morbid_res=FAMD(multi_morbid[,15:ncol(multi_morbid)],ncp = ncol(multi_morbid)+50, graph = FALSE)
 
 
 #IND PLOTS
 FAMD_multi_morbid_ind_plot_d12=make_FAMD_ind_plot(FAMD_multi_morbid_res,
-                                                  dims=c(1,2),
-                                                  custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
+                   dims=c(1,2),
+                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
 svg(filename="../results/results_joel_HPC_V3_male/FAMD_ordinal_factors_multi_morbid_ind_plot_d12.svg",width=10,height=10)
 print(FAMD_multi_morbid_ind_plot_d12)
@@ -101,62 +100,4 @@ print(FAMD_multi_morbid_var_plot_d34)
 dev.off()
 
 
-saveRDS(FAMD_multi_morbid_res,"../data/processed_V3/FAMD_ordinal_factors_multi_morbid_male_res.rds")
-
-
-################################################################################
-################################################################################
-# multi-morbid individuals only : FEMALE
-################################################################################
-################################################################################
-
-
-# multi_morbid_ordinal_factors_HW_PCA
-# multi_morbid_ordinal_factors
-multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_factors_HW_mod_female.rds")
-# multi_morbid=multi_morbid[1:200,]
-
-################################################################################
-# FAMD on the multi-morbid individuals
-################################################################################
-
-FAMD_multi_morbid_res=FAMD(multi_morbid[,10:ncol(multi_morbid)], ncp = ncol(multi_morbid)+50, graph = FALSE)
-
-
-#IND PLOTS
-FAMD_multi_morbid_ind_plot_d12=make_FAMD_ind_plot(FAMD_multi_morbid_res,
-                                                  dims=c(1,2),
-                                                  custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
-
-svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_factors_multi_morbid_ind_plot_d12.svg",width=10,height=10)
-print(FAMD_multi_morbid_ind_plot_d12)
-dev.off()
-
-
-FAMD_multi_morbid_ind_plot_d34=make_FAMD_ind_plot(FAMD_multi_morbid_res,
-                                                  dims=c(3,4),
-                                                  custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
-
-svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_factors_multi_morbid_ind_plot_d34.svg",width=10,height=10)
-print(FAMD_multi_morbid_ind_plot_d34)
-dev.off()
-
-
-
-#VAR PLOTS
-FAMD_multi_morbid_var_plot_d12 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
-
-
-svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_factors_multi_morbid_var_plot_d12.svg",width=10,height=10)
-print(FAMD_multi_morbid_var_plot_d12)
-dev.off()
-
-
-FAMD_multi_morbid_var_plot_d34 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
-
-svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_factors_multi_morbid_var_plot_d34.svg",width=10,height=10)
-print(FAMD_multi_morbid_var_plot_d34)
-dev.off()
-
-
-saveRDS(FAMD_multi_morbid_res,"../data/processed_V3/FAMD_ordinal_factors_multi_morbid_female_res.rds")
+saveRDS(FAMD_multi_morbid_res,"../data/processed_V3/FAMD_ordinal_factors_multi_morbid_res.rds")
