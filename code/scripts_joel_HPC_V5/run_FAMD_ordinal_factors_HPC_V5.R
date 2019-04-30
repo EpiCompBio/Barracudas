@@ -51,8 +51,6 @@ source("code/utility_functions/colors_themes_utility.R")
 ################################################################################
 ################################################################################
 
-# multi_morbid_ordinal_factors_HW_PCA
-# multi_morbid_ordinal_keep
 multi_morbid=readRDS("../data/processed_V5/multi_morbid_ordinal_factors_HW_mod_controls.rds")
 # multi_morbid=multi_morbid[1:200,]
 
@@ -63,7 +61,7 @@ multi_morbid=readRDS("../data/processed_V5/multi_morbid_ordinal_factors_HW_mod_c
 
 
 #Adding a +50 to get higher explained variance
-FAMD_multi_morbid_res=FAMD(multi_morbid[,16:ncol(multi_morbid)],ncp = ncol(multi_morbid)+50, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,15:ncol(multi_morbid)],ncp = ncol(multi_morbid)+50, graph = FALSE)
 
 
 #IND PLOTS
