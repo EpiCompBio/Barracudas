@@ -53,7 +53,7 @@ library(doParallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
 
-multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_factors_no_obesity_HW_mod.rds")
+multi_morbid=readRDS("../data/processed_V4/multi_morbid_ordinal_factors_HW_mod_no_obesity.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
