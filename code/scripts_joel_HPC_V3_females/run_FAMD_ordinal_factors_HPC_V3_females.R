@@ -51,7 +51,7 @@ source("code/utility_functions/colors_themes_utility.R")
 ################################################################################
 ################################################################################
 
-multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_factors_HW_mod_female.rds")
+multi_morbid=readRDS("../data/processed_V3_females/multi_morbid_ordinal_factors_HW_mod_female.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
@@ -100,4 +100,4 @@ print(FAMD_multi_morbid_var_plot_d34)
 dev.off()
 
 
-saveRDS(FAMD_multi_morbid_res,"../data/processed_V3/FAMD_ordinal_factors_multi_morbid_res.rds")
+saveRDS(FAMD_multi_morbid_res,"../data/processed_V3_females/FAMD_ordinal_factors_multi_morbid_res.rds")

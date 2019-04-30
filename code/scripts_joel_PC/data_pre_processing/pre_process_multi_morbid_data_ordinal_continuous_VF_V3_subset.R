@@ -372,7 +372,7 @@ for (k in 1:ncol(multi_morbid_female)) {
 multi_morbid_male$Sex=NULL
 multi_morbid_female$Sex=NULL
 
-saveRDS(multi_morbid_male,"../data/processed_V3/multi_morbid_ordinal_continuous_HW_mod_male_subset.rds")
-saveRDS(multi_morbid_female,"../data/processed_V3/multi_morbid_ordinal_continuous_HW_mod_female_subset.rds")
+saveRDS(multi_morbid_male,"../data/processed_V3_males/multi_morbid_ordinal_continuous_HW_mod_male_subset.rds")
+saveRDS(multi_morbid_female,"../data/processed_V3_females/multi_morbid_ordinal_continuous_HW_mod_female_subset.rds")
 
 

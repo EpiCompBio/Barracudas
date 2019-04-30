@@ -31,7 +31,7 @@ library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 ################################################################################
 ################################################################################
 
-multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_factors_HW_mod_female_subset.rds")
+multi_morbid=readRDS("../data/processed_V3_females/multi_morbid_ordinal_factors_HW_mod_female_subset.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
@@ -41,5 +41,5 @@ multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_factors_HW_mod_f
 gower_dissimilarity_multi_morbid_res=as.matrix(daisy(multi_morbid[,15:ncol(multi_morbid)],metric="gower"))
 
 
-saveRDS(gower_dissimilarity_multi_morbid_res,"../data/processed_V3/gower_dissimilarity_multi_morbid_res.rds")
+saveRDS(gower_dissimilarity_multi_morbid_res,"../data/processed_V3_females/gower_dissimilarity_multi_morbid_res.rds")
 

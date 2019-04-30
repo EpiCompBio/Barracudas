@@ -12,22 +12,18 @@
 #  }
 # }
 # 
-# using("randomForest")
+# using("magrittr","cluster","dplyr")
 
-
-library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(magrittr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
 
-# file_path<-dirname(rstudioapi::getActiveDocumentContext()$path)
-# setwd(file_path)
-
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
-
-
 
 ################################################################################
 ################################################################################
@@ -35,15 +31,15 @@ library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 ################################################################################
 ################################################################################
 
-
-multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_factors_HW_mod_male_subset.rds")
+multi_morbid=readRDS("../data/processed_V3_males/multi_morbid_ordinal_factors_HW_mod_male_subset.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 ################################################################################
-# Random forests for the proximty measures
+# gower distance for the proximty measures
 ################################################################################
 
+gower_dissimilarity_multi_morbid_res=as.matrix(daisy(multi_morbid[,15:ncol(multi_morbid)],metric="gower"))
 
-RF_proximity_measure_multi_morbid_res=randomForest(x=multi_morbid[,15:ncol(multi_morbid)])$proximity
 
-saveRDS(RF_proximity_measure_multi_morbid_res,"../data/processed_V3/RF_proximity_measure_ordinal_factors_multi_morbid_res.rds")
+saveRDS(gower_dissimilarity_multi_morbid_res,"../data/processed_V3_males/gower_dissimilarity_multi_morbid_res.rds")
+

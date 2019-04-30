@@ -53,7 +53,7 @@ library(doParallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
 
 
-multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_continuous_HW_mod_male.rds")
+multi_morbid=readRDS("../data/processed_V3_males/multi_morbid_ordinal_continuous_HW_mod_male.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
@@ -62,7 +62,7 @@ multi_morbid=readRDS("../data/processed_V3/multi_morbid_ordinal_continuous_HW_mo
 # source("C:/Users/JOE/Documents/R_utility_and_self_implementations/clustering_utility.R")
 
 
-source("../data/processed_V3/var_groupings_V3.R")
+source("../data/processed_V3_males/var_groupings_V3.R")
 source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")
@@ -114,7 +114,7 @@ add_to_seed_subsampling=0
 ################################################################################
 ################################################################################
 
-FAMD_multi_morbid_res=readRDS("../data/processed_V3/FAMD_ordinal_continuous_multi_morbid_res.rds")
+FAMD_multi_morbid_res=readRDS("../data/processed_V3_males/FAMD_ordinal_continuous_multi_morbid_res.rds")
 
 nb_comp_FAMD_multi_morbid=which(FAMD_multi_morbid_res$eig[,3] > 90)[1]
 
