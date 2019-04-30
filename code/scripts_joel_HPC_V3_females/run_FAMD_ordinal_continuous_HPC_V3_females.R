@@ -63,7 +63,7 @@ FAMD_multi_morbid_ind_plot_d12=make_FAMD_ind_plot(FAMD_multi_morbid_res,
                                                   dims=c(1,2),
                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_V3_females/FAMD_ordinal_continuous_multi_morbid_ind_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_continuous_multi_morbid_ind_plot_d12.svg",width=10,height=10)
 print(FAMD_multi_morbid_ind_plot_d12)
 dev.off()
 
@@ -72,7 +72,7 @@ FAMD_multi_morbid_ind_plot_d34=make_FAMD_ind_plot(FAMD_multi_morbid_res,
                                                   dims=c(3,4),
                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_V3_females/FAMD_ordinal_continuous_multi_morbid_ind_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_continuous_multi_morbid_ind_plot_d34.svg",width=10,height=10)
 print(FAMD_multi_morbid_ind_plot_d34)
 dev.off()
 
@@ -81,14 +81,14 @@ dev.off()
 FAMD_multi_morbid_var_plot_d12 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
 
-svg(filename="../results/results_joel_HPC_V3_females/FAMD_ordinal_continuous_multi_morbid_var_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_continuous_multi_morbid_var_plot_d12.svg",width=10,height=10)
 print(FAMD_multi_morbid_var_plot_d12)
 dev.off()
 
 
 FAMD_multi_morbid_var_plot_d34 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
-svg(filename="../results/results_joel_HPC_V3_females/FAMD_ordinal_continuous_multi_morbid_var_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V3_female/FAMD_ordinal_continuous_multi_morbid_var_plot_d34.svg",width=10,height=10)
 print(FAMD_multi_morbid_var_plot_d34)
 dev.off()
 
