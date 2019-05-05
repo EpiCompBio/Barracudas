@@ -8,7 +8,7 @@ using<-function(...) {
   }
 }
 
-using("magrittr","dplyr")
+using("magrittr","dplyr","KODAMA")
 
 # library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
@@ -269,10 +269,9 @@ multi_morbid_ordinal_factors_HW_mod_controls[,cat_col_ids] = factor(multi_morbid
 multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids] = lapply(multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
 
 set.seed(1)
-multi_morbid_ordinal_continuous_HW_mod_controls <- multi_morbid_ordinal_continuous_HW_mod_controls %>%
+multi_morbid_ordinal_factors_HW_mod_controls <- multi_morbid_ordinal_factors_HW_mod_controls %>%
   group_by(Sex,age) %>%
   sample_frac(0.3) %>% as.data.frame()
-
 
 
 #scale numeric features

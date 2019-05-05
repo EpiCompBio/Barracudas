@@ -8,7 +8,7 @@ using<-function(...) {
   }
 }
 
-using("magrittr","dplyr")
+using("magrittr","dplyr","KODAMA")
 
 # library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")

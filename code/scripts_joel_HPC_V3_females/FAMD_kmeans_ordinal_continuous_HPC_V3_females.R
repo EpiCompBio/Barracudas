@@ -62,9 +62,9 @@ source("code/utility_functions/clustering_utility.R")
 ################################################################################
 n_Cores=20
 
-do_choose_nclusters=TRUE
-do_rep_clustering=FALSE
-do_stability=FALSE
+do_choose_nclusters=FALSE
+do_rep_clustering=TRUE
+do_stability=TRUE
 
 n_rep_choose_nb_clust=10
 seed_start_choose_clust=200
