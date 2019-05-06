@@ -69,9 +69,10 @@ source("code/utility_functions/clustering_utility.R")
 
 n_Cores=20
 
-do_choose_nclusters=TRUE
-do_rep_clustering=FALSE
-do_stability=FALSE
+do_choose_nclusters=FALSE
+do_rep_clustering=TRUE
+do_stability=TRUE
+
 
 n_rep_choose_nb_clust=10
 seed_start_choose_clust=200
@@ -372,6 +373,9 @@ var_importance_df=var_importance_df[match(colnames(multi_morbid)[2:ncol(multi_mo
 var_importance_df$var_importance=randomForest_multi_morbid$importance
 
 
+saveRDS(var_importance_df,paste0("../results/results_joel_HPC_V3_male/FAMD_kmeans_ordinal_factors/",
+                                 "FAMD_kmeans_ordinal_continuous_var_importance_df_morbid.rds"))
+
 variable_importance_plot=make_variable_importance_plot(var_importance_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
                                                        threshold=50)
 
@@ -465,6 +469,8 @@ if (do_stability==TRUE) {
   var_importance_stab_df$UB=apply(var_importance_stab_matrix,2,function(x) {x[upper_bound_int]})
   
   
+  saveRDS(var_importance_stab_df,paste0("../results/results_joel_HPC_V3_male/FAMD_kmeans_ordinal_factors/",
+                                        "FAMD_kmeans_ordinal_continuous_var_importance_stab_df_morbid.rds"))
   
   variable_importance_stability_plot=make_variable_importance_stability_plot(var_importance_stab_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
                                                                              threshold=50)

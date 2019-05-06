@@ -106,6 +106,9 @@ if (do_choose_nclusters==TRUE) {
                    numInit = n_rep_choose_nb_clust,
                    calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.5)
   
+  
+  saveRDS(kamRes,"../results/results_joel_HPC_V3_male/kamila_ordinal_continuous/kamila_cluster_choice_multi_morbid.rds")
+  
   kamila_cluster_choice <- plot(2:5, kamRes$nClust$psValues,
                                 pch = 19, frame = FALSE, 
                                 xlab="Number of clusters",
@@ -312,6 +315,8 @@ var_importance_df=var_importance_df[match(colnames(multi_morbid)[2:ncol(multi_mo
 var_importance_df$var_importance=randomForest_multi_morbid$importance
 
 
+saveRDS(var_importance_df,"../results/results_joel_HPC_V3_male/kamila_ordinal_continuous/kamila_var_importance_df_morbid.rds")
+
 variable_importance_plot=make_variable_importance_plot(var_importance_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
                                                        threshold=50)
 
@@ -385,6 +390,8 @@ if (do_stability==TRUE) {
   var_importance_stab_df$LB=apply(var_importance_stab_matrix,2,function(x) {x[lower_bound_int]})
   var_importance_stab_df$UB=apply(var_importance_stab_matrix,2,function(x) {x[upper_bound_int]})
   
+  
+  saveRDS(var_importance_stab_df,"../results/results_joel_HPC_V3_male/kamila_ordinal_continuous/kamila_var_importance_stab_df_morbid.rds")
   
   
   variable_importance_stability_plot=make_variable_importance_stability_plot(var_importance_stab_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,

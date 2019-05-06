@@ -43,6 +43,8 @@ library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # Other packages used in the script
 library(parallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 library(randomForest,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+library(doParallel,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -59,6 +61,19 @@ source("code/utility_functions/FAMD_plots_utility.R")
 source("code/utility_functions/colors_themes_utility.R")
 source("code/utility_functions/clustering_utility.R")
 
+
+################################################################################
+# Parameters for inside the script
+################################################################################
+
+n_Cores=40
+
+do_stability=TRUE
+
+
+n_sub_sample=80
+int_val=90
+add_to_seed_subsampling=0
 
 ################################################################################
 ################################################################################
@@ -264,6 +279,10 @@ var_importance_df=var_importance_df[match(colnames(multi_morbid)[2:ncol(multi_mo
 var_importance_df$var_importance=randomForest_multi_morbid$importance
 
 
+saveRDS(var_importance_df,paste0("../results/results_joel_HPC_V3_male/gower_diana/",
+                                 "gower_diana_multi_morbid_var_importance_df_morbid.rds"))
+
+
 variable_importance_plot=make_variable_importance_plot(var_importance_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
                                                        threshold=50)
 
@@ -273,3 +292,85 @@ svg(filename=paste0("../results/results_joel_HPC_V3_male/gower_diana/",
     width=10,height=10)
 print(variable_importance_plot)
 dev.off()
+
+
+
+################################################################################################
+# Cluster stability
+################################################################################################
+
+if (do_stability==TRUE) {
+  
+  registerDoParallel(n_Cores)
+  
+  
+  lower_bound_int=floor(n_sub_sample * (100 - int_val) / 200) + 1
+  upper_bound_int=floor(n_sub_sample * (1 - (100 - int_val) / 200))+  1
+  
+  # matrix(0,ncol=ncol(multi_morbid),nrow=n_sub_sample)
+  
+  
+  
+  
+  var_importance_stab_list=foreach(i=1:n_sub_sample,
+                                   .packages = c('FactoMineR',"randomForest","cluster")) %dopar% {
+                                     
+                                     
+                                     set.seed(i+add_to_seed_subsampling)
+                                     multi_morbid_subsample=multi_morbid[sample(1:nrow(multi_morbid),size=floor(nrow(multi_morbid)*0.8)),]
+                                     
+                                     gower_dissimilarity_multi_morbid_subsample_res=
+                                       as.matrix(daisy(multi_morbid_subsample[,15:ncol(multi_morbid_subsample)],metric="gower"))
+                                     
+                                     gower_diana_multi_morbid_subsample=diana(gower_dissimilarity_multi_morbid_subsample_res)
+                                     clusters_gower_diana_multi_morbid_subsample=cutree(gower_diana_multi_morbid_subsample,2)
+                                     
+                                     
+                                     randomForest_multi_morbid_subsample=
+                                       randomForest(multi_morbid_subsample[,2:ncol(multi_morbid_subsample)],
+                                                    y=as.factor(clusters_gower_diana_multi_morbid_subsample),ntree=500)
+                                     
+                                     return(randomForest_multi_morbid_subsample$importance)
+                                     
+                                   }
+  
+  
+  stopImplicitCluster()
+  
+  var_importance_stab_matrix=as.data.frame(matrix(unlist(var_importance_stab_list),
+                                                  byrow=TRUE,nrow=length(var_importance_stab_list),
+                                                  dimnames = list(NULL,
+                                                                  rownames(var_importance_stab_list[[1]]))))
+  
+  var_importance_stab_matrix=apply(var_importance_stab_matrix,2,sort)
+  
+  
+  var_importance_stab_df=data.frame(matrix(0,ncol=2,nrow=length(c(cont_variables,cat_variables))))
+  colnames(var_importance_stab_df)=c("var_name","Type")
+  
+  var_importance_stab_df[,1]=c(cont_variables,cat_variables)
+  var_importance_stab_df[,2]=c(rep("Cont",length(cont_variables)),rep("Cat",length(cat_variables)))         
+  var_importance_stab_df=var_importance_stab_df[match(colnames(multi_morbid[,2:ncol(multi_morbid)]),var_importance_stab_df[,1]),]
+  
+  
+  var_importance_stab_df$median=apply(var_importance_stab_matrix,2,median)
+  var_importance_stab_df$LB=apply(var_importance_stab_matrix,2,function(x) {x[lower_bound_int]})
+  var_importance_stab_df$UB=apply(var_importance_stab_matrix,2,function(x) {x[upper_bound_int]})
+  
+  
+  saveRDS(var_importance_stab_df,paste0("../results/results_joel_HPC_V3_male/gower_diana/",
+                                        "gower_diana_multi_morbid_var_importance_stab_df_morbid.rds"))
+  
+  
+  variable_importance_stability_plot=make_variable_importance_stability_plot(var_importance_stab_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
+                                                                             threshold=50)
+  
+  
+  svg(filename=paste0("../results/results_joel_HPC_V3_male/gower_diana/",
+                      "gower_diana_multi_morbid_variable_importance_stability.svg"),
+      width=10,height=10)
+  print(variable_importance_stability_plot)
+  dev.off()
+  
+}
+
