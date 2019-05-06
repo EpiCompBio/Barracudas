@@ -51,9 +51,7 @@ source("code/utility_functions/colors_themes_utility.R")
 ################################################################################
 ################################################################################
 
-# multi_morbid_ordinal_factors_HW_PCA
-# multi_morbid_ordinal_keep
-multi_morbid=readRDS("../data/processed_V5/multi_morbid_ordinal_factors_HW_mod_controls.rds")
+multi_morbid=readRDS("../data/processed_V5_males/multi_morbid_ordinal_factors_HW_mod_controls_male.rds")
 # multi_morbid=multi_morbid[1:200,]
 
 
@@ -63,7 +61,7 @@ multi_morbid=readRDS("../data/processed_V5/multi_morbid_ordinal_factors_HW_mod_c
 
 
 #Adding a +50 to get higher explained variance
-FAMD_multi_morbid_res=FAMD(multi_morbid[,16:ncol(multi_morbid)],ncp = ncol(multi_morbid)+50, graph = FALSE)
+FAMD_multi_morbid_res=FAMD(multi_morbid[,15:ncol(multi_morbid)],ncp = ncol(multi_morbid)+50, graph = FALSE)
 
 
 #IND PLOTS
@@ -71,7 +69,7 @@ FAMD_multi_morbid_ind_plot_d12=make_FAMD_ind_plot(FAMD_multi_morbid_res,
                    dims=c(1,2),
                    custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_ind_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V5_male/FAMD_ordinal_factors_multi_morbid_ind_plot_d12.svg",width=10,height=10)
 print(FAMD_multi_morbid_ind_plot_d12)
 dev.off()
 
@@ -80,7 +78,7 @@ FAMD_multi_morbid_ind_plot_d34=make_FAMD_ind_plot(FAMD_multi_morbid_res,
                                                   dims=c(3,4),
                                                   custom_theme=theme_jh,color_scale=distinct_scale[2],show_labels = FALSE)
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_ind_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V5_male/FAMD_ordinal_factors_multi_morbid_ind_plot_d34.svg",width=10,height=10)
 print(FAMD_multi_morbid_ind_plot_d34)
 dev.off()
 
@@ -90,16 +88,16 @@ dev.off()
 FAMD_multi_morbid_var_plot_d12 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(1,2),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_var_plot_d12.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V5_male/FAMD_ordinal_factors_multi_morbid_var_plot_d12.svg",width=10,height=10)
 print(FAMD_multi_morbid_var_plot_d12)
 dev.off()
 
 
 FAMD_multi_morbid_var_plot_d34 <- make_FAMD_variable_graph(FAMD_multi_morbid_res,dims=c(3,4),custom_theme=theme_jh,color_scale=distinct_scale[2])
 
-svg(filename="../results/results_joel_HPC_V5/FAMD_ordinal_factors_multi_morbid_var_plot_d34.svg",width=10,height=10)
+svg(filename="../results/results_joel_HPC_V5_male/FAMD_ordinal_factors_multi_morbid_var_plot_d34.svg",width=10,height=10)
 print(FAMD_multi_morbid_var_plot_d34)
 dev.off()
 
 
-saveRDS(FAMD_multi_morbid_res,"../data/processed_V5/FAMD_ordinal_factors_multi_morbid_res.rds")
+saveRDS(FAMD_multi_morbid_res,"../data/processed_V5_males/FAMD_ordinal_factors_multi_morbid_res.rds")

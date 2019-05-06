@@ -8,10 +8,7 @@ using<-function(...) {
   }
 }
 
-using("magrittr","dplyr","KODAMA")
-
-# library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
-# library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+using("magrittr","dplyr")
 
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
@@ -158,7 +155,7 @@ merged_data$birth_year=NULL
 merged_data$obese = ifelse(merged_data$BMI >= 40, 1, 0)
 
 #define outcome cols
-outcomes = c('diabetes','CAD','angina','obese','htn',"heart_failure","intracranial_haemorrhage","peripheral_vascular")
+outcomes = c('diabetes','CAD','angina','htn',"heart_failure","intracranial_haemorrhage","peripheral_vascular")
 
 
 
@@ -311,74 +308,53 @@ print(summary(merged_data[,'seated_box_height']))
 ####################################################################################################
 
 
-# #subset multi morbid rows
-# multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
-
-
-matched_inds = frequency_matching(merged_data[,c("age","Sex")],
-                                  as.numeric(as.character(merged_data$no_chronic)) >1,times=1,seed=1)
-
-
-matched_inds_data=merged_data[as.numeric(matched_inds$selection),]
-
-multi_morbid_ordinal_continuous_HW_mod_controls=matched_inds_data[as.numeric(as.character(matched_inds_data$no_chronic)) < 2,]
-
-
-
+#subset multi morbid rows
+multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
 
 
 # We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
-print(sum( multi_morbid_ordinal_continuous_HW_mod_controls$smoker ==  multi_morbid_ordinal_continuous_HW_mod_controls$current_smoker))
-print(nrow( multi_morbid_ordinal_continuous_HW_mod_controls))
+print(sum(multi_morbid$smoker == multi_morbid$current_smoker))
+print(nrow(multi_morbid))
 
 # We're going to remove one of them
-multi_morbid_ordinal_continuous_HW_mod_controls$smoker=NULL
+multi_morbid$smoker=NULL
 
 #Birth_month is a dumb variable
-multi_morbid_ordinal_continuous_HW_mod_controls$birth_month=NULL
+multi_morbid$birth_month=NULL
 
-multi_morbid_ordinal_continuous_HW_mod_controls$hip_waist_ratio= multi_morbid_ordinal_continuous_HW_mod_controls$hip_circum/ multi_morbid_ordinal_continuous_HW_mod_controls$waist_circum
+multi_morbid$hip_waist_ratio=multi_morbid$hip_circum/multi_morbid$waist_circum
 
 
 height_weight_related=c("Height","height_sitting","sitting_height","BMI",
                         "Weight","body_fat_perc","whole_body_fat_mass","whole_body_water_mass","hip_waist_ratio")
 
 
-print(cor( multi_morbid_ordinal_continuous_HW_mod_controls[,height_weight_related]))
+print(cor(multi_morbid[,height_weight_related]))
 
-multi_morbid_ordinal_continuous_HW_mod_controls$height_sitting=NULL
+multi_morbid$height_sitting=NULL
 
-multi_morbid_ordinal_continuous_HW_mod_controls$sitting_height=NULL
-
-
-
-multi_morbid_ordinal_continuous_HW_mod_controls[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
-                                                   "whole_body_fat_mass","Height","Weight")] <- list(NULL)
+multi_morbid$sitting_height=NULL
 
 
-multi_morbid_ordinal_continuous_HW_mod_controls[,"seated_box_height"] <- list(NULL)
+
+multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
+                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
 
 
-multi_morbid_ordinal_continuous_HW_mod_controls_male=multi_morbid_ordinal_continuous_HW_mod_controls[multi_morbid_ordinal_continuous_HW_mod_controls$Sex=="Male",]
-multi_morbid_ordinal_continuous_HW_mod_controls_female=multi_morbid_ordinal_continuous_HW_mod_controls[multi_morbid_ordinal_continuous_HW_mod_controls$Sex=="Female",]
+multi_morbid[,"seated_box_height"] <- list(NULL)
+
+multi_morbid <- multi_morbid %>%
+  group_by(Sex,age) %>%
+  sample_frac(0.3) %>% as.data.frame()
 
 
-for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls_male)) {
-  if (class(multi_morbid_ordinal_continuous_HW_mod_controls_male[,k])!="factor" & k!=1) {
-    multi_morbid_ordinal_continuous_HW_mod_controls_male[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls_male[,k])
+
+for (k in 1:ncol(multi_morbid)) {
+  if (class(multi_morbid[,k])!="factor" & k!=1) {
+    multi_morbid[,k]=scale(multi_morbid[,k])
   }
 }
 
-for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls_female)) {
-  if (class(multi_morbid_ordinal_continuous_HW_mod_controls_female[,k])!="factor" & k!=1) {
-    multi_morbid_ordinal_continuous_HW_mod_controls_female[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls_female[,k])
-  }
-}
-
-multi_morbid_ordinal_continuous_HW_mod_controls_male$Sex=NULL
-multi_morbid_ordinal_continuous_HW_mod_controls_female$Sex=NULL
-
-saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls_male,"../data/processed_V5_males/multi_morbid_ordinal_continuous_HW_mod_controls_male.rds")
-saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls_female,"../data/processed_V5_females/multi_morbid_ordinal_continuous_HW_mod_controls_female.rds")
+saveRDS(multi_morbid,"../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity_subset.rds")
 
 

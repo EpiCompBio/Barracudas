@@ -13,6 +13,7 @@ using("magrittr","dplyr","KODAMA")
 # library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 # library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
 
+
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
@@ -21,7 +22,6 @@ using("magrittr","dplyr","KODAMA")
 # setwd(file_path)
 
 setwd("C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas")
-
 
 
 ################################################################################
@@ -173,8 +173,6 @@ merged_data$no_chronic = apply(merged_data[,outcome_cols],1,sum)
 merged_data$Sex = factor(ifelse(merged_data$gender == 0, 'Female','Male'))
 merged_data$gender=NULL
 
-
-
 #re-organize columns
 merged_data=merged_data %>% dplyr::select(eid,CAD,stroke,obese,diabetes,htn,dvt_asthma_copd_atopy,
                                           heart_failure,intracranial_haemorrhage,peripheral_vascular,no_chronic,self_reported_surgery,
@@ -182,12 +180,7 @@ merged_data=merged_data %>% dplyr::select(eid,CAD,stroke,obese,diabetes,htn,dvt_
 
 
 merged_data[,'no_chronic']=as.factor(merged_data[,'no_chronic'])
-merged_data[,'birth_month']=as.factor(merged_data[,'birth_month'])
 
-
-#binary cols
-binary_col_ids = which(unlist(sapply(merged_data, function(x) length(levels(factor(x)))==2)))
-merged_data[,binary_col_ids]=lapply(merged_data[,binary_col_ids],as.factor)
 
 #We'll transform all the ordinal columns so that they can reasonably be considered continuous
 ord_cols = c('self_reported_surgery',
@@ -209,110 +202,19 @@ ord_cols = c('self_reported_surgery',
              'seated_box_height'
 )
 
-
-# This is OK for a continuous variable (it's count data)
-print(summary(merged_data[,'self_reported_surgery']))
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'freq_climb_stairs_4wks']))
-print(summary(merged_data[,'freq_climb_stairs_4wks']))
-merged_data[,'freq_climb_stairs_4wks']=recode(merged_data[,'freq_climb_stairs_4wks'],"0"=0,"1"=3,"2"=8,"3"=13,"4"=18,"5"=25)
+#categorical cols
+cat_cols = c('birth_month')
 
 
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'freq_walked_for_pleasure_4wks']))
-print(summary(merged_data[,'freq_walked_for_pleasure_4wks']))
-merged_data[,'freq_walked_for_pleasure_4wks']=recode(merged_data[,'freq_walked_for_pleasure_4wks'],"1"=1,"2"=2.5,"3"=4,"4"=10,"5"=18,"6"=28)
 
 
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'Duration_pleasure_walks']))
-print(summary(merged_data[,'Duration_pleasure_walks']))
-merged_data[,'Duration_pleasure_walks']=recode(merged_data[,'Duration_pleasure_walks'],"1"=7.5,"2"=22.5,"3"=45,"4"=75,"5"=105,"6"=150,
-                                               "7"=240)
-
-# This is alright for continuous
-print(table(merged_data[,'smokers_in_house']))
-print(summary(merged_data[,'smokers_in_house']))
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'oily_fish_intake']))
-print(summary(merged_data[,'oily_fish_intake']))
-merged_data[,'oily_fish_intake']=recode(merged_data[,'oily_fish_intake'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'non_oily_fish_intake']))
-print(summary(merged_data[,'non_oily_fish_intake']))
-merged_data[,'non_oily_fish_intake']=recode(merged_data[,'non_oily_fish_intake'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'processed_meat']))
-print(summary(merged_data[,'processed_meat']))
-merged_data[,'processed_meat']=recode(merged_data[,'processed_meat'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'poultry']))
-print(summary(merged_data[,'poultry']))
-merged_data[,'poultry']=recode(merged_data[,'poultry'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'beef_intake']))
-print(summary(merged_data[,'beef_intake']))
-merged_data[,'beef_intake']=recode(merged_data[,'beef_intake'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'lamb_intake']))
-print(summary(merged_data[,'lamb_intake']))
-merged_data[,'lamb_intake']=recode(merged_data[,'lamb_intake'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'pork_intake']))
-print(summary(merged_data[,'pork_intake']))
-merged_data[,'pork_intake']=recode(merged_data[,'pork_intake'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'cheese_intake']))
-print(summary(merged_data[,'cheese_intake']))
-merged_data[,'cheese_intake']=recode(merged_data[,'cheese_intake'],"0"=0,"1"=0.5,"2"=1,"3"=3,"4"=5.5,"5"=8)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'salt_added_food']))
-print(summary(merged_data[,'salt_added_food']))
-merged_data[,'salt_added_food']=recode(merged_data[,'salt_added_food'],"1"=0,"2"=1,"3"=2,"4"=3)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'varition_in_diet']))
-print(summary(merged_data[,'varition_in_diet']))
-merged_data[,'varition_in_diet']=recode(merged_data[,'varition_in_diet'],"1"=0,"2"=1,"3"=2)
-
-
-# This is not ideal, we'll use the information from UK Biobank to recode
-print(table(merged_data[,'Alc_intake_freq']))
-print(summary(merged_data[,'Alc_intake_freq']))
-merged_data[,'Alc_intake_freq']=recode(merged_data[,'Alc_intake_freq'],"1"=28,"2"=14,"3"=6,"4"=2,"5"=1,"6"=0)
-
-
-# Let's say this is OK! 
-print(table(merged_data[,'seated_box_height']))
-print(summary(merged_data[,'seated_box_height']))
 
 ####################################################################################################
 # PREPARING MULTI-MORBID DATA AND SCALING
 ####################################################################################################
 
 
-# #subset multi morbid rows
-# multi_morbid = merged_data[which(as.numeric(as.character(merged_data$no_chronic))>1),]
+
 
 
 matched_inds = frequency_matching(merged_data[,c("age","Sex")],
@@ -321,64 +223,61 @@ matched_inds = frequency_matching(merged_data[,c("age","Sex")],
 
 matched_inds_data=merged_data[as.numeric(matched_inds$selection),]
 
-multi_morbid_ordinal_continuous_HW_mod_controls=matched_inds_data[as.numeric(as.character(matched_inds_data$no_chronic)) < 2,]
-
-
+multi_morbid_ordinal_factors_HW_mod_controls=matched_inds_data[as.numeric(as.character(matched_inds_data$no_chronic)) < 2,]
 
 
 
 # We noticed that the columns "smoker" and "current_smoker" are the  (just different for 5 individuals), so we're going to remove one
-print(sum( multi_morbid_ordinal_continuous_HW_mod_controls$smoker ==  multi_morbid_ordinal_continuous_HW_mod_controls$current_smoker))
-print(nrow( multi_morbid_ordinal_continuous_HW_mod_controls))
+print(sum(multi_morbid_ordinal_factors_HW_mod_controls$smoker == multi_morbid_ordinal_factors_HW_mod_controls$current_smoker))
+print(nrow(multi_morbid_ordinal_factors_HW_mod_controls))
 
 # We're going to remove one of them
-multi_morbid_ordinal_continuous_HW_mod_controls$smoker=NULL
+multi_morbid_ordinal_factors_HW_mod_controls$smoker=NULL
 
 #Birth_month is a dumb variable
-multi_morbid_ordinal_continuous_HW_mod_controls$birth_month=NULL
+multi_morbid_ordinal_factors_HW_mod_controls$birth_month=NULL
 
-multi_morbid_ordinal_continuous_HW_mod_controls$hip_waist_ratio= multi_morbid_ordinal_continuous_HW_mod_controls$hip_circum/ multi_morbid_ordinal_continuous_HW_mod_controls$waist_circum
+multi_morbid_ordinal_factors_HW_mod_controls$hip_waist_ratio=multi_morbid_ordinal_factors_HW_mod_controls$hip_circum/multi_morbid_ordinal_factors_HW_mod_controls$waist_circum
 
+multi_morbid_ordinal_factors_HW_mod_controls$height_sitting=NULL
 
-height_weight_related=c("Height","height_sitting","sitting_height","BMI",
-                        "Weight","body_fat_perc","whole_body_fat_mass","whole_body_water_mass","hip_waist_ratio")
-
-
-print(cor( multi_morbid_ordinal_continuous_HW_mod_controls[,height_weight_related]))
-
-multi_morbid_ordinal_continuous_HW_mod_controls$height_sitting=NULL
-
-multi_morbid_ordinal_continuous_HW_mod_controls$sitting_height=NULL
+multi_morbid_ordinal_factors_HW_mod_controls$sitting_height=NULL
 
 
-
-multi_morbid_ordinal_continuous_HW_mod_controls[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
-                                                   "whole_body_fat_mass","Height","Weight")] <- list(NULL)
-
-
-multi_morbid_ordinal_continuous_HW_mod_controls[,"seated_box_height"] <- list(NULL)
+multi_morbid_ordinal_factors_HW_mod_controls[,c("height_sitting","sitting_height","waist_circum","hip_circum","whole_body_water_mass",
+                                                "whole_body_fat_mass","Height","Weight")] <- list(NULL)
 
 
-multi_morbid_ordinal_continuous_HW_mod_controls_male=multi_morbid_ordinal_continuous_HW_mod_controls[multi_morbid_ordinal_continuous_HW_mod_controls$Sex=="Male",]
-multi_morbid_ordinal_continuous_HW_mod_controls_female=multi_morbid_ordinal_continuous_HW_mod_controls[multi_morbid_ordinal_continuous_HW_mod_controls$Sex=="Female",]
+multi_morbid_ordinal_factors_HW_mod_controls[,"seated_box_height"] <- list(NULL)
 
 
-for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls_male)) {
-  if (class(multi_morbid_ordinal_continuous_HW_mod_controls_male[,k])!="factor" & k!=1) {
-    multi_morbid_ordinal_continuous_HW_mod_controls_male[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls_male[,k])
-  }
-}
-
-for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls_female)) {
-  if (class(multi_morbid_ordinal_continuous_HW_mod_controls_female[,k])!="factor" & k!=1) {
-    multi_morbid_ordinal_continuous_HW_mod_controls_female[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls_female[,k])
-  }
-}
-
-multi_morbid_ordinal_continuous_HW_mod_controls_male$Sex=NULL
-multi_morbid_ordinal_continuous_HW_mod_controls_female$Sex=NULL
-
-saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls_male,"../data/processed_V5_males/multi_morbid_ordinal_continuous_HW_mod_controls_male.rds")
-saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls_female,"../data/processed_V5_females/multi_morbid_ordinal_continuous_HW_mod_controls_female.rds")
 
 
+
+
+
+#binary cols
+binary_col_ids = which(unlist(sapply(multi_morbid_ordinal_factors_HW_mod_controls, function(x) length(levels(factor(x)))==2)))
+multi_morbid_ordinal_factors_HW_mod_controls[,binary_col_ids]=lapply(multi_morbid_ordinal_factors_HW_mod_controls[,binary_col_ids],as.factor)
+
+
+
+cat_col_ids = which(colnames(multi_morbid_ordinal_factors_HW_mod_controls) %in% cat_cols)
+ord_col_ids = which(colnames(multi_morbid_ordinal_factors_HW_mod_controls) %in% ord_cols)
+
+multi_morbid_ordinal_factors_HW_mod_controls[,cat_col_ids] = factor(multi_morbid_ordinal_factors_HW_mod_controls[,cat_col_ids])
+multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids] = lapply(multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
+
+set.seed(1)
+multi_morbid_ordinal_factors_HW_mod_controls <- multi_morbid_ordinal_factors_HW_mod_controls %>%
+  group_by(Sex,age) %>%
+  sample_frac(0.3) %>% as.data.frame()
+
+
+#scale numeric features
+multi_morbid_ordinal_factors_HW_mod_controls[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =
+  as.data.frame(scale(multi_morbid_ordinal_factors_HW_mod_controls[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)]))
+
+
+
+saveRDS(multi_morbid_ordinal_factors_HW_mod_controls,"../data/processed_V5/multi_morbid_ordinal_factors_HW_mod_controls_subset.rds")

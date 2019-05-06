@@ -254,9 +254,24 @@ multi_morbid[,cat_col_ids] = factor(multi_morbid[,cat_col_ids])
 multi_morbid[,ord_col_ids] = lapply(multi_morbid[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
 
 
+
+multi_morbid_male=multi_morbid[multi_morbid$Sex=="Male",]
+multi_morbid_female=multi_morbid[multi_morbid$Sex=="Female",]
+
+
 #scale numeric features
-multi_morbid[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =
-  as.data.frame(scale(multi_morbid[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)]))
+multi_morbid_male[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =
+  as.data.frame(scale(multi_morbid_male[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)]))
 
 
-saveRDS(multi_morbid,"../data/processed_V4/multi_morbid_ordinal_factors_HW_mod_no_obesity.rds")
+multi_morbid_female[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)] =
+  as.data.frame(scale(multi_morbid_female[,-c(1,11,binary_col_ids,cat_col_ids,ord_col_ids)]))
+
+
+multi_morbid_male$Sex=NULL
+multi_morbid_female$Sex=NULL
+
+
+
+saveRDS(multi_morbid_male,"../data/processed_V4_males/multi_morbid_ordinal_factors_HW_mod_no_obesity_male.rds")
+saveRDS(multi_morbid_female,"../data/processed_V4_females/multi_morbid_ordinal_factors_HW_mod_no_obesity_female.rds")

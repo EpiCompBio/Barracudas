@@ -10,6 +10,9 @@ using<-function(...) {
 
 using("magrittr","dplyr")
 
+# library(cluster,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+# library(dplyr,lib.loc ="/home/jheller/anaconda3/lib/R/library")
+
 ################################################################################
 # WORKING DIRECTORY AND SOURCING FUNCTIONS
 ################################################################################
@@ -343,18 +346,33 @@ multi_morbid[,c("height_sitting","sitting_height","waist_circum","hip_circum","w
 
 multi_morbid[,"seated_box_height"] <- list(NULL)
 
+
+set.seed(1)
 multi_morbid <- multi_morbid %>%
   group_by(Sex,age) %>%
   sample_frac(0.3) %>% as.data.frame()
 
 
+multi_morbid_male=multi_morbid[multi_morbid$Sex=="Male",]
+multi_morbid_female=multi_morbid[multi_morbid$Sex=="Female",]
 
-for (k in 1:ncol(multi_morbid)) {
-  if (class(multi_morbid[,k])!="factor" & k!=1) {
-    multi_morbid[,k]=scale(multi_morbid[,k])
+
+for (k in 1:ncol(multi_morbid_male)) {
+  if (class(multi_morbid_male[,k])!="factor" & k!=1) {
+    multi_morbid_male[,k]=scale(multi_morbid_male[,k])
   }
 }
 
-saveRDS(multi_morbid,"../data/processed_V4/multi_morbid_ordinal_continuous_HW_mod_no_obesity_subset.rds")
+for (k in 1:ncol(multi_morbid_female)) {
+  if (class(multi_morbid_female[,k])!="factor" & k!=1) {
+    multi_morbid_female[,k]=scale(multi_morbid_female[,k])
+  }
+}
+
+multi_morbid_male$Sex=NULL
+multi_morbid_female$Sex=NULL
+
+saveRDS(multi_morbid_male,"../data/processed_V4_males/multi_morbid_ordinal_continuous_HW_mod_no_obesity_male_subset.rds")
+saveRDS(multi_morbid_female,"../data/processed_V4_females/multi_morbid_ordinal_continuous_HW_mod_no_obesity_female_subset.rds")
 
 

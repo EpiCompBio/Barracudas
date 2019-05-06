@@ -359,26 +359,20 @@ multi_morbid_ordinal_continuous_HW_mod_controls[,c("height_sitting","sitting_hei
 multi_morbid_ordinal_continuous_HW_mod_controls[,"seated_box_height"] <- list(NULL)
 
 
-multi_morbid_ordinal_continuous_HW_mod_controls_male=multi_morbid_ordinal_continuous_HW_mod_controls[multi_morbid_ordinal_continuous_HW_mod_controls$Sex=="Male",]
-multi_morbid_ordinal_continuous_HW_mod_controls_female=multi_morbid_ordinal_continuous_HW_mod_controls[multi_morbid_ordinal_continuous_HW_mod_controls$Sex=="Female",]
+set.seed(1)
+multi_morbid_ordinal_continuous_HW_mod_controls <- multi_morbid_ordinal_continuous_HW_mod_controls %>%
+  group_by(Sex,age) %>%
+  sample_frac(0.3) %>% as.data.frame()
 
 
-for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls_male)) {
-  if (class(multi_morbid_ordinal_continuous_HW_mod_controls_male[,k])!="factor" & k!=1) {
-    multi_morbid_ordinal_continuous_HW_mod_controls_male[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls_male[,k])
+
+
+for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls)) {
+  if (class(multi_morbid_ordinal_continuous_HW_mod_controls[,k])!="factor" & k!=1) {
+    multi_morbid_ordinal_continuous_HW_mod_controls[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls[,k])
   }
 }
 
-for (k in 1:ncol(multi_morbid_ordinal_continuous_HW_mod_controls_female)) {
-  if (class(multi_morbid_ordinal_continuous_HW_mod_controls_female[,k])!="factor" & k!=1) {
-    multi_morbid_ordinal_continuous_HW_mod_controls_female[,k]=scale(multi_morbid_ordinal_continuous_HW_mod_controls_female[,k])
-  }
-}
-
-multi_morbid_ordinal_continuous_HW_mod_controls_male$Sex=NULL
-multi_morbid_ordinal_continuous_HW_mod_controls_female$Sex=NULL
-
-saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls_male,"../data/processed_V5_males/multi_morbid_ordinal_continuous_HW_mod_controls_male.rds")
-saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls_female,"../data/processed_V5_females/multi_morbid_ordinal_continuous_HW_mod_controls_female.rds")
+saveRDS(multi_morbid_ordinal_continuous_HW_mod_controls,"../data/processed_V5/multi_morbid_ordinal_continuous_HW_mod_controls_subset.rds")
 
 

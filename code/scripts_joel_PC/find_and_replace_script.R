@@ -5,7 +5,7 @@ file_find_replace <- function(filepath, pattern, replacement) {
 }
 
 
-my_dir <- "C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas/code/scripts_joel_HPC_V5"
+my_dir <- "C:/Users/JOE/Documents/Imperial College 2018-2019/Translational Data Science/Barracudas/code/scripts_joel_HPC_V5_males"
 setwd(my_dir)
 
 
@@ -14,8 +14,8 @@ my_r_scripts <- list.files(path = my_dir, pattern = "(r|R)$")
 
 for (r_script in my_r_scripts ) {
   file_find_replace(r_script,
-                    "processed_V2",
-                    "processed_V5")
+                    "female",
+                    "male")
 }
 
 
