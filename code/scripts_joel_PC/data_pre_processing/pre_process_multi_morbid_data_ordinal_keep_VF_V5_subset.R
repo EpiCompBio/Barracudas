@@ -251,6 +251,19 @@ multi_morbid_ordinal_factors_HW_mod_controls[,c("height_sitting","sitting_height
 multi_morbid_ordinal_factors_HW_mod_controls[,"seated_box_height"] <- list(NULL)
 
 
+#binary cols
+binary_col_ids = which(unlist(sapply(multi_morbid_ordinal_factors_HW_mod_controls, function(x) length(levels(factor(x)))==2)))
+multi_morbid_ordinal_factors_HW_mod_controls[,binary_col_ids]=lapply(multi_morbid_ordinal_factors_HW_mod_controls[,binary_col_ids],as.factor)
+
+
+
+cat_col_ids = which(colnames(multi_morbid_ordinal_factors_HW_mod_controls) %in% cat_cols)
+ord_col_ids = which(colnames(multi_morbid_ordinal_factors_HW_mod_controls) %in% ord_cols)
+
+multi_morbid_ordinal_factors_HW_mod_controls[,cat_col_ids] = factor(multi_morbid_ordinal_factors_HW_mod_controls[,cat_col_ids])
+multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids] = lapply(multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
+
+
 
 set.seed(1)
 multi_morbid_ordinal_factors_HW_mod_controls <- multi_morbid_ordinal_factors_HW_mod_controls %>%
@@ -260,6 +273,8 @@ multi_morbid_ordinal_factors_HW_mod_controls <- multi_morbid_ordinal_factors_HW_
 
 multi_morbid_ordinal_factors_HW_mod_controls_male=multi_morbid_ordinal_factors_HW_mod_controls[multi_morbid_ordinal_factors_HW_mod_controls$Sex=="Male",]
 multi_morbid_ordinal_factors_HW_mod_controls_female=multi_morbid_ordinal_factors_HW_mod_controls[multi_morbid_ordinal_factors_HW_mod_controls$Sex=="Female",]
+
+
 
 
 #scale numeric features
@@ -275,6 +290,7 @@ multi_morbid_ordinal_factors_HW_mod_controls_male$Sex=NULL
 multi_morbid_ordinal_factors_HW_mod_controls_female$Sex=NULL
 
 
-
 saveRDS(multi_morbid_ordinal_factors_HW_mod_controls_male,"../data/processed_V5_males/multi_morbid_ordinal_factors_HW_mod_controls_male_subset.rds")
 saveRDS(multi_morbid_ordinal_factors_HW_mod_controls_female,"../data/processed_V5_females/multi_morbid_ordinal_factors_HW_mod_controls_female_subset.rds")
+
+

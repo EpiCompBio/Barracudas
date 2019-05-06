@@ -217,6 +217,8 @@ cat_cols = c('birth_month')
 
 
 
+
+
 matched_inds = frequency_matching(merged_data[,c("age","Sex")],
                                   as.numeric(as.character(merged_data$no_chronic)) >1,times=1,seed=1)
 
@@ -251,6 +253,17 @@ multi_morbid_ordinal_factors_HW_mod_controls[,c("height_sitting","sitting_height
 multi_morbid_ordinal_factors_HW_mod_controls[,"seated_box_height"] <- list(NULL)
 
 
+#binary cols
+binary_col_ids = which(unlist(sapply(multi_morbid_ordinal_factors_HW_mod_controls, function(x) length(levels(factor(x)))==2)))
+multi_morbid_ordinal_factors_HW_mod_controls[,binary_col_ids]=lapply(multi_morbid_ordinal_factors_HW_mod_controls[,binary_col_ids],as.factor)
+
+
+
+cat_col_ids = which(colnames(multi_morbid_ordinal_factors_HW_mod_controls) %in% cat_cols)
+ord_col_ids = which(colnames(multi_morbid_ordinal_factors_HW_mod_controls) %in% ord_cols)
+
+multi_morbid_ordinal_factors_HW_mod_controls[,cat_col_ids] = factor(multi_morbid_ordinal_factors_HW_mod_controls[,cat_col_ids])
+multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids] = lapply(multi_morbid_ordinal_factors_HW_mod_controls[,ord_col_ids], function(x) factor(as.integer(x), ordered = TRUE))
 
 
 
