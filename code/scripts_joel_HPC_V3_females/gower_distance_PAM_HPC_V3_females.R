@@ -325,8 +325,10 @@ if (do_stability==TRUE) {
                                      gower_dissimilarity_multi_morbid_subsample_res=
                                        as.matrix(daisy(multi_morbid_subsample[,15:ncol(multi_morbid_subsample)],metric="gower"))
                                      
-                                     gower_pam_multi_morbid_subsample=pam(gower_dissimilarity_multi_morbid_subsample_res)
-                                     clusters_gower_pam_multi_morbid_subsample=cutree(gower_pam_multi_morbid_subsample,2)
+                                  
+                                     
+                                     gower_pam_multi_morbid_subsample=pam(gower_dissimilarity_multi_morbid_subsample_res,2)
+                                     clusters_gower_pam_multi_morbid_subsample=gower_pam_multi_morbid_subsample$clustering
                                      
                                      
                                      randomForest_multi_morbid_subsample=
