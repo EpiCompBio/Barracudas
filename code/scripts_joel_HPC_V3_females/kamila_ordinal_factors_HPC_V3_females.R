@@ -112,7 +112,7 @@ if (do_choose_nclusters==TRUE) {
                    calcNumClust = "ps",numPredStrCvRun = 10, predStrThresh = 0.5)
   
   
-  saveRDS(kamRes,"../results_joel_HPC_V3_female/kamila_ordinal_factors/kamila_cluster_choice_multi_morbid.rds")
+  saveRDS(kamRes,"../results/results_joel_HPC_V3_female/kamila_ordinal_factors/kamila_cluster_choice_multi_morbid.rds")
   
   kamila_cluster_choice <- plot(2:5, kamRes$nClust$psValues,
                                 pch = 19, frame = FALSE, 
