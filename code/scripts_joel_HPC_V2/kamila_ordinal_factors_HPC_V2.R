@@ -382,7 +382,8 @@ if (do_stability==TRUE) {
   var_importance_stab_df$LB=apply(var_importance_stab_matrix,2,function(x) {x[lower_bound_int]})
   var_importance_stab_df$UB=apply(var_importance_stab_matrix,2,function(x) {x[upper_bound_int]})
   
-  
+  saveRDS(var_importance_stab_df,paste0("../results/results_joel_HPC_V2/kamila_ordinal_factors/",
+                                        "kamila_ordinal_factors_var_importance_stab_df.rds"))
   
   variable_importance_stability_plot=make_variable_importance_stability_plot(var_importance_stab_df,grouping_names=grouping_names, color_scale=NULL,custom_theme=theme_jh,
                                                                              threshold=50)
